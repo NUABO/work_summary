@@ -1,0 +1,75 @@
+test.c
+
+#include <unistd.h>
+#include<stdio.h>
+void aa(int i)
+{
+	printf("%d\n",i);
+}
+int main()
+{
+	while(1)
+	{
+		printf("hellow world\n");
+		aa(10);
+		bb(10);
+		printf("test\n");
+		sleep(5);
+	}
+	return;
+}
+
+
+test_lib.c
+
+#include<stdio.h>
+void bb(int i)
+{
+	printf("%d\n",i);
+}
+
+gcc test_lib.c  -g -fPIC -shared -o libtest.so
+gcc -g test.c  -o test -L /home/pvtrace -ltest -Wl,-rpath,/home/pvtrace/
+
+http://leeon.me/a/linux-cp-so-cause-coredump
+更新动态库so 如何避免出现断错误
+用install替换cp命令
+
+cp libtest.so.new libtest.so 换成：
+install libtest.so.new libtest.so
+
+cp 和 install的区别就是  cp会先清空文件后往里写入新文件，而install则会先删除掉原先的文件然后写入新文件。
+
+cp的情况：
+1.应用程序运行时，kernel通过mmap把so加载到进程地址空间.
+2.在这个过程中loader会把so里面引用的外部符号解析成真正的虚存地址。
+3.当so被cp覆盖时，确切地说是被trunc时，kernel会把so文件在虚拟内的页purge 掉。
+4.当运行到so里面的代码时，因为物理内存中不再有实际的数据（仅存在于虚存空间内），会产生一次缺页中断。
+5.Kernel从so文件中copy一份到内存中去,但是这时的全局符号表并没有经过解析，当调用到时就产生segment fault。
+
+install的情况：
+install 的方式跟cp不同，先unlink再creat，当unlink的时候，已经map的虚拟空间vma中的inode结点没有变，只有inode结点的引用计数为0。
+也就是新的so和旧的so用的不是同一个inode结点，所以不会相互影响。
+
+[root@swift-1 pvtrace]# cp libtest.so libtest.so.bak
+[root@swift-1 pvtrace]# ln libtest.so libtest.so.hl
+[root@swift-1 pvtrace]# ls -ial libtest.so libtest.so.hl
+17829082 -rwxr-xr-x 2 root root 7079 Apr 15 11:39 libtest.so
+17829082 -rwxr-xr-x 2 root root 7079 Apr 15 11:39 libtest.so.hl
+[root@swift-1 pvtrace]# install libtest.so.bak libtest.so
+[root@swift-1 pvtrace]#
+[root@swift-1 pvtrace]#
+[root@swift-1 pvtrace]# ls -ial libtest.so libtest.so.hl
+17829086 -rwxr-xr-x 1 root root 7079 Apr 15 11:41 libtest.so
+17829082 -rwxr-xr-x 1 root root 7079 Apr 15 11:39 libtest.so.hl
+
+
+strace 查看动态库的加载过程
+
+open("/home/pvtrace/libtest.so", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0 \5\0\0\0\0\0\0"..., 832) = 832
+fstat(3, {st_mode=S_IFREG|0755, st_size=7201, ...}) = 0
+mmap(NULL, 2099384, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7fcd2c667000
+mprotect(0x7fcd2c668000, 2093056, PROT_NONE) = 0
+mmap(0x7fcd2c867000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0) = 0x7fcd2c867000
+close(3)      

@@ -1,0 +1,165 @@
+
+
+
+[root@swift-1 ~]# /usr/local/nagios/libexec/check_load -w 5.0,4.0,3.0 -c 10.0,6.0,4.0
+OK - load average: 0.00, 0.00, 0.00|load1=0.000;5.000;10.000;0; load5=0.000;4.000;6.000;0; load15=0.000;3.000;4.000;0;
+
+
+
+vi  /usr/local/nagios/var/status.dat
+
+servicestatus {
+    host_name=swift-1
+    service_description=Current Load
+    modified_attributes=0
+    check_command=check_local_load!5.0,4.0,3.0!10.0,6.0,4.0
+    check_period=24x7
+    notification_period=24x7
+    check_interval=5.000000
+    retry_interval=1.000000
+    event_handler=
+    has_been_checked=1
+    should_be_scheduled=1
+    check_execution_time=0.001
+    check_latency=0.000
+    check_type=0
+    current_state=0
+    last_hard_state=0
+    last_event_id=5
+    current_event_id=6
+    current_problem_id=0
+    last_problem_id=4
+    current_attempt=1
+    max_attempts=4
+    state_type=1
+    last_state_change=1428477223
+    last_hard_state_change=1427873371
+    last_time_ok=1429251888
+    last_time_warning=1428477223
+    last_time_unknown=0
+    last_time_critical=0
+    plugin_output=OK - load average: 0.00, 0.00, 0.00
+    long_plugin_output=
+    performance_data=load1=0.000;5.000;10.000;0; load5=0.000;4.000;6.000;0; load15=0.000;3.000;4.000;0;
+    last_check=1429251888
+    next_check=1429252188
+    check_options=0
+    current_notification_number=0
+    current_notification_id=0
+    last_notification=0
+    next_notification=0
+    no_more_notifications=0
+    notifications_enabled=1
+    active_checks_enabled=1
+    passive_checks_enabled=1
+    event_handler_enabled=1
+    problem_has_been_acknowledged=0
+    acknowledgement_type=0
+    flap_detection_enabled=1
+    process_performance_data=1
+    obsess=1
+    last_update=1429252126
+    is_flapping=0
+    percent_state_change=0.00
+    scheduled_downtime_depth=0
+    }
+
+
+
+[root@swift-1 ~]# /usr/local/nagios/libexec/check_ping -H 191.168.45.74  -w 100.0,20% -c 500.0,60%  -p 5
+PING OK - Packet loss = 0%, RTA = 0.02 ms|rta=0.024000ms;100.000000;500.000000;0.000000 pl=0%;20;60;0
+
+servicestatus {
+    host_name=swift-1
+    service_description=PING
+    modified_attributes=0
+    check_command=check_ping!100.0,20%!500.0,60%
+    check_period=24x7
+    notification_period=24x7
+    check_interval=5.000000
+    retry_interval=1.000000
+    event_handler=
+    has_been_checked=1
+    should_be_scheduled=1
+    check_execution_time=4.001
+    check_latency=0.000
+    check_type=0
+    current_state=0
+    last_hard_state=0
+    last_event_id=7
+    current_event_id=8
+    current_problem_id=0
+    last_problem_id=5
+    current_attempt=1
+    max_attempts=4
+    state_type=1
+    last_state_change=1428911084
+    last_hard_state_change=1427873484
+    last_time_ok=1429251403
+    last_time_warning=0
+    last_time_unknown=1428911084
+    last_time_critical=0
+    plugin_output=PING OK - Packet loss = 0%, RTA = 0.03 ms
+    long_plugin_output=
+    performance_data=rta=0.028000ms;100.000000;500.000000;0.000000 pl=0%;20;60;0
+    last_check=1429251403
+    next_check=1429251703
+    check_options=0
+    current_notification_number=0
+    current_notification_id=0
+    last_notification=0
+    next_notification=0
+    no_more_notifications=0
+    notifications_enabled=1
+    active_checks_enabled=1
+    passive_checks_enabled=1
+    event_handler_enabled=1
+    problem_has_been_acknowledged=0
+    acknowledgement_type=0
+    flap_detection_enabled=1
+    process_performance_data=1
+    obsess=1
+    last_update=1429251536
+    is_flapping=0
+    percent_state_change=0.00
+    scheduled_downtime_depth=0
+    }
+
+
+
+
+[root@swift-1 ~]# tail -f  /usr/local/pnp4nagios/var/service-perfdata
+DATATYPE::SERVICEPERFDATA       TIMET::1429252713       HOSTNAME::swift-1       SERVICEDESC::Swap Usage 
+SERVICEPERFDATA::swap=0MB;0;0;0;0 SERVICECHECKCOMMAND::check_local_swap!20!10     HOSTSTATE::UP   
+HOSTSTATETYPE::HARD     SERVICESTATE::CRITICAL    SERVICESTATETYPE::HARD
+
+
+
+[root@swift-1 swift-1]# pwd
+/usr/local/pnp4nagios/var/perfdata/swift-1
+[root@swift-1 swift-1]# ls -al
+total 5308
+drwxr-xr-x 2 nagios nagios    4096 Apr 17 15:13 .
+drwxr-xr-x 4 nagios nagios    4096 Apr 14 16:28 ..
+-rw-r--r-- 1 nagios nagios 1151496 Apr 17 15:09 Current_Load.rrd
+-rw-r--r-- 1 nagios nagios    3412 Apr 17 15:09 Current_Load.xml
+-rw-r--r-- 1 nagios nagios  384952 Apr 17 15:10 Current_Users.rrd
+-rw-r--r-- 1 nagios nagios    1964 Apr 17 15:10 Current_Users.xml
+-rw-r--r-- 1 nagios nagios  768224 Apr 17 15:11 _HOST_.rrd
+-rw-r--r-- 1 nagios nagios    2541 Apr 17 15:11 _HOST_.xml
+-rw-r--r-- 1 nagios nagios  768224 Apr 17 15:11 HTTP.rrd
+-rw-r--r-- 1 nagios nagios    2551 Apr 17 15:11 HTTP.xml
+-rw-r--r-- 1 nagios nagios  768224 Apr 17 15:11 PING.rrd
+-rw-r--r-- 1 nagios nagios    2641 Apr 17 15:11 PING.xml
+-rw-r--r-- 1 nagios nagios  384952 Apr 17 15:12 Root_Partition.rrd
+-rw-r--r-- 1 nagios nagios    2021 Apr 17 15:12 Root_Partition.xml
+-rw-r--r-- 1 nagios nagios  384952 Apr 17 15:13 SSH.rrd
+-rw-r--r-- 1 nagios nagios    1926 Apr 17 15:13 SSH.xml
+-rw-r--r-- 1 nagios nagios  384952 Apr 17 15:13 Swap_Usage.rrd
+-rw-r--r-- 1 nagios nagios    1950 Apr 17 15:13 Swap_Usage.xml
+-rw-r--r-- 1 nagios nagios  384952 Apr 17 15:09 Total_Processes.rrd
+-rw-r--r-- 1 nagios nagios    2006 Apr 17 15:09 Total_Processes.xml
+
+rrdtool fetch -r 3 Current_Load.rrd  AVERAGE  
+
+(一天的数据)

@@ -1,0 +1,32 @@
+74:
+/mnt/dev1/nas1/  :
+             trusted.glusterfs.volume-id :  0xfd76eab11ade4c7f9f76788c8492ca98
+                            trusted.gfid :  0x00000000000000000000000000000001
+                   trusted.glusterfs.dht :  0x0000000100000000000000007fffff7f   哈希范围：0 - 7fffff7f
+/mnt/dev1/nas1/dir1/  :
+                            trusted.gfid :  0x2f2cdf589d4e46178c217f0b6f51068e
+                   trusted.glusterfs.dht :  0x00000001000000007fffff80ffffffff
+/mnt/dev1/nas1/dir2/  :
+                            trusted.gfid :  0xccfc76f08f114bbdb331cbbc729ceefa
+                   trusted.glusterfs.dht :  0x00000001000000007fffff80ffffffff
+/mnt/dev1/nas1/dir1/file1  :
+                            trusted.gfid :  0x4455cd9fc16b4ed3bd22f24d9a2ad768
+/mnt/dev1/nas1/dir1/file2  :
+                            trusted.gfid :  0x89987a9f0e86418fa48bb53c7dc79999							
+				   
+104:
+/mnt/dev1/nas1/  :
+             trusted.glusterfs.volume-id :  0xfd76eab11ade4c7f9f76788c8492ca98
+                            trusted.gfid :  0x00000000000000000000000000000001
+                   trusted.glusterfs.dht :  0x00000001000000007fffff80ffffffff  哈希范围：7fffff80 - ffffffff
+/mnt/dev1/nas1/dir1/  :
+                            trusted.gfid :  0x2f2cdf589d4e46178c217f0b6f51068e
+                   trusted.glusterfs.dht :  0x0000000100000000000000007fffff7f  新建dir1目录时，根据dir1名字计算hash值，落在104上，先建立dir1，dht属性为7fffff7f，这个哈希值是下一层存放的依据，文件没有下一层，所以没有这个属性
+/mnt/dev1/nas1/dir2/  :
+                            trusted.gfid :  0xccfc76f08f114bbdb331cbbc729ceefa
+                   trusted.glusterfs.dht :  0x0000000100000000000000007fffff7f
+/mnt/dev1/nas1/dir1/file3  :
+                            trusted.gfid :  0x56e3c979ba1a4ceaaf6a3cc054d18e2a
+							
+把104下电写入 dir1/file3
+touch: cannot touch `./dir1/file3': Transport endpoint is not connected

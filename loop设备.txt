@@ -1,0 +1,6 @@
+dd if=/dev/zero of=/NAS/loopdev1  bs=1M count=1024
+mkfs -t ext4 /NAS/loopdev1
+mkdir  /mnt/dev1 
+
+vi /etc/fstab
+/NAS/loopdev1            /mnt/dev1     ext4             loop        0 0

@@ -1,0 +1,270 @@
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+// 
+
+#ifdef __cplusplus
+}
+#endif
+
+#ifndef __ALARM_COMMON_H__
+#define __ALARM_COMMON_H__
+
+//
+
+#endif
+
+
+#ifdef UNISTOR_HA
+    "ha trigger"
+#endif
+
+strtol
+snprintf
+shmget
+msgget
+msgsnd
+memset
+system
+strtoul
+strchr
+index
+gethostname
+queue_msg_send
+popen
+pid_t
+struct flock lock
+pid文件
+syslog
+fork
+chdir
+fcntl
+getpid
+ftruncate
+umask
+close(STDIN_FILENO);
+close(STDOUT_FILENO);
+close(STDERR_FILENO);
+setsid
+signal
+signal(SIGHUP, monitor_sig_hup) == SIG_ERR
+signal(SIGTERM, monitor_clean_beep_daemon);
+IPC对象
+
+创建共享内存
+连接共享内存
+注册
+
+
+获取debug开关全局变量
+设置进程后台运行
+确保只起一个守护进程
+进程初始化
+向告警中心注册
+监听各模块注册消息以及事件消息
+
+
+
+
+#if 0
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+va_list args;
+va_start(args, log_id);
+va_end(args);
+
+
+关于时间
+mktime
+
+time_t timep = 0;
+time(&timep);
+ptm = localtime(&timep);
+module_init
+module_param
+EXPORT_SYMBOL
+MODULE_LICENSE
+MODULE_DESCRIPTION
+
+do_gettimeofday
+struct timeval tv;
+do_gettimeofday(&tv);
+offset = (0 - (sys_tz.tz_minuteswest)) * 60;
+time_to_tm(tv.tv_sec, offset, &stm);
+read_lock_bh(&link_info.lock);
+printk
+read_unlock_bh(&link_info.lock);
+sscanf
+strcasecmp
+
+gettimeofday
+
+
+
+
+
+strerror(errno)
+
+ flag = fcntl(fd, F_GETFL, 0);                   /* 获取套接字标志符 */
+ ret = fcntl(fd, F_SETFL, O_NONBLOCK | flag);    /* 设置套接字非阻塞标志 */
+test -f  +文件名 测试文件是否存在
+
+gethostname
+写锁
+accept
+readn
+
+
+
+
+EXPORT_SYMBOL
+dlopen
+dlerror
+dlsym
+dlclose
+
+(void)sigemptyset(&newset);
+(void)sigaddset(&newset, SIGPIPE);
+(void)sigprocmask(SIG_SETMASK, &newset, NULL);
+sigfillset
+
+waitpid
+WIFEXITED
+WEXITSTATUS
+(void*)shm_ptr
+umask(0)
+setsid()
+
+snmp_sess_init
+syscall
+syscall((long)SYS_gettid)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bzero
+strstr
+pollfd
+poll
+inet_ntoa
+
+#include <net-snmp/net-snmp-config.h>
+#include <net-snmp/net-snmp-includes.h>
+#include <net-snmp/agent/net-snmp-agent-includes.h>
+snmp_pdu_create
+snmp_add_var
+snmp_send
+snmp_open
+
+[root@proxy bin]# $LD_LIBRARY_PATH  
+[root@proxy bin]# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/cluster_distribution/SERVER/sms_install/usr/lib/    动态库环境变量
+[root@proxy bin]# ./alarmd 
+
+chmod 777 * -R 修改当前目录下的文件的权限
+grep -r  x86_64-redhat-linux *   在某一目录下递归[所有子目录]查找某一字串: 
+
+/etc/profile.d  开机启动脚本
+
+kill -9 2840
+ps aux | grep mysqld
+tail -f /var/log/messages  查看messages输出
+
+rm -rf +文件夹
+
+df -lh
+
+
+用df -Th就能看见你现在的空间使用量了.
+
+可以使用du -sh /*  来看一下那个路径下的文件比较大,删除一些无用的文件
+
+
+chkconfig | grep mysqld
+chkconfig mysqld off
+
+ldd program 查看一个程序需要的共享库
+nm libalarm.so 查看库里面有哪些函数
+nm alarmd  查看可执行文件有哪些函数
+nm alarm.o  查看目标文件有哪些函数
+
+
+
+
+getopt_long()
+using_history();???  GNU History Library (the Library)  Begin a session in which the history functions might be used. This initializes the interactive variables.
+
+bonding 端口聚合
+gateway 网关
+
+
+GNU Readline Library
+GUN History Library
+
+info_lib.a
+libhistory.a
+libncurses.a
+libreadline.a
+
+ROOT    := $(shell pwd)/..  makefile中当前目录的前一个目录
+
+可变参数宏定义
+
+vsnprintf
+snprintf
+
+命令行用问号来显示帮助命令
+
+
+python 调用动态库时，是调用该库以及相关的链接库，其实调用libalarm,和调用liball区别。
+
+
+mail——Forward_4710.exe
+MIB Browser
+
+scp root@192.168.44.226:/home/tert.c root@192.168.44.74:/home
+scp -r root@192.168.44.74:/home/zhong/zhong_cloud/cloud root@192.168.44.226:/home/zhong/zhong_cloud/
+
+history | grep mount
+
+mount -t cifs -o user=w0738 //192.168.44.225/code/Cloud_B03D043  /home/zhong
+mount -t cifs -o username=cw0738 //192.168.44.215/code/zhong_cloud  /home/zhong_cloud
+*&Ab1358068
+
+
+
+df -Th
+
+
+代码里运行系统命令时最好绝对路径，如ntpdate -u 192.168.44.74  应该改为：/usr/sbin/ntpdate -u 192.168.44.74
+
+
+cat ~/.bashrc
+
+
+
+

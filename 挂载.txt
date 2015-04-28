@@ -1,0 +1,32 @@
+mount -t cifs -o username=c01843 //192.168.44.215/code/zhong_cloud  /home/zhong_cloud
+mount -t cifs -o username=c01843 //192.168.44.215/code/sys_log  /home/sys_log
+mount -t cifs -o username=c01843 //192.168.44.215/code/  /home/zhong
+mount -t cifs -o username=c01843 //192.168.44.215/code/zhong_cloud/cloud  /usr/local/hstor/cloud/
+*&Ab1358068
+
+
+mount -t cifs -o username=c01843  //191.168.45.215/code/Cloud_B03D044SP01/cloud  /usr/local/hstor/cloud
+mount -t cifs -o username=c01843  //191.168.45.215/code/Cloud_B03D044SP01/      /home/zhong
+
+scp -rp root@192.168.44.74:/home/zhong/zhong_cloud/cloud  root@192.168.44.104:/home/zhong/
+
+scp -rp root@192.168.44.74:/usr/local/hstor/cloud  root@192.168.44.104:/home/zhong/
+scp -rp root@192.168.44.74:/usr/local/hstor/cloud  root@192.168.44.104:/usr/local/hstor/
+scp -rp root@192.168.44.74:/usr/local/hstor/sms_install  root@192.168.44.104:/usr/local/hstor/
+
+
+scp -rp root@192.168.44.74:/usr/local/hstor/cloud  /usr/local/hstor/
+
+scp -rp root@192.168.1.195:/home/zhong/cloud  /usr/local/hstor/
+scp -rp root@192.168.1.195:/home/zhong/cloud_alarm_distribution/SERVER/sms_install/usr/bin  /usr/local/hstor/
+
+scp -rp root@192.168.44.74:/home/zhong/Cloud_B03D044SP01/cloud_alarm_distribution/SERVER/sms_install  /usr/local/hstor/
+
+
+scp -rp root@192.168.44.74:/usr/local/hstor/sms_install/usr/lib  root@192.168.44.104:/usr/local/hstor/sms_install/usr/
+
+/bin/cp -af /home/sys_log_distribution/SERVER/sms_install/usr/lib/ /usr/local/hstor/sms_install/usr
+
+/bin/cp -af /home/zhong/trunk_new/sys_log_distribution/SERVER/sms_install/usr /usr/local/hstor/sms_install
+
+

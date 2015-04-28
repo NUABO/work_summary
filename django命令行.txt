@@ -1,0 +1,33 @@
+1、创建一个Django Project
+django-admin.py startproject mysite
+
+2、启动服务器
+python manage.py runserver 0.0.0.0:8000
+
+3、进入Shell状态（可以与用户进行交互）
+python manage.py shell
+
+4、创建一个叫做book的APP
+python manage.py startapp book   
+
+5、检查模型的有效性（说通俗点就是这个模型能不能在数据库中生成表，它只是检测，并没有真正生成）
+python manage.py validate        
+
+生成SQL语句
+python manage.py sqlall books
+
+提交SQL语句至数据库
+python manage.py syncdb
+
+进入数据库
+python manage.py dbshell
+
+django-admin.py startproject test   创建一个项目名叫test的项目
+python manage.py startapp app            创建一个叫做app的APP
+python manage.py runserver                  启动服务器
+python manage.py validate                     检查模型的有效性（说通俗点就是这个模型能不能在数据库中生成表，它只是检测，并没有真正生成）
+python manage.py sqlall app名称             打印这个app中创建数据库的SQL语句
+manage.py syncdb                          同步并创建数据库，这也大大减少了不懂的数据库知识的开发人员的工作量
+python manage.py createsuperuser  创建一个admin用户用以管理你的Django站点（不过这个已经在第6个个命令中默认提示执行，看图可知）如果你在第六步中没有创建admin用户，这时你就可以使用该命令。
+manage.py sql app名称                   查看数据库中所存在的表
+manage.py shell                             进入Shell状态（可以与用户进行交互）
