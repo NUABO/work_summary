@@ -10,7 +10,7 @@ from struct import *
 
 
 def decompose(file_in):
-    size = 1024
+    size = 1024*100
     filesize = os.path.getsize(file_in)
     f_in = open(file_in,'rb')
     j=0
