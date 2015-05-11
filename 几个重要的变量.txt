@@ -1,0 +1,40 @@
+fuse_write_resume函数中有生成frame，fuse_write就有this变量
+
+#0  io_stats_writev (frame=0x7f926c00eb7c, this=0x2145b80, fd=0x7f926c016dac, vector=0x7f926c001210, count=1,
+    offset=0, flags=32769, iobref=0x7f926c00e880, xdata=0x0) at io-stats.c:2146
+#1  0x00007f927f67fcb8 in default_writev (frame=0x7f926c00eb7c, this=0x2147020, fd=0x7f926c016dac,
+    vector=0x7f926c001210, count=1, off=0, flags=32769, iobref=0x7f926c00e880, xdata=0x0) at defaults.c:1813
+#2  0x00007f9271796d0a in meta_writev (frame=0x7f926c00eb7c, this=0x2147020, fd=0x7f926c016dac, iov=0x7f926c001210,
+    count=1, offset=0, flags=32769, iobref=0x7f926c00e880, xdata=0x0) at meta.c:147
+#3  0x00007f9276fd4ea2 in fuse_write_resume (state=0x7f926c000b20) at fuse-bridge.c:2306
+#4  0x00007f9276fc92c1 in fuse_fop_resume (state=0x7f926c000b20) at fuse-bridge.c:568
+#5  0x00007f9276fc68b0 in fuse_resolve_done (state=0x7f926c000b20) at fuse-resolve.c:660
+#6  0x00007f9276fc69ae in fuse_resolve_all (state=0x7f926c000b20) at fuse-resolve.c:687
+#7  0x00007f9276fc6869 in fuse_resolve (state=0x7f926c000b20) at fuse-resolve.c:651
+#8  0x00007f9276fc6985 in fuse_resolve_all (state=0x7f926c000b20) at fuse-resolve.c:683
+#9  0x00007f9276fc6a37 in fuse_resolve_continue (state=0x7f926c000b20) at fuse-resolve.c:703
+#10 0x00007f9276fc6541 in fuse_resolve_fd (state=0x7f926c000b20) at fuse-resolve.c:563
+#11 0x00007f9276fc6817 in fuse_resolve (state=0x7f926c000b20) at fuse-resolve.c:640
+#12 0x00007f9276fc6930 in fuse_resolve_all (state=0x7f926c000b20) at fuse-resolve.c:676
+#13 0x00007f9276fc6aa3 in fuse_resolve_and_resume (state=0x7f926c000b20, fn=0x7f9276fd4940 <fuse_write_resume>)
+    at fuse-resolve.c:715
+#14 0x00007f9276fd50c2 in fuse_write (this=0x210df80, finh=0x7f926c012060, msg=0x7f927def8000) at fuse-bridge.c:2358
+#15 0x00007f9276fe196c in fuse_thread_proc (data=0x210df80) at fuse-bridge.c:4900
+#16 0x00007f927efdbdf3 in start_thread () from /lib64/libpthread.so.0
+#17 0x00007f927e7283dd in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:113
+
+
+print (*(xlator_t *)0x210df80)
+print *(*(xlator_t *)0x210df80).next
+print *(*(xlator_t *)0x210df80).next.next
+
+(xlator_t *)0x210df80 不等于 global_xlator（这个全局变量的作用还不知）,   保存在this_xlator_key中，THIS中
+
+(*(xlator_t *)0x210df80).ctx  等于  glusterfsd_ctx
+
+frame是在STACK_WIND中生成的
+
+
+
+afr_private_t dht_conf  fuse_private_t ec_t
+

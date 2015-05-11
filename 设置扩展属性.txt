@@ -1,0 +1,9 @@
+setfattr -n 'trusted.glusterfs.io-stat-dump' -v '/tmp/vol_iostat' /mnt/dht/  ¹ý³Ì
+
+3 fuse_setxattr
+4 default_setxattr
+5 io_stats_setxattr
+6 conditional_dump
+7 io_stats_dump
+8 io_stats_dump_global
+9 io_stats_dump_global_to_logfp

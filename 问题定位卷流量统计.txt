@@ -1,0 +1,13 @@
+setfattr -n 'trusted.glusterfs.io-stat-dump' -v '/tmp/vol_iostat' /mnt/dht/
+
+dd if=/dev/zero of=io_test  bs=1M  count=1000
+
+cp /home/io_test /mnt/dht/io_test123
+
+
+volume /NAS/nasdevice7
+    type debug/io-stats
+    option count-fop-hits off
+    option latency-measurement off
+    subvolumes test-dht-quota
+end-volume

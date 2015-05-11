@@ -1,0 +1,25 @@
+service ctdb start
+service ctdb stop
+
+ctdb status
+
+ctdb listnodes 显示节点
+
+ctdb ip 显示虚拟ip
+
+ctdb ipinfo 10.1.45.100 显示单个虚拟ip的详细情况
+
+
+ctdb moveip 191.168.1.1 0    把ip搬到某个节点上，节点号用 ctdb status可以查 pnn:0
+
+ctdb addip 10.1.45.100/16 eth2 添加单个虚拟ip
+
+
+ctdb delip 10.1.45.100  删除单个虚拟ip
+
+ctdb recmaster  查看哪个节点是主节点
+
+ctdb reloadnodes    #reload the nodes file and restart the transport on all nodes
+
+
+/etc/ctdb/static-routes #路由文件

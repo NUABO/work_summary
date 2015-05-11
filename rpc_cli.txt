@@ -1,0 +1,31 @@
+0 cli_cmd_volume_create_cbk（cli创建卷）
+1 gf_cli_create_volume（客户端注册的fn）
+2 cli_to_glusterd
+3 dict_allocate_and_serialize （把字典转的req）
+3 cli_cmd_submit
+4 xdr_serialize_generic
+4 cli_submit_request
+5 rpc_clnt_submit
+6 rpc_transport_connect（建立传输层连接）
+6 rpc_transport_submit_request（提交传输层rpc请求）
+7 socket_submit_requestsocket（socket提交请求）
+8 ___wait___（等待服务端响应）
+9 socket_event_handler
+10 socket_event_poll_in
+11 rpc_transport_notify
+12 rpc_transport_t->notify___rpc_clnt_notify
+13 rpc_clnt_handle_cbk（客户端处理回调函数）
+14 program->actors___gf_cli_create_volume_cbk
+
+
+0 rpcsvc_notify（rpc服务器响应函数）
+1 rpcsvc_handle_rpc_call（处理RPC调用）
+2 rpcsvc_program_actor___glusterd_handle_create_volume
+2 glusterd_handle_create_volume（RPC响应函数）
+3 glusterd_big_locked_handler（加个大锁）
+4 __glusterd_handle_create_volume
+5 glusterd_to_cli（glusterd响应rpc客户端）
+6 glusterd_submit_reply
+7 rpcsvc_submit_generic
+8 rpcsvc_transport_submit（提交传输层rpc响应）
+9 rpc_transport_submit_reply

@@ -1,0 +1,5 @@
+http_proxy=191.168.44.218:3128
+https_proxy=191.168.44.218:3128
+ftp_proxy=191.168.44.218:3128
+no_proxy=191.168.,192.168.44.,192.168.1.,
+export http_proxy https_proxy ftp_proxy no_proxy

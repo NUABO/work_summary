@@ -1,0 +1,94 @@
+1、启动和停止
+/etc/init.d/glusterd start
+/etc/init.d/glusterd stop
+
+chkconfig glusterd on
+
+2、创建存储池
+
+gluster peer probe server2
+gluster peer probe 191.168.45.74
+
+3、把一台主机从存储池移除
+gluster peer detach server
+
+4、创建卷
+
+gluster volume create NEW-VOLNAME [stripe COUNT | replica COUNT]
+[transport [tcp | rdma | tcp,rdma]] NEW-BRICK1 NEW-BRICK2 NEW-BRICK3...
+
+gluster volume create test-volume server3:/exp3 server4:/exp4
+
+创建分布式卷
+gluster volume create test-volume server1:/exp1 server2:/exp2 server3:/exp3 server4:/exp4
+gluster volume info
+
+创建复制卷
+gluster volume create test-volume replica 2 transport tcp server1:/exp1 server2:/exp2
+
+创建条带卷
+gluster volume create test-volume stripe 2 transport tcp server1:/exp1 server2:/exp2
+
+创建分布式条带卷
+gluster volume create test-volume stripe 4 transport tcp server1:/exp1 server2:/exp2
+ server3:/exp3 server4:/exp4 server5:/exp5 server6:/exp6 server7:/exp7 server8:/exp8
+ 
+ 创建分布式复制卷
+gluster volume create test-volume replica 2 transport tcp server1:/exp1 server2:/exp2 server3:/exp3 server4:/exp4
+ 
+创建分布式条带复制卷
+gluster volume create test-volume stripe 2 replica 2 transport tcp server1:/exp1
+ server2:/exp2 server3:/exp3 server4:/exp4 server5:/exp5 server6:/exp6 server7:/exp7
+ 
+ 创建条带复制卷
+ gluster volume create test-volume stripe 2 replica 2 transport tcp server1:/exp1 server2:/exp2 server3:/exp3 server4:/exp4
+ server8:/exp8
+ 
+ 5、启动卷
+ gluster volume start test-volume
+ 
+ 6、客户端安装
+  modprobe fuse
+  dmesg | grep -i fuse
+  mkdir glusterfs
+  cd glusterfs
+  tar -xvzf glusterfs-3.3.0.tar.gz
+  ./configure
+  make
+  make install
+  glusterfs –-version
+  
+ 7、挂载
+ mount -t glusterfs server1:/test-volume /mnt/glusterfs
+ 
+ 自动挂载 /etc/fstab
+HOSTNAME-OR-IPADDRESS:/VOLNAME MOUNTDIR glusterfs defaults,_netdev 0 0
+For example:
+server1:/test-volume /mnt/glusterfs glusterfs defaults,_netdev 0 0
+ 
+Mounting Options：
+backupvolfile-server=server-name
+fetch-attempts=N (where N is number of attempts)
+log-level=loglevel
+log-file=logfile
+direct-io-mode=[enable|disable]
+ro (for readonly mounts)
+acl (for enabling posix-ACLs)
+worm (making the mount WORM - Write Once, Read Many type)
+selinux (enable selinux on GlusterFS mount）
+
+example:
+mount -t glusterfs -o backupvolfile-server=volfile_server2,fetchattempts=2,log-level=WARNING,log-file=/var/log/gluster.log server1:/testvolume /mnt/glusterfs
+HOSTNAME-OR-IPADDRESS:/VOLNAME MOUNTDIR glusterfs defaults,_netdev,loglevel=WARNING,log-file=/var/log/gluster.log 0 0
+
+8、使用NFS挂载
+mount -t nfs -o vers=3 server1:/test-volume /mnt/glusterfs
+mount -o mountproto=tcp,vers=3 -t nfs server1:/test-volume /mnt/glusterfs
+mount -o proto=tcp,vers=3 nfs://server1:38467/test-volume /mnt/glusterfs
+自动挂载
+HOSTNAME-OR-IPADDRESS:/VOLNAME MOUNTDIR nfs defaults,_netdev,vers=3 0 0
+server1:/test-volume /mnt/glusterfs nfs defaults,_netdev,vers=3 0 0
+server1:/test-volume /mnt/glusterfs nfs defaults,_netdev,mountproto=tcp 0 0
+
+9、设置卷参数
+gluster volume set VOLNAME OPTION PARAMETER
