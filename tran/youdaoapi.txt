@@ -1,0 +1,14 @@
+有道翻译API申请成功
+API key：1333588662
+keyfrom：chenzhongtao
+创建时间：2015-05-07
+网站名称：chenzhongtao
+网站地址：http://chenzhongtao.com
+
+http://fanyi.youdao.com/openapi.do?keyfrom=chenzhongtao&key=1333588662&type=data&doctype=json&version=1.1&q=good
+
+import json
+from urllib import urlopen
+url = "http://fanyi.youdao.com/openapi.do?keyfrom=chenzhongtao&key=1333588662&type=data&doctype=json&version=1.1&q=good"
+f = urlopen(url)
+jsonStr = f.read()
