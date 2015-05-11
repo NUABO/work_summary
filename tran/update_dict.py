@@ -21,7 +21,7 @@ class Youdao:
         result = urllib2.urlopen(url).read()
         json_result = json.loads(result)
         if json_result.has_key('errorCode') and json_result["errorCode"] != 0:
-            print "error: error code ",json_result["errorCode"]
+            print "error: error code ",json_result["errorCode"],"word:",words
             return -1
         dict_word = {}
         if json_result.has_key('translation'):
