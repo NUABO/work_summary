@@ -1,0 +1,132 @@
+[root@swift-1 hadoop-2.7.0]# cat /etc/hosts
+#::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+127.0.0.1   localhost  localhost.localdomain localhost4 localhost4.localdomain4
+191.168.45.74 swift-1
+191.168.45.104 swift-104
+
+
+[root@swift-1 hadoop-2.7.0]# cd /opt/hadoop-2.7.0
+
+./bin/hadoop dfsadmin -report
+./bin/hdfs dfsadmin -report
+
+
+[root@swift-1 hadoop-2.7.0]# ./sbin/start-dfs.sh
+Starting namenodes on [swift-1]
+swift-1: starting namenode, logging to /opt/hadoop-2.7.0/logs/hadoop-root-namenode-swift-1.out
+swift-1: starting datanode, logging to /opt/hadoop-2.7.0/logs/hadoop-root-datanode-swift-1.out
+swift-104: starting datanode, logging to /opt/hadoop-2.7.0/logs/hadoop-root-datanode-swift-104.out
+Starting secondary namenodes [swift-1]
+swift-1: starting secondarynamenode, logging to /opt/hadoop-2.7.0/logs/hadoop-root-secondarynamenode-swift-1.out
+
+
+[root@swift-1 hadoop-2.7.0]# ./sbin/start-yarn.sh
+[root@swift-1 hadoop-2.7.0]# jps 
+
+
+[root@swift-1 hadoop-2.7.0]# cd /opt/hadoop-2.7.0/bin
+./hdfs dfs -mkdir /foodir             创建一个名为 /foodir 的目录
+./hdfs dfs -put /root/123.conf  /foodir/123.conf   将本地文件夹存储至hadoop
+./hdfs dfs -cat /foodir/123.conf    查看名为 /foodir/123.conf 的文件内容 
+./hdfs dfs -ls /foodir  查看指定目录下内容
+./hdfs dfs -lsr /foodir  ls命令的递归版本  ./hdfs dfs -ls -R /foodir
+./hdfs dfs -get /foodir/123.conf /home/   将hadoop上某个文件down至本地已有目录下
+./hdfs dfs -copyToLocal /foodir/123.conf /home/   除了限定目标路径是一个本地文件外，和get命令类似
+./hdfs dfs -du /foodir/123.conf 显示目录中所有文件的大小，或者当只指定一个文件时，显示此文件的大小
+./hdfs dfs -dus /foodir/123.conf  显示文件的大小  = du -s
+./hdfs dfs -stat /foodir/123.conf 返回指定路径的统计信息
+./hdfs dfs -tail /foodir/123.conf  将文件尾部的内容输出到stdout
+./hdfs dfs -test -e /foodir/123.conf      -e  检查文件是否存在。如果存在则返回0。
+                                          -z  检查文件是否是0字节。如果是则返回0.
+                                          -d  检查路径是个目录，则返回1，否则返回0.
+./hdfs dfs -touchz  /foodir/new.txt 在hadoop指定目录下新建一个空文件
+./hdfs dfs -copyFromLocal /root/123.conf  /foodir/copy.txt  I除了限定资源路径是一个本地文件外，和put命令相似
+./hdfs dfs -moveFromLocal /root/123.conf  /foodir/move.txt  mv一个文件，与put的区别就是会删除本地文件
+./hdfs dfs -rm /foodir/move.txt  删除文件
+./hdfs dfs -rm -r /test  删除目录
+./hdfs dfs -expunge 清空回收站
+./hdfs dfs -mv  /foodir/copy.txt  /foodir/copy2.txt  将hadoop上某个文件重命名
+./hdfs dfs -cp  /foodir/copy2.txt  /foodir/copy.txt  将文件从源路径复制到目标路径。这个命令允许有多个源路径，此时目标路径必须是一个目录。
+./hdfs dfs -chgrp [-R] GROUP [URI ...]   改变文件必属的组
+./hdfs dfs -chmod [-R] <MODE[,MODE]> URI [URI ...] 改变文件的权限
+./hdfs dfs -chown [-R] [OWNER][:[GROUP]] URI [URI]
+./hdfs dfs -appendToFile /root/123.conf  /foodir/123.conf  把本地文件的内容添加到某个文件后面
+./hdfs dfs
+[root@swift-1 bin]# ./hdfs dfs
+Usage: hadoop fs [generic options]
+        [-appendToFile <localsrc> ... <dst>]
+        [-cat [-ignoreCrc] <src> ...]
+        [-checksum <src> ...]
+        [-chgrp [-R] GROUP PATH...]
+        [-chmod [-R] <MODE[,MODE]... | OCTALMODE> PATH...]
+        [-chown [-R] [OWNER][:[GROUP]] PATH...]
+        [-copyFromLocal [-f] [-p] [-l] <localsrc> ... <dst>]
+        [-copyToLocal [-p] [-ignoreCrc] [-crc] <src> ... <localdst>]
+        [-count [-q] [-h] <path> ...]
+        [-cp [-f] [-p | -p[topax]] <src> ... <dst>]
+        [-createSnapshot <snapshotDir> [<snapshotName>]]
+        [-deleteSnapshot <snapshotDir> <snapshotName>]
+        [-df [-h] [<path> ...]]
+        [-du [-s] [-h] <path> ...]
+        [-expunge]
+        [-find <path> ... <expression> ...]
+        [-get [-p] [-ignoreCrc] [-crc] <src> ... <localdst>]
+        [-getfacl [-R] <path>]
+        [-getfattr [-R] {-n name | -d} [-e en] <path>]
+        [-getmerge [-nl] <src> <localdst>]
+        [-help [cmd ...]]
+        [-ls [-d] [-h] [-R] [<path> ...]]
+        [-mkdir [-p] <path> ...]
+        [-moveFromLocal <localsrc> ... <dst>]
+        [-moveToLocal <src> <localdst>]
+        [-mv <src> ... <dst>]
+        [-put [-f] [-p] [-l] <localsrc> ... <dst>]
+        [-renameSnapshot <snapshotDir> <oldName> <newName>]
+        [-rm [-f] [-r|-R] [-skipTrash] <src> ...]
+        [-rmdir [--ignore-fail-on-non-empty] <dir> ...]
+        [-setfacl [-R] [{-b|-k} {-m|-x <acl_spec>} <path>]|[--set <acl_spec> <path>]]
+        [-setfattr {-n name [-v value] | -x name} <path>]
+        [-setrep [-R] [-w] <rep> <path> ...]
+        [-stat [format] <path> ...]
+        [-tail [-f] <file>]
+        [-test -[defsz] <path>]
+        [-text [-ignoreCrc] <src> ...]
+        [-touchz <path> ...]
+        [-truncate [-w] <length> <path> ...]
+        [-usage [cmd ...]]
+
+
+./bin/hadoop jar /opt/hadoop-2.7.0/share/hadoop/tools/lib/hadoop-streaming-2.7.0.jar \
+-mapper /opt/hadoop-2.7.0/mapper.py \
+-file /opt/hadoop-2.7.0/mapper.py \
+-reducer /opt/hadoop-2.7.0/reducer.py \
+-file /opt/hadoop-2.7.0/reducer.py \
+-input /123.txt  /messages -output /123-output7 \
+-jobconf mapred.reduce.tasks=3
+
+-D mapred.reduce.tasks=16
+
+
+
+
+./bin/hadoop jar /opt/hadoop-2.7.0/share/hadoop/tools/lib/hadoop-streaming-2.7.0.jar \
+-D mapred.reduce.tasks=16 \
+-input /123.txt  /messages -output /123-output11 \
+-mapper /bin/cat \
+-reducer /usr/bin/wc \
+
+./bin/hadoop jar /opt/hadoop-2.7.0/share/hadoop/tools/lib/hadoop-streaming-2.7.0.jar \
+-D mapred.reduce.tasks=1 \
+-input /123-output11  -output /123-output13 \
+-mapper /bin/cat \
+-reducer /usr/bin/wc \
+
+
+
+hadoop jar /opt/hadoop-2.7.0/share/hadoop/tools/lib/hadoop-streaming-2.7.0.jar \
+-D mapred.reduce.tasks=1 \
+-input /data  -output /distance_output \
+-mapper /opt/hadoop-2.7.0/hadoop_code/distance/mapper.py \
+-file /opt/hadoop-2.7.0/hadoop_code/distance/mapper.py \
+-reducer /opt/hadoop-2.7.0/hadoop_code/distance/reducer.py \
+-file /opt/hadoop-2.7.0/hadoop_code/distance/reducer.py \
