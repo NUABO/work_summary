@@ -265,6 +265,8 @@ df -Th
 
 cat ~/.bashrc
 
+umount -l «ø÷∆–∂‘ÿ
+
 
 
 
