@@ -64,7 +64,7 @@ def word(file_in, file_out):
                     sleep(7)
                 words_dict[word.lower()] = dict_word
             
-    f1 = open("dict_new","wb")
+    f1 = open(file_out,"wb")
     pickle.dump(words_dict, f1)
     f1.close()
 

@@ -31,7 +31,7 @@ def word(file_in, file_out):
         if modify_dict[i].lower() in words_dict:
             words_dict[modify_dict[i].lower()]["translation"][0] = modify_dict[i+1].decode("utf-8")
             print modify_dict[i]
-    f1 = open("dict_new","wb")
+    f1 = open("file_out","wb")
     pickle.dump(words_dict, f1)
     f1.close()
 
@@ -40,7 +40,7 @@ def main():
     #from dbgp.client import brk
     #brk(host="191.168.45.215", port=50803)
     file_in = "modify_dict.txt"
-    file_out = "dict_new"
+    file_out = "dict"
     if len(sys.argv) >= 3:
         file_in = sys.argv[1]
         file_out = sys.argv[2]

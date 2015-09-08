@@ -1,0 +1,15 @@
+1、 运行word_unknow.py  translate  unknow_word.txt   把目录translate的文件所有生词加到 unknow_word.txt中
+2、 复制unknow_word.txt为unknow_word_new.txt，人工修改删除unknow_word_new.txt中认识的单词
+3、 运行update_know_word.py  unknow_word.txt unknow_word_new.txt   更新know_word.txt
+4、 运行update_dict.py  unknow_word.txt dict  更新dict
+5、 复制translate 为translate_tran
+6、 运行translate.py  unknow_word.txt dict  把目录translate的文件翻译到translate_tran
+
+如果觉得翻译不好，可以更新dict  运行update_dict.py  会把modify_dict.txt中的单词更新 modify_dict.txt中的内容如(explains 解释 concept 概念)
+
+
+
+html：
+把第1步改为：word_unknow_html.py
+第6步改为： translate_html.py
+（所有文本文件都可以用这两步，推荐）

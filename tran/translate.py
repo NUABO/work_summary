@@ -12,7 +12,7 @@ from time import sleep
 
 
 
-def translate(file_in, file_out):
+def translate_all(file_in, file_out):
     
     unknow_list  = []
     
@@ -30,16 +30,28 @@ def translate(file_in, file_out):
         print "dict is empty"
         return 
     if os.path.isdir("translate"):
-        os.chdir("./translate")
+        pass
     else:
         print "no dir translate"
         return
-    file_list = os.listdir("./")
-    for filename in file_list:
-        if ".tran" in filename:
-            continue
-        f = open(filename,"r")
-        f_w =codecs.open(filename+".tran","w",'utf-8')
+    #os.mkdir("translate_tran")
+    translate(unknow_list, words_dict, "translate", "translate_tran")
+    print "translate success"
+
+def translate(unknow_list, words_dict, before, after):
+    if os.path.isdir(before):
+        file_list = os.listdir(before)
+        file_list.sort()
+        for filename in file_list:
+            if "-a" not in sys.argv:
+                if filename[0] == '.':
+                    continue
+            filename_b = os.path.join(before, filename)
+            filename_a = os.path.join(after, filename)
+            translate(unknow_list, words_dict, filename_b, filename_a)
+    elif os.path.isfile(before):
+        f = open(before,"r")
+        f_w =codecs.open(after,"w",'utf-8')
         for line in f:
             line = unicode(line,'utf-8')
             lines_list = line.split()
@@ -53,7 +65,9 @@ def translate(file_in, file_out):
             f_w.write(line)  
         f.close()
         f_w.close()
-        
+    else:
+        print "%s is not exist." % before
+    
 
 
 
@@ -68,7 +82,7 @@ def main():
     elif len(sys.argv) == 2:
         file_in = sys.argv[1]
         
-    translate(file_in, file_out)
+    translate_all(file_in, file_out)
 
 
 

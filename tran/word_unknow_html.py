@@ -7,7 +7,6 @@ import os
 
 words_list  = []
 
-
 def word(know_list, file_in):
 	if os.path.isdir(file_in):
 		file_list = os.listdir(file_in)
@@ -19,19 +18,30 @@ def word(know_list, file_in):
 				filename = os.path.join(file_in, filename)
 				word(know_list, filename)
 	elif os.path.isfile(file_in):
-		#words_list  = []
+		
 		lines_list  = []
 		
-		with open(file_in, 'r') as f:
-			for line in f:
-				#把标点换成空格
-				line=re.sub("[;,.?]\s"," ", line)
-				lines_list = line.split()
-				for i in lines_list:
-					# 只统计单词
-					if not re.findall(r'[^a-zA-Z]+', i) :
-						if  i not in words_list:
-							words_list.append(i)
+		fr = open(file_in, 'r')
+		s = fr.read()
+		#s = re.sub("(<noscript>.*?</noscript>)","",s) #.是没有匹配换行符的
+		s = re.sub("(<noscript>[\s\S]*?</noscript>)","",s)
+		s = re.sub("(<script[\s\S]*?</script>)","",s)
+		s = re.sub("(<[\s\S]*?>)","",s)
+		
+		f_tmp = os.tmpfile()
+		f_tmp.write(s)
+		f_tmp.seek(0)
+
+		for line in f_tmp:
+			#把标点换成空格
+			line=re.sub("[;,.?]\s"," ", line)
+			lines_list = line.split()
+			for i in lines_list:
+				# 只统计单词
+				if not re.findall(r'[^a-zA-Z]+', i) :
+					if  i not in words_list:
+						words_list.append(i)
+		f_tmp.close()
 	else:
 		print "%s is not exist." % file_in
 
@@ -61,7 +71,7 @@ def main():
 			i = i + 1
 	fw.close()
 	print "words : " ,i
-	print "word_unknow success"
+	print "word_unknow_html success"
 
 
 

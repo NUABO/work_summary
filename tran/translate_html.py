@@ -12,7 +12,7 @@ from time import sleep
 
 
 
-def translate(file_in, file_out):
+def translate_all(file_in, file_out):
     
     unknow_list  = []
     
@@ -30,27 +30,47 @@ def translate(file_in, file_out):
         print "dict is empty"
         return 
     if os.path.isdir("translate"):
-        os.chdir("./translate")
+        pass
     else:
         print "no dir translate"
         return
-    file_list = os.listdir("./")
-    for filename in file_list:
-        if "tran_" in filename:
-            continue
-        f = open(filename,"r")
-        f_w =codecs.open("tran_" + filename,"w",'utf-8')
+    #os.mkdir("translate_tran")
+    translate(unknow_list, words_dict, "translate", "translate_tran")
+    print "translate success"
+
+
+#def translate(file_in, file_out):
+def translate(unknow_list, words_dict, before, after):
+    if os.path.isdir(before):
+        file_list = os.listdir(before)
+        file_list.sort()
+        for filename in file_list:
+            if "-a" not in sys.argv:
+                if filename[0] == '.':
+                    continue
+            filename_b = os.path.join(before, filename)
+            filename_a = os.path.join(after, filename)
+            translate(unknow_list, words_dict, filename_b, filename_a)
+    elif os.path.isfile(before):
+        f = open(before,"r")
+        f_w =codecs.open(after,"w",'utf-8')
         s= f.read()
         for word in unknow_list:
-            tran = word+"(%s) "%words_dict[word.lower()]["translation"][0]
-            s = re.sub(word+" ",tran,s)
+            tran = word+"(%s)"%words_dict[word.lower()]["translation"][0]
+            s = re.sub(word+" ",tran+" ",s)
+            s = re.sub(word+"\n",tran+"\n",s)
+            s = re.sub(word+"\r\n",tran+"\r\n",s)
+            s = re.sub(word+",",tran+",",s)
+            s = re.sub(word+"\.",tran+"\.",s)
+            s = re.sub(word+"\?",tran+"\?",s)
+            s = re.sub(word+"$",tran,s)
         f_w.write(s)  
         f.close()
         f_w.close()
+    else:
+        print "%s is not exist." % before
         
-
-
-
+        
 def main():
     #from dbgp.client import brk
     #brk(host="191.168.45.215", port=50803)
@@ -62,7 +82,7 @@ def main():
     elif len(sys.argv) == 2:
         file_in = sys.argv[1]
         
-    translate(file_in, file_out)
+    translate_all(file_in, file_out)
 
 
 

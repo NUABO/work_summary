@@ -1,5 +1,9 @@
-http_proxy=191.168.44.218:3128
-https_proxy=191.168.44.218:3128
-ftp_proxy=191.168.44.218:3128
-no_proxy=191.168.,192.168.44.,192.168.1.,
+服务器配置：http://blog.csdn.net/lrping/article/details/317251
+
+
+http_proxy=http://191.168.45.11:3128
+https_proxy=https://191.168.45.11:3128
+ftp_proxy=ftp://191.168.45.11:3128
+export no_proxy=191.168.,192.168.45.,192.168.1.
 export http_proxy https_proxy ftp_proxy no_proxy
+

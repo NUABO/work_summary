@@ -29,3 +29,6 @@
 7 rpcsvc_submit_generic
 8 rpcsvc_transport_submit（提交传输层rpc响应）
 9 rpc_transport_submit_reply
+
+
+两个重要的结构体数组 gd_svc_cli_actors （服务端调用）  gluster_cli_actors（客户端调用）

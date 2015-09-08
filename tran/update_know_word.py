@@ -27,7 +27,7 @@ def word(file_in, file_out):
         if word not in unknow_list_new:
             know_list.append(word.lower())
             
-    fw = open("know_word_new.txt", 'w')
+    fw = open("know_word.txt", 'w')
     i = 0
     for key in sorted(know_list):
             fw.write(key+"\n")

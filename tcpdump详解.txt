@@ -1,0 +1,187 @@
+服务器：
+from socket import *
+s = socket(AF_INET, SOCK_STREAM)
+s.bind(("",2015))
+s.listen(5)
+c,adrr = s.accept() #在这个之前客户端已经连接成功了
+c.getsockopt(SOL_SOCKET,SO_SNDBUF)
+c.getsockopt(SOL_SOCKET,SO_RCVBUF)
+
+客户端：
+from socket import *
+s = socket(AF_INET, SOCK_STREAM)
+s.connect(("60.60.1.11",2015))
+d = "1"*1024
+s.send(d)
+
+
+
+1、客户端60.60.1.101向服务端60.60.1.102建立连接，发送1K数据并断开连接的过程
+
+
+60.60.1.101上tcpdump输出  60.60.1.102上tcpdump输出是一样的
+tcpdump  -i  slot1_10GE1  host 60.60.1.102  # and port 2015
+
+11:13:01.420610 IP 60.60.1.101.51098 > 60.60.1.102.cypress: Flags [S], seq 3936711372, win 14600, options [mss 1460,sackOK,TS val 2079809395 ecr 0,nop,wscale 7], length 0
+11:13:01.420660 IP 60.60.1.102.cypress > 60.60.1.101.51098: Flags [S.], seq 2569133227, ack 3936711373, win 14480, options [mss 1460,sackOK,TS val 2079916685 ecr 2079809395,nop,wscale 7], length 0
+11:13:01.420673 IP 60.60.1.101.51098 > 60.60.1.102.cypress: Flags [.], ack 1, win 115, options [nop,nop,TS val 2079809395 ecr 2079916685], length 0
+11:13:01.420713 IP 60.60.1.101.51098 > 60.60.1.102.cypress: Flags [P.], seq 1:1025, ack 1, win 115, options [nop,nop,TS val 2079809395 ecr 2079916685], length 1024
+11:13:01.420747 IP 60.60.1.102.cypress > 60.60.1.101.51098: Flags [.], ack 1025, win 130, options [nop,nop,TS val 2079916685 ecr 2079809395], length 0
+11:13:01.420764 IP 60.60.1.101.51098 > 60.60.1.102.cypress: Flags [F.], seq 1025, ack 1, win 115, options [nop,nop,TS val 2079809395 ecr 2079916685], length 0
+11:13:01.420980 IP 60.60.1.102.cypress > 60.60.1.101.51098: Flags [F.], seq 1, ack 1026, win 130, options [nop,nop,TS val 2079916685 ecr 2079809395], length 0
+11:13:01.420988 IP 60.60.1.101.51098 > 60.60.1.102.cypress: Flags [.], ack 2, win 115, options [nop,nop,TS val 2079809395 ecr 2079916685], length 0
+
+前三条连接时的三次握手
+倒数后条客户端发送一个FIN,服务端因为没数据要发送了。所以马上ACK和发送一个FIN，最后客户端ACK.
+
+S indicates that the SYN flag
+F indicates that the FIN flag
+`.' means the ACK flag was set
+R indicates that the RST flag  (有数据还没处理进程就退出就会向对方发送一个RET)
+P indicates that the PSH flag (尽可能快的将数据发送到接收进程)
+win 是指滑动窗口大小
+length 指数据包的大小
+TS val是发送端的时间戳。ecr是回显应答时间戳
+nop 空操作选项
+
+ 0                            15                              31
+-----------------------------------------------------------------
+|          source port          |       destination port        |
+-----------------------------------------------------------------
+|                        sequence number                        |
+-----------------------------------------------------------------
+|                     acknowledgment number                     |
+-----------------------------------------------------------------
+|  HL   | rsvd  |C|E|U|A|P|R|S|F|        window size            |
+-----------------------------------------------------------------
+|         TCP checksum          |       urgent pointer          |
+-----------------------------------------------------------------
+|                 options                                       |
+-----------------------------------------------------------------
+
+There are 8 bits in the control bits section of the TCP header:
+
+CWR | ECE | URG | ACK | PSH | RST | SYN | FIN
+
+
+2、当客户端在发数据时,服务端退出会发送一个RST,客户没有发数据也会受到RST，（python中会受到socket.error异常）
+ File "client.py", line 54, in _main
+    tcpCliSock.send(data)
+socket.error: [Errno 104] Connection reset by peer
+
+
+3、服务进程还没起时，客户端发起连接，客户端会受到一个RST
+13:41:00.650794 IP 60.60.1.101.40885 > 60.60.1.11.cypress: Flags [S], seq 242181515, win 14600, options [mss 1460,sackOK,TS val 2088688625 ecr 0,nop,wscale 7], length 0
+13:41:00.650908 IP 60.60.1.11.cypress > 60.60.1.101.40885: Flags [R.], seq 0, ack 242181516, win 0, length 0
+
+File "<string>", line 1, in connect
+socket.error: [Errno 111] Connection refused
+
+
+4、客户端发完数据就调用close,此时服务端还有数据要发送，将收到客户端发来的RST，服务端收到RST就会把套接字关了，此时再写就会报错，（客户端收到RST是报出异常），服务器recv时收到FIN和RST都是返回空
+15:30:26.261087 IP 60.60.1.102.cypress > 60.60.1.101.34402: Flags [S.], seq 4011669066, ack 182677718, win 14480, options [mss 1460,sackOK,TS val 2095361508 ecr 2095254235,nop,wscale 7], length 0
+15:30:26.261100 IP 60.60.1.101.34402 > 60.60.1.102.cypress: Flags [.], ack 1, win 115, options [nop,nop,TS val 2095254235 ecr 2095361508], length 0
+15:30:26.261123 IP 60.60.1.101.34402 > 60.60.1.102.cypress: Flags [P.], seq 1:1025, ack 1, win 115, options [nop,nop,TS val 2095254235 ecr 2095361508], length 1024
+15:30:26.261142 IP 60.60.1.101.34402 > 60.60.1.102.cypress: Flags [F.], seq 1025, ack 1, win 115, options [nop,nop,TS val 2095254235 ecr 2095361508], length 0
+15:30:26.261150 IP 60.60.1.102.cypress > 60.60.1.101.34402: Flags [.], ack 1025, win 130, options [nop,nop,TS val 2095361509 ecr 2095254235], length 0
+15:30:26.261499 IP 60.60.1.102.cypress > 60.60.1.101.34402: Flags [P.], seq 1:6, ack 1026, win 130, options [nop,nop,TS val 2095361509 ecr 2095254235], length 5
+15:30:26.261511 IP 60.60.1.101.34402 > 60.60.1.102.cypress: Flags [R], seq 182678743, win 0, length 0
+#这里一行应该是收到RST之前就发送FIN，所以收到多一个RST
+15:30:26.261530 IP 60.60.1.102.cypress > 60.60.1.101.34402: Flags [F.], seq 6, ack 1026, win 130, options [nop,nop,TS val 2095361509 ecr 2095254235], length 0
+15:30:26.261532 IP 60.60.1.101.34402 > 60.60.1.102.cypress: Flags [R], seq 182678743, win 0, length 0
+
+
+客户端发完数据就调用showdown(SHUT_WR)，服务端还有数据要发送，再发送FIN
+15:36:27.790969 IP 60.60.1.101.36659 > 60.60.1.102.cypress: Flags [S], seq 2555191769, win 14600, options [mss 1460,sackOK,TS val 2095615765 ecr 0,nop,wscale 7], length 0
+15:36:27.791001 IP 60.60.1.102.cypress > 60.60.1.101.36659: Flags [S.], seq 2633582508, ack 2555191770, win 14480, options [mss 1460,sackOK,TS val 2095723048 ecr 2095615765,nop,wscale 7], length 0
+15:36:27.791011 IP 60.60.1.101.36659 > 60.60.1.102.cypress: Flags [.], ack 1, win 115, options [nop,nop,TS val 2095615765 ecr 2095723048], length 0
+15:36:27.791275 IP 60.60.1.101.36659 > 60.60.1.102.cypress: Flags [P.], seq 1:1025, ack 1, win 115, options [nop,nop,TS val 2095615765 ecr 2095723048], length 1024
+15:36:27.791303 IP 60.60.1.101.36659 > 60.60.1.102.cypress: Flags [F.], seq 1025, ack 1, win 115, options [nop,nop,TS val 2095615765 ecr 2095723048], length 0
+15:36:27.791310 IP 60.60.1.102.cypress > 60.60.1.101.36659: Flags [.], ack 1025, win 130, options [nop,nop,TS val 2095723049 ecr 2095615765], length 0
+15:36:27.791349 IP 60.60.1.102.cypress > 60.60.1.101.36659: Flags [P.], seq 1:6, ack 1026, win 130, options [nop,nop,TS val 2095723049 ecr 2095615765], length 5
+15:36:27.791368 IP 60.60.1.101.36659 > 60.60.1.102.cypress: Flags [.], ack 6, win 115, options [nop,nop,TS val 2095615765 ecr 2095723049], length 0
+15:36:27.791372 IP 60.60.1.102.cypress > 60.60.1.101.36659: Flags [F.], seq 6, ack 1026, win 130, options [nop,nop,TS val 2095723049 ecr 2095615765], length 0
+15:36:27.791375 IP 60.60.1.101.36659 > 60.60.1.102.cypress: Flags [.], ack 7, win 115, options [nop,nop,TS val 2095615765 ecr 2095723049], length 0
+
+
+
+
+
+服务进程只连接，一直不读发来的数据
+>>> ADDR = ("60.60.1.102",2015)
+>>> tcpCliSock = socket(AF_INET, SOCK_STREAM)
+>>> tcpCliSock.connect(ADDR)
+>>> s="1"*102400
+>>> tcpCliSock.send(s) # 马上返回，数据放到发送缓存
+102400
+>>> tcpCliSock.send(s) # 卡在这里，因为发送缓存已经满了
+
+>>> tcpCliSock.settimeout(5) #设置超时 应该是发送和接收超时
+>>> tcpCliSock.send(s)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+socket.timeout: timed out
+
+s.settimeout(0.0) is equivalent to s.setblocking(0); #设置阻塞
+s.settimeout(None) is equivalent to s.setblocking(1).#设置阻塞且不超时
+
+当独设置发送时间和接收时间（c 语言的时间是使用结构体 timeval{} ）
+import socket
+timeval = struct.pack('ll', 1, 0)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDTIMEO, timeval) #设置发送超时
+s.setsockopt(socket.SOL_SOCKET, socket.SO_RCVTIMEO, timeval) #设置接收超时
+
+
+
+13:44:50.842801 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [S], seq 1260383470, win 14600, options [mss 1460,sackOK,TS val 2088918817 ecr 0,nop,wscale 7], length 0
+13:44:50.842865 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [S.], seq 3308164566, ack 1260383471, win 14480, options [mss 1460,sackOK,TS val 2089026104 ecr 2088918817,nop,wscale 7], length 0
+13:44:50.842876 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], ack 1, win 115, options [nop,nop,TS val 2088918817 ecr 2089026104], length 0
+13:45:30.818749 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], seq 1:7241, ack 1, win 115, options [nop,nop,TS val 2088958793 ecr 2089026104], length 7240
+13:45:30.818756 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [P.], seq 7241:14481, ack 1, win 115, options [nop,nop,TS val 2088958793 ecr 2089026104], length 7240
+13:45:30.818811 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 2897, win 136, options [nop,nop,TS val 2089066078 ecr 2088958793], length 0
+13:45:30.818820 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 13033, win 159, options [nop,nop,TS val 2089066078 ecr 2088958793], length 0
+13:45:30.818827 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [P.], seq 14481:21721, ack 1, win 115, options [nop,nop,TS val 2088958793 ecr 2089066078], length 7240
+13:45:30.818830 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 14481, win 181, options [nop,nop,TS val 2089066078 ecr 2088958793], length 0
+13:45:30.818855 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 17377, win 204, options [nop,nop,TS val 2089066078 ecr 2088958793], length 0
+13:45:30.818869 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 20273, win 227, options [nop,nop,TS val 2089066078 ecr 2088958793], length 0
+13:45:30.818872 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 21721, win 249, options [nop,nop,TS val 2089066078 ecr 2088958793], length 0
+13:45:30.818906 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], seq 21721:37649, ack 1, win 115, options [nop,nop,TS val 2088958793 ecr 2089066078], length 15928
+13:45:30.818956 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 24617, win 272, options [nop,nop,TS val 2089066078 ecr 2088958793], length 0
+13:45:30.858231 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 37649, win 223, options [nop,nop,TS val 2089066118 ecr 2088958793], length 0
+13:45:30.858253 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [P.], seq 37649:53577, ack 1, win 115, options [nop,nop,TS val 2088958832 ecr 2089066118], length 15928
+13:45:30.858286 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], seq 53577:57921, ack 1, win 115, options [nop,nop,TS val 2088958832 ecr 2089066118], length 4344
+13:45:30.898232 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 57921, win 66, options [nop,nop,TS val 2089066158 ecr 2088958832], length 0
+13:45:30.898255 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], seq 57921:65161, ack 1, win 115, options [nop,nop,TS val 2088958872 ecr 2089066158], length 7240
+13:45:30.938225 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 65161, win 10, options [nop,nop,TS val 2089066198 ecr 2088958872], length 0
+13:45:31.151532 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [P.], seq 65161:66441, ack 1, win 115, options [nop,nop,TS val 2088959125 ecr 2089066198], length 1280
+13:45:31.151604 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 66441, win 76, options [nop,nop,TS val 2089066411 ecr 2088959125], length 0
+13:45:31.151613 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], seq 66441:75129, ack 1, win 115, options [nop,nop,TS val 2088959126 ecr 2089066411], length 8688
+13:45:31.151616 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [P.], seq 75129:75297, ack 1, win 115, options [nop,nop,TS val 2088959126 ecr 2089066411], length 168
+13:45:31.405485 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [P.], seq 75297:76193, ack 1, win 115, options [nop,nop,TS val 2088959380 ecr 2089066451], length 896
+13:45:31.405549 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 76193, win 0, options [nop,nop,TS val 2089066665 ecr 2088959380], length 0
+13:45:31.619480 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], ack 1, win 115, options [nop,nop,TS val 2088959594 ecr 2089066665], length 0
+13:45:31.619527 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 76193, win 0, options [nop,nop,TS val 2089066879 ecr 2088959380], length 0
+13:45:32.047481 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], ack 1, win 115, options [nop,nop,TS val 2088960022 ecr 2089066879], length 0
+13:45:32.047526 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 76193, win 0, options [nop,nop,TS val 2089067307 ecr 2088959380], length 0
+13:45:32.903478 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], ack 1, win 115, options [nop,nop,TS val 2088960878 ecr 2089067307], length 0
+13:45:32.903512 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 76193, win 0, options [nop,nop,TS val 2089068163 ecr 2088959380], length 0
+13:45:34.615483 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], ack 1, win 115, options [nop,nop,TS val 2088962590 ecr 2089068163], length 0
+13:45:34.615517 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 76193, win 0, options [nop,nop,TS val 2089069875 ecr 2088959380], length 0
+13:45:38.039480 IP 60.60.1.101.51409 > 60.60.1.102.cypress: Flags [.], ack 1, win 115, options [nop,nop,TS val 2088966014 ecr 2089069875], length 0
+13:45:38.039532 IP 60.60.1.102.cypress > 60.60.1.101.51409: Flags [.], ack 76193, win 0, options [nop,nop,TS val 2089073299 ecr 2088959380], length 0
+#可以看出窗口在一直变小，最后为0，76193表明对方只接收76192个数据，其他都丢失了
+
+
+
+400000个客户端并发
+客户端发送后就close，如果服务器繁忙，来不及读（还是丢包要重读），导致服务器read 失败  Connection reset by peer
+
+
+
+
+
+
+
+
+
+
