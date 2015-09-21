@@ -1,0 +1,8 @@
+yum install nfs-utils
+
+/etc/init.d/rpcbind start
+/etc/init.d/nfslock start
+/etc/init.d/nfs  start
+chkconfig rpcbind on
+chkconfig nfslock on
+chkconfig nfs on

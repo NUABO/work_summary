@@ -28,7 +28,7 @@ def word(know_list, file_in):
 				line=re.sub("[;,.?]\s"," ", line)
 				lines_list = line.split()
 				for i in lines_list:
-					# 只统计单词
+					# 只统计单词,如果不存在非字母字符
 					if not re.findall(r'[^a-zA-Z]+', i) :
 						if  i not in words_list:
 							words_list.append(i)
