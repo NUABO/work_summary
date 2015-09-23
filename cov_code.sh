@@ -1,7 +1,9 @@
 #!/bin/bash
 #
-#
-FILE_DIR=/home/zhong/cloud_cov
+#例如 sh  cov_code.sh -d /home/zhong/cloud_cov
+#把文件从utf-8转为GBK,解决source insight中文乱码问题
+
+FILE_DIR=/home/cloud
 
 SCRIPTFILE="$(basename "$0")"
 usage()
@@ -27,10 +29,8 @@ done
 for i in `find $FILE_DIR  -name "*.py" `
 do      
 	echo $i
-	iconv -f UTF-8 -t GBK $i -o /tmp/flag.py
-	if [ $? -ne 0 ]; then
-		rm -rf /tmp/flag.py
-	else
-		mv  /tmp/flag.py $i >/dev/null 2>&1
-	fi
+	iconv -f UTF-8 -t GBK $i -o $i
+	#if [ $? -ne 0 ]; then
+	#	echo "Fail to iconv -f UTF-8 -t GBK $i -o $i"
+	#fi
 done
