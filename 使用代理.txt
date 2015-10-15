@@ -4,8 +4,11 @@
 http_proxy=http://191.168.45.11:3128
 https_proxy=https://191.168.45.11:3128
 ftp_proxy=ftp://191.168.45.11:3128
-export no_proxy=http://191.168.,http://192.168.45.,http://192.168.1.
+no_proxy=191.168.45.74,191.168.45.104,127.0.0.1
+
 export http_proxy https_proxy ftp_proxy no_proxy
 
+
+no_proxy=191.168.,192.168.45.,192.168.1.
 
 unset http_proxy https_proxy ftp_proxy no_proxy

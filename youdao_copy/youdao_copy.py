@@ -341,7 +341,8 @@ class Youdao_copy(object):
                     if re.findall(r'[^a-zA-Z\ ,.]+', word_new):
                         time.sleep(0.1)
                         continue
-                    
+                    if word_new[-1] in (',','.'):
+                        word_new = word_new[:-1]
                     #err_old = None
                 except BaseException,err_old:
                     #if err_old == None:

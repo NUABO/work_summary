@@ -1,0 +1,23 @@
+1 πÿ±’∑¿ª«Ω
+
+centos 6 
+
+/etc/init.d/iptables stop
+chkconfig iptables off
+
+centos 7
+systemctl stop  firewalld.service
+systemctl disable  firewalld.service
+
+∆Ù∂Øsmb
+
+6:
+/etc/init.d/smb stop
+chkconfig smb off
+
+7:
+systemctl start smb
+systemctl enable smb
+
+…Ë÷√smb√‹¬Î
+smbpasswd -a root
