@@ -338,6 +338,9 @@ class Youdao_copy(object):
             try :
                 try :
                     word_new = xerox.paste()
+                    #source insight复制后好面有“\x00”,估计是编码问题
+                    if isinstance(word_new,str):
+                        word_new = word_new.replace("\x00","")
                     if re.findall(r'[^a-zA-Z\ ,.]+', word_new):
                         time.sleep(0.1)
                         continue
@@ -434,6 +437,8 @@ def fun():
         time.sleep(5)
         
 def main():
+    if os.path.exists(pid_file):
+        os.remove(pid_file)
     signal.signal(signal.SIGINT, handler)
     cmd = "python.exe clicktocopy.py"
     p = subprocess.Popen(cmd, stdin = subprocess.PIPE, stdout = subprocess.PIPE,

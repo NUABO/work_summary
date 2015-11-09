@@ -1,0 +1,10 @@
+http://www.eclipse.org/babel/downloads.php
+
+http://download.eclipse.org/technology/babel/babel_language_packs/R0.13.0/mars/mars.php
+
+下载语言包，解压到对应路径
+
+语言包好像有很多个，可以全部下载放在一起
+
+写个.bat脚本启动
+D:\Tools\eclipse-cpp-mars-1-win32\eclipse.exe -nl zh
