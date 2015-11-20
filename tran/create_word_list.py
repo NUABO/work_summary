@@ -58,6 +58,7 @@ def word(file_in, file_out):
     i = 0
     f = codecs.open(file_out, "w", 'utf-8') 
     f.write("<wordbook>\n")
+    word_count = 0
     for word in unknow_list:
         try:
             s= ""
@@ -72,6 +73,8 @@ def word(file_in, file_out):
                 dict_word = words_dict[word.lower()]
             phonetic =  dict_word.get("phonetic") or ""
             explains = " ".join( dict_word.get("explains") or [])
+            if not explains:
+                continue
 
             s = """    <item>
         <word>%s</word>
@@ -82,8 +85,11 @@ def word(file_in, file_out):
     </item>
 """ %(word.lower(),explains, phonetic)
             f.write(s)
+            word_count = word_count +1
         except:
-            print "translate [%] error" % word
+            print "translate [%s] error" % word
+            
+    print "words : " , word_count
     f.write("</wordbook>")
     f.close()
             
@@ -91,12 +97,74 @@ def word(file_in, file_out):
     pickle.dump(words_dict, f1)
     f1.close()
 
+def word_plus(file_in, file_out):
+    
+    unknow_list  = []
+    unknow_plus  = []
+    
+    fr = open(file_in, 'r')
+    s = fr.read().strip()
+    unknow_list = re.split("\s+",s)
+    fr.close()
+    
+    filesize = os.path.getsize("dict")
+    if filesize != 0:
+        f2 = open("dict", "rb")
+        words_dict = pickle.load(f2)
+        f2.close()
+    else:
+        words_dict = {}
+    
+    youdao = Youdao()
+    i = 0
+
+    word_count = 0
+    for word in unknow_list:
+        try:
+            s= ""
+            if word.lower() not in words_dict:
+                dict_word = youdao.get_translation(word.lower())
+                if dict_word != -1:
+                    i = i + 1
+                    if i>500:
+                        sleep(7)
+                    words_dict[word.lower()] = dict_word
+            else:
+                dict_word = words_dict[word.lower()]
+            explains = " ".join( dict_word.get("explains") or [])
+            if not explains:
+                continue
+
+        
+            word = word.lower()
+            if re.match("(.*s$)|(.*ing$)|(.*ed$)", word):
+                m = re.match(".*(%s[A-Za-z]*).*" % word[:3], explains)
+                if m:
+                    print "%s -> %s" %(word ,m.groups()[0])
+                    word = m.groups()[0]
+                
+            if  word not in unknow_plus:
+                unknow_plus.append(word)
+        except:
+            print "translate [%s] error" % word
+            
+    i = 0
+    fw = open(file_out, 'w')
+    for key in sorted(unknow_plus):
+        fw.write(key+"\n")
+        i = i + 1
+    fw.close()
+    print "words : " ,i
+            
+
 
 def main():
     #from dbgp.client import brk
     #brk(host="191.168.45.215", port=50803)
     file_in = "unknow_word.txt"
     file_out = "word.xml"
+    file_in_plus = "unknow_word_plus.txt"
+    file_out_plus = "word_plus.xml"
     if len(sys.argv) >= 3:
         file_in = sys.argv[1]
         file_out = sys.argv[2]
@@ -104,6 +172,8 @@ def main():
         file_in = sys.argv[1]
         
     word(file_in, file_out)
+    word_plus(file_in, file_in_plus)
+    word(file_in_plus, file_out_plus)
 
 
 

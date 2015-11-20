@@ -5,9 +5,8 @@
 5、 复制translate 为translate_tran
 6、 运行translate.py  unknow_word.txt dict  把目录translate的文件翻译到translate_tran
 
-如果觉得翻译不好，可以更新dict  运行modify_dict .py  会把modify_dict.txt中的单词更新 modify_dict.txt中的内容如(explains 解释 concept 概念)
+如果觉得翻译不好，可以更新dict  运行modify_dict.py  会把modify_dict.txt中的单词更新 modify_dict.txt中的内容如(explains 解释 concept 概念)
 
-运行create_word_list.py  unknow_word.txt word.xml  把unknow_word.txt中的单词生成有道生词本
 
 
 html：
