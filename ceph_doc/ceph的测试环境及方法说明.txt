@@ -1,0 +1,127 @@
+
+
+1、开机后查看磁盘是否正常识别，有时候105的第一块磁盘识别有问题，经常需要插拔一下，然后在重启
+   因为每块磁盘对应不同的osd，如果磁盘识别的顺序变了，会导致需要自己手动找出磁盘和osd的对应关系，然后mount，比较麻烦
+
+  sdb~sdm是SAS磁盘，sdn和sdo是SSD盘
+
+2、在iozone-12中运行/etc/init.d/ceph start mon.0启动monitor
+
+3、在其他的存储设备中，首先到/mnt目录下，运行mount.sh命令挂载对应的数据盘和journal盘
+
+  然后运行/etc/init.d/ceph start osd启动osd
+
+4、最后查看ceph health和ceph osd tree确定ceph集群的健康状态
+
+5、需要手动将SSD盘添加为新的rule，见文档
+  \\10.220.8.26\teamroom\P2软件部\3.云存储项目组\ceph\经验总结文档\ceph如何添加ssd磁盘做cache tier.docx
+
+
+----------------------------------------------------------------------------------------------------
+1、创建ssd cache tier，做到这步就可以了
+ceph osd pool create ssd 1024 1024 replicated ssd_ruleset
+
+ceph osd pool delete ssd ssd --yes-i-really-really-mean-it
+
+ceph osd erasure-code-profile set ec-81 k=8  m=1 ruleset-failure-domain=osd
+
+ceph osd pool create ecpool-2 1024 1024 erasure ec-81
+
+ceph osd pool delete ecpool-2 ecpool-2 --yes-i-really-really-mean-it
+
+ceph osd pool create rep-pool 128 128 replicated
+ceph osd pool set rep-pool size 3  #复制3份
+
+ceph osd pool delete rep-pool rep-pool --yes-i-really-really-mean-it
+
+ceph osd tier add ecpool-2 ssd
+
+ceph osd tier cache-mode ssd writeback
+
+ceph osd tier set-overlay ecpool-2 ssd
+
+ceph osd pool set ssd hit_set_type bloom
+
+2、创建rbd,创建5个volume
+rbd create volume-1 --size 10240 -p ecpool-2
+rbd create volume-1 --size 20480 -p rep-pool
+rbd resize --size 71680 volume-1 -p rep-pool
+
+3、然后每台客户端挂载一个，通过修改/etc/tgt/targets.conf文件为自己创建的对应的pool和rbd设备
+[root@iozone-11 ~]# cat /etc/tgt/targets.conf
+# Empty targets configuration file -- please see the package
+# documentation directory for an example.
+#
+# You can drop individual config snippets into /etc/tgt/conf.d
+include /etc/tgt/conf.d/*.conf
+
+<target iqn.test_ceph_iscsi.finals.com:iscsi>
+    driver iscsi
+    bs-type rbd
+    backing-store ssd/volume-1
+</target>
+
+替换pool名
+sed -i "s/rep-pool/ecpool-2/g" /etc/tgt/targets.conf
+sed -i "s/volume-1/volume-10/g" /etc/tgt/targets.conf
+
+service tgtd reload
+service tgtd restart
+iscsiadm连接
+
+tgt-admin -s
+
+service tgtd reload
+service tgtd restart
+iscsiadm -m discovery -t st -p 70.70.1.12
+iscsiadm -m node -T iqn.test_ceph_iscsi.finals.com:iscsi -p 70.70.1.12 -l
+
+登出
+iscsiadm -m node --logoutall=all
+
+测试用的FIO命令
+fio -filename=/dev/sdb -direct=1 -iodepth 16 -thread -rw=write -ioengine=libaio -bs=4M -size=10G -numjobs=1 -runtime=600 -group_reporting -name=mytest1
+
+fio -filename=/dev/sdb -direct=0 -iodepth 16 -thread -rw=write -ioengine=libaio -bs=128k -size=50G -numjobs=16 -runtime=600 -group_reporting -name=mytest1
+
+dd if=/dev/zero of=/dev/sdb bs=1M count=204800 seek=181747dd if=/dev/zero of=/dev/sdb bs=4M count=100350  seek=27650  
+dd if=/dev/zero of=/dev/sdb bs=4M count=5120  conv=fdatasync
+dd if=/dev/zero of=/dev/sdb bs=4M count=25600
+dd if=/dev/zero of=/dev/sdb bs=4M count=25600 seek=25600
+dd if=/dev/zero of=/dev/sdb bs=4M count=25600 seek=51200
+dd if=/dev/zero of=/dev/sdb bs=4M count=25600 seek=76800
+dd if=/dev/zero of=/dev/sdb bs=4M count=25600 seek=102400
+dd if=/dev/zero of=/dev/sdb bs=4M count=128000 seek=128000
+dd if=/dev/zero of=/dev/sdb bs=4M count=5120 seek=5120
+dd if=/dev/zero of=/dev/sdb bs=4M count=100350 seek=27650  
+
+rados ls -p ssd
+rados ls -p ecpool-2
+ceph health
+rbd --image volume-1 -p ecpool-2 info
+ceph --admin-daemon /var/run/ceph/ceph-osd.0.asok config show
+
+
+
+1）动态查询ceph节点进程当前配置的方法：
+
+登陆osd.0节点：
+
+ceph --admin-daemon /var/run/ceph/ceph-osd.0.asok config show | less
+
+2）动态修改ceph节点进程当前配置的方法：
+
+[root@osd-94 ~]# ceph --admin-daemon /var/run/ceph/ceph-osd.0.asok config show | grep filestore_journal_writeahead
+  "filestore_journal_writeahead": "false",
+[root@osd-94 ~]# 
+
+修改为true：
+
+[root@osd-94 ~]# ceph --admin-daemon /var/run/ceph/ceph-osd.0.asok config set filestore_journal_writeahead true
+{ "success": "filestore_journal_writeahead = 'true' "}
+[root@osd-94 ~]# 
+
+再次查询，值已经动态修改为true了。
+[root@osd-94 ~]# ceph --admin-daemon /var/run/ceph/ceph-osd.0.asok config show | grep filestore_journal_writeahead
+  "filestore_journal_writeahead": "true",
+[root@osd-94 ~]# 

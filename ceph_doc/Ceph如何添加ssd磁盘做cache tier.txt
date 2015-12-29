@@ -1,0 +1,111 @@
+Ceph如何添加ssd磁盘做cache tier
+
+添加ssd盘到系统中
+1、在每台存储设备中插入ssd盘，使用fdisk查看系统是否识别到ssd盘
+2、将ssd盘格式化，并add osd
+fdisk /dev/sdn
+mkfs.xfs /dev/sdn1
+mount /dev/sdn1 /mnt/osd60
+ceph osd create
+ceph-osd –i 60 –mkfs --mkjournal
+
+3、所有的ssd盘都作为osd增加后，到处系统的crushmap
+ceph osd getcrushmap -o ma-crush-map
+
+4、反编译crushmap
+crushtool -d ma-crush-map -o ma-crush-map.txt
+
+5、修改ma-crush-map.txt
+将是ssd盘的osd从host中移除
+添加新的root及rule
+root ssd {
+       id -7            # do not change unnecessarily
+       #weight  0.80
+       alg straw
+       hash 0  # rjenkins1
+       item osd.60 weight 0.160
+       item osd.61 weight 0.160
+       item osd.62 weight 0.160
+       item osd.63 weight 0.160
+       item osd.64 weight 0.160
+}
+
+rule ssd_ruleset {
+        ruleset 2
+        type replicated
+        min_size 1
+        max_size 10
+        step take ssd
+        step chooseleaf firstn 0 type osd
+        step emit
+}
+
+6、编译crushmap txt
+crushtool -c ma-crush-map_new.txt -o map
+
+7、设置新的map
+ceph osd setcrushmap -i map
+
+8、查看ceph osd tree，ssd作为单独的显示了
+[root@iozone-101 zql]# ceph osd tree
+# id    weight  type name       up/down reweight
+-7      0.7999  root ssd
+60      0.16            osd.60  up      1
+61      0.16            osd.61  up      1
+62      0.16            osd.62  up      1
+63      0.16            osd.63  up      1
+64      0.16            osd.64  up      1
+
+
+创建ssd盘的cache tier
+
+ceph osd pool create ssd 1024 1024 replicated ssd_ruleset
+
+ceph osd erasure-code-profile set ec-81 k=8  m=1 ruleset-failure-domain=osd
+
+ceph osd pool create ecpool-2 1024 1024 erasure ec-81
+
+ceph osd tier add ecpool-2 ssd
+
+ceph osd tier cache-mode ssd writeback
+
+ceph osd tier set-overlay ecpool-2 ssd
+
+ceph osd pool set ssd hit_set_type bloom
+
+ceph osd pool set ssd hit_set_count 1
+
+ceph osd pool set ssd hit_set_period 60
+
+ceph osd pool set ssd target_max_bytes 20000000000
+
+ceph osd pool set ssd min_read_recency_for_promote 1
+
+ceph osd pool set ssd cache_target_dirty_ratio .4
+
+ceph osd pool set ssd cache_target_full_ratio .8
+
+rbd create volume-1 --size 1024000 -p ecpool-2
+
+rbd create volume-2 --size 20480 -p ecpool-2 --order 20    12673.598522KB/s
+rbd create volume-3 --size 20480 -p ecpool-2 --order 21    15055.5272134KB/s
+rbd create volume-5 --size 20480 -p ecpool-2 --order 21    17367.6439784KB/s
+rbd create volume-4 --size 20480 -p ecpool-2 --order 23    20196.2231853KB/s
+
+
+rbd create volume-6 --size 20480 -p ecpool-2 --order 22 24926.9387623KB/s
+rbd create volume-7 --size 20480 -p ecpool-2 --order 23 26021.7135763KB/s
+rbd create volume-8 --size 20480 -p ecpool-2 --order 24 30361.0322786KB/s
+rbd create volume-9 --size 20480 -p ecpool-2 --order 25 35781.4102812KB/s
+
+单独跑：
+rbd create volume-10 --size 20480 -p ecpool-2 --order 22  49603.974997KB/s
+rbd create volume-11 --size 20480 -p ecpool-2 --order 23  71671.1780535KB/s
+rbd create volume-12 --size 20480 -p ecpool-2 --order 24  84378.9752208KB/s
+rbd create volume-13 --size 20480 -p ecpool-2 --order 25  77829.5812299KB/s
+
+
+rados -p ssd cache-flush-evict-all
+
+ceph osd tier remove-overlay  ecpool-2
+ceph osd tier remove ecpool-2 ssd

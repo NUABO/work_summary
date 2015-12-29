@@ -26,6 +26,18 @@ class MyClass4(object):
 import codecs
 #with codecs.open( filename, "w", 'utf-8') as f:
 
+#python 获取当前文件所在路径
+os.path.realpath(__file__)
+PATH = os.path.split(os.path.realpath(__file__))[0]
+
+#打印详细的错误跟踪信息
+import traceback
+print traceback.format_exc()
+
+# pdb
+
+import pdb
+pdb.set_trace()
 
 if __name__ == "__main__":
     sys.exit(main())

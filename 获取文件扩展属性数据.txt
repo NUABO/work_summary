@@ -1,0 +1,55 @@
+[root@iozone-102 test_101]# getfattr -d -m . -e hex 00001
+# file: 00001
+trusted.ec.config=0x0000080a02000200
+trusted.ec.filetype=0x646973706572736500
+trusted.ec.size=0x0000000000000000
+trusted.ec.version=0x0000000000000000
+trusted.gfid=0x0e8f49a6ff5348d18773c60cc495d1df
+
+[root@iozone-102 test_101]# getfattr -d -m .  00001
+# file: 00001
+trusted.ec.config=0sAAAICgIAAgA=
+trusted.ec.filetype="disperse"
+trusted.ec.size=0sAAAAAAAAAAA=
+trusted.ec.version=0sAAAAAAAAAAA=
+trusted.gfid=0sDo9Jpv9TSNGHc8YMxJXR3w==
+
+
+[root@swift-1 nasdevice1]# getfattr --help
+getfattr 2.4.44 -- get extended attributes
+Usage: getfattr [-hRLP] [-n name|-d] [-e en] [-m pattern] path...
+  -n, --name=name         get the named extended attribute value
+  -d, --dump              get all extended attribute values
+  -e, --encoding=...      encode values (as 'text', 'hex' or 'base64')
+      --match=pattern     only get attributes with names matching pattern
+      --only-values       print the bare values only
+  -h, --no-dereference    do not dereference symbolic links
+      --absolute-names    don't strip leading '/' in pathnames
+  -R, --recursive         recurse into subdirectories
+  -L, --logical           logical walk, follow symbolic links
+  -P  --physical          physical walk, do not follow symbolic links
+      --version           print version and exit
+      --help              this help text
+
+# -n 获取某个指定扩展属性的值
+[root@swift-1 nasdevice1]# getfattr -n trusted.ec.config  123
+# file: 123
+trusted.ec.config=0sAAAIBgIAAgA=
+
+# -d和-m 配合使用，-d 为显示所有的扩展属性 -m 为模式匹配 . 表示全部
+[root@swift-1 nasdevice1]# getfattr -d -m . 123
+# file: 123
+trusted.ec.config=0sAAAIBgIAAgA=
+trusted.ec.size=0sAAAAAAAAADw=
+trusted.ec.version=0sAAAAAAAQXQo=
+trusted.gfid=0s2qmYJePPSoWyqCfxb6Z8JQ==
+
+# trusted.ec* 表示扩展属性以 trusted.ec开头的
+[root@swift-1 nasdevice1]# getfattr -d -m trusted.ec* 123
+# file: 123
+trusted.ec.config=0sAAAIBgIAAgA=
+trusted.ec.size=0sAAAAAAAAADw=
+trusted.ec.version=0sAAAAAAAQXQo=
+
+
+

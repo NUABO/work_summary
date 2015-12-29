@@ -1,0 +1,55 @@
+ceph自己定义了 __le16等类
+
+Linux内核源码也有与字节序相关的头文件
+
+include/linux/types.h   http://www.it165.net/os/html/201504/12488.html
+
+//_be32只是一个带有bitwise属性的整型类型，
+//而这个属性对gcc本身没有任何作用，
+//所以如果不利用sparse，__be32和__u32没有任何差别，
+//但是如果利用sparse（sparse是什么），它就能提供一种超强制的类型匹配检查。
+
+sparse是一个C/C++源文件静态分析工具   sparse与__be32   http://www.lenky.info/archives/2012/07/1776
+
+/usr/include/linux/byteorder/little_endian.h  http://www.th7.cn/system/lin/201504/101621.shtml
+/usr/include/linux/byteorder/big_endian.h
+
+little_endian.h和big_endian.h这两个文件中定义的函数是一样的，实现不一样，如果是小端机器就include little_endian.h
+little_endian.h中的函数对于小端什么也不做，转大端就要swab
+
+
+字节交换在这里定义
+linux/swab.h
+
+
+#include</usr/include/linux/types.h>
+#include<stdio.h>
+#include</usr/include/linux/byteorder/big_endian.h>
+
+
+int main()
+{
+int a=16;
+__le32 b=__cpu_to_le32(a);
+__be32 c=__cpu_to_be32(a);
+printf("%d\n",(int)b);
+printf("%d\n",(int)c);
+return 0;
+}
+
+
+
+#include</usr/include/linux/types.h>
+#include<stdio.h>
+#include</usr/include/linux/byteorder/little_endian.h>
+
+
+int main()
+{
+int a=16;
+__le32 b=__cpu_to_le32(a);
+__be32 c=__cpu_to_be32(a);
+printf("%d\n",(int)b);
+printf("%d\n",(int)c);
+return 0;
+}

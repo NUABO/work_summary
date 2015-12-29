@@ -1,0 +1,204 @@
+./configure  --localstatedir=/var --without-fuse CXXFLAGS="-g -O0"  CCASFLAGS="-g -O0"  CFLAGS="-g -O0"
+ 
+
+
+
+CEPH的RPM包下载地址：
+http://ceph.com/rpm/el6/
+http://eu.ceph.com/
+
+CEPH依赖包的地址：
+http://ceph.com/packages/ceph-extras/rpm
+
+源码包下载地址，或者从github下载
+http://download.ceph.com/tarballs/
+https://github.com/ceph/ceph
+
+*******************************************************
+
+1. CEPH编译过程：
+
+*********************  安装的CentOS 配置为编译服务器，需安装的rpm包 ***********
+yum install gcc-c++ libstdc++-devel gdisk python-argparse gperftools-libs snappy snappy-devel leveldb leveldb-devel uuid uuid-devel libuuid-devel libudev-devel libblkid-devel libkeyutils-dev  keyutils-libs-devel cryptopp cryptopp-devel libatomic_ops-devel libedit-devel fuse fuse-devel automake autoconf libtool libaio-devel xfsprogs xfsprogs-devel boost-devel -y
+ 
+yum install expat-devel git setuptool -y
+
+
+编译过程中提示“No module named setuptools”，安装如下rpm包：
+[root@Hadoop-1 ~]# rpm -qa | grep setuptool
+setuptool-1.19.9-3.el6.x86_64
+python-setuptools-0.6.10-3.el6.noarch
+
+./autogen.sh
+./configure --prefix=/opt/ceph --without-tcmalloc --localstatedir=/var --without-fuse #--without-cryptopp --with-nss
+make -j8
+make install ------ 将编译的目标程序安装到上述/home/zhangmin的目录下。
+
+find /home/ceph_install -type f -name "*.la" -exec rm -f {} ';'
+find /home/ceph_install -type f -name "*.a" -exec rm -f {} ';'
+
+
+上面的tcmalloc是ceph的内存监控功能
+
+将目标文件拷贝到其它节点上，需要配置环境变量：
+
+export PATH="$PATH:/home/zhangmin87/bin:/home/zhangmin87/sbin:/home/zhangmin87/lib:/home/zhangmin87/libexec"
+export PYTHONPATH="/home/zhangmin87/lib/python2.6/site-packages" ----- 这个是python库依赖包路径
+
+发现编译的目标文件大小远远大于rpm安装的版本上的同名文件大小：
+[root@server-60 zhangmin87]# du -sh bin
+1.1G    bin
+[root@server-60 zhangmin87]# du -sh bin/*
+32K     bin/ceph
+29M     bin/ceph-authtool
+16K     bin/ceph-brag
+4.0K    bin/ceph-clsinfo
+28M     bin/ceph-conf
+4.0K    bin/ceph-coverage
+4.0K    bin/ceph-crush-location
+4.0K    bin/ceph-debugpack
+148M    bin/ceph-dencoder
+128K    bin/cephfs
+71M     bin/cephfs-journal-tool
+82M     bin/ceph-fuse
+132M    bin/ceph-mds
+95M     bin/ceph-mon
+30M     bin/ceph_mon_store_converter
+151M    bin/ceph_objectstore_tool
+149M    bin/ceph-osd
+4.0K    bin/ceph-post-file
+4.0K    bin/ceph-rbdnamer
+4.0K    bin/ceph-rest-api
+4.0K    bin/ceph-run
+84M     bin/ceph-syn
+45M     bin/crushtool
+788K    bin/librados-config
+29M     bin/monmaptool
+40M     bin/osdmaptool
+6.3M    bin/rados
+2.3M    bin/rbd
+48K     bin/rbd-fuse
+2.6M    bin/rbd-replay
+查看rpm安装的节点上的文件大小：
+
+[root@Mon-Md-93 ~]# du -sh /usr/bin/* | grep ceph
+32K     /usr/bin/ceph
+2.3M    /usr/bin/ceph-authtool
+16K     /usr/bin/ceph-brag
+60K     /usr/bin/ceph-client-debug
+4.0K    /usr/bin/ceph-clsinfo
+2.2M    /usr/bin/ceph-conf
+4.0K    /usr/bin/ceph-coverage
+4.0K    /usr/bin/ceph-crush-location
+4.0K    /usr/bin/ceph-debugpack
+11M     /usr/bin/ceph-dencoder
+20K     /usr/bin/cephfs
+4.3M    /usr/bin/cephfs-journal-tool
+8.2M    /usr/bin/ceph-mds
+6.6M    /usr/bin/ceph-mon
+2.3M    /usr/bin/ceph_mon_store_converter
+11M     /usr/bin/ceph-osd
+4.0K    /usr/bin/ceph-post-file
+4.0K    /usr/bin/ceph-rbdnamer
+4.0K    /usr/bin/ceph-rest-api
+4.0K    /usr/bin/ceph-run
+5.7M    /usr/bin/ceph-syn
+[root@Mon-Md-93 ~]# 
+
+
+为了弄清楚原因，通过源码制作一次rpm包：
+1）安装rpm制作工具：
+yum install rpm-build rpmdevtools -y
+
+2）执行 rpmdev-setuptree
+
+3）下载ceph源码包ceph-0.87.2.tar.bz2，放入~/rpmbuild/SOURCES/目录中
+
+4）从github上找到文件init-ceph.in-fedora.patch，放入~/rpmbuild/SOURCES/目录中
+
+5）安装制作rpm依赖的包：
+yum install bzip2-devel python-nose libcurl-devel libxml2-devel yasm nss-devel gperftools-devel fcgi-devel lttng-ust-devel libbabeltrace-devel java-devel junit4 -y
+
+6)提取规范文件：
+tar --strip-components=1 -C ~/rpmbuild/SPECS/ --no-anchored -xvjf ~/rpmbuild/SOURCES/ceph-0.87.2.tar.bz2 "ceph.spec"
+
+修改make参数为8线程编译：　make -j8
+
+
+去掉 --docdir=%{_docdir}/ceph \  --with-debug \
+	 --enable-cephfs-java \
+
+7）修改ceph.spec的宿主：上述步骤后，其值为-rw-rw-r-- 1 1001 1001 23402 Oct 15 00:42 /root/rpmbuild/SPECS/ceph.spec
+chown root:root /root/rpmbuild/SPECS/ceph.spec
+
+8)开始构建 RPM 包：
+rpmbuild -ba ~/rpmbuild/SPECS/ceph.spec
+
+生成的rpm包如下：
+[root@server-60 ~]# du -sh  rpmbuild/RPMS/x86_64/*
+33M     rpmbuild/RPMS/x86_64/ceph-0.87.2-0.el6.x86_64.rpm
+7.5M    rpmbuild/RPMS/x86_64/ceph-common-0.87.2-0.el6.x86_64.rpm
+52K     rpmbuild/RPMS/x86_64/ceph-devel-0.87.2-0.el6.x86_64.rpm
+20K     rpmbuild/RPMS/x86_64/cephfs-java-0.87.2-0.el6.x86_64.rpm
+2.1M    rpmbuild/RPMS/x86_64/ceph-fuse-0.87.2-0.el6.x86_64.rpm
+4.0K    rpmbuild/RPMS/x86_64/ceph-libs-compat-0.87.2-0.el6.x86_64.rpm
+1.7M    rpmbuild/RPMS/x86_64/ceph-radosgw-0.87.2-0.el6.x86_64.rpm
+43M     rpmbuild/RPMS/x86_64/ceph-test-0.87.2-0.el6.x86_64.rpm
+19M     rpmbuild/RPMS/x86_64/libcephfs1-0.87.2-0.el6.x86_64.rpm
+240K    rpmbuild/RPMS/x86_64/libcephfs_jni1-0.87.2-0.el6.x86_64.rpm
+19M     rpmbuild/RPMS/x86_64/librados2-0.87.2-0.el6.x86_64.rpm
+432K    rpmbuild/RPMS/x86_64/libradosstriper1-0.87.2-0.el6.x86_64.rpm
+3.9M    rpmbuild/RPMS/x86_64/librbd1-0.87.2-0.el6.x86_64.rpm
+116K    rpmbuild/RPMS/x86_64/python-ceph-0.87.2-0.el6.x86_64.rpm
+16K     rpmbuild/RPMS/x86_64/rbd-fuse-0.87.2-0.el6.x86_64.rpm
+620K    rpmbuild/RPMS/x86_64/rest-bench-0.87.2-0.el6.x86_64.rpm
+
+[root@server-60 ~]# du -sh rpmbuild/SRPMS/*
+5.6M    rpmbuild/SRPMS/ceph-0.87.2-0.el6.src.rpm
+
+
+安装rpm包需要：
+
+cryptsetup is needed by ceph-1:0.87.2-0.el6.x86_64
+        hdparm is needed by ceph-1:0.87.2-0.el6.x86_64
+        liblttng-ust.so.0()(64bit) is needed by ceph-1:0.87.2-0.el6.x86_64
+        parted is needed by ceph-1:0.87.2-0.el6.x86_64
+        python-flask is needed by ceph-1:0.87.2-0.el6.x86_64
+        python-requests is needed by ceph-1:0.87.2-0.el6.x86_64
+        liblttng-ust.so.0()(64bit) is needed by librados2-1:0.87.2-0.el6.x86_64
+        liblttng-ust.so.0()(64bit) is needed by librbd1-1:0.87.2-0.el6.x86_64
+        python-requests is needed by ceph-common-1:0.87.2-0.el6.x86_64
+        redhat-lsb-core is needed by ceph-common-1:0.87.2-0.el6.x86_64
+
+yum install cryptsetup hdparm parted python-flask python-requests redhat-lsb-core lttng-ust -y
+
+rpm -ivh ceph-0.87.2-0.el6.x86_64.rpm  libcephfs1-0.87.2-0.el6.x86_64.rpm librados2-0.87.2-0.el6.x86_64.rpm  librbd1-0.87.2-0.el6.x86_64.rpm python-ceph-0.87.2-0.el6.x86_64.rpm  ceph-common-0.87.2-0.el6.x86_64.rpm
+
+rpm -e ceph-0.87.2-0.el6.x86_64 libcephfs1-0.87.2-0.el6.x86_64 librados2-0.87.2-0.el6.x86_64  librbd1-0.87.2-0.el6.x86_64 python-ceph-0.87.2-0.el6.x86_64  ceph-common-0.87.2-0.el6.x86_64
+
+遗留的问题： 编译源码制作rpm包后，rpm包安装出来的bin目录文件大小和编译的目标文件大小不同，不知道为啥。
+
+制作rpm包时编译的文件大小：
+[root@server-60 src]# du -sh ceph-* | grep M
+29M     ceph-authtool
+28M     ceph-conf
+154M    ceph-dencoder
+81M     ceph-fuse
+29M     ceph-kvstore-tool
+131M    ceph-mds
+95M     ceph-mon
+30M     ceph-monstore-tool
+150M    ceph-osd
+37M     ceph-osdomap-tool
+84M     ceph-syn
+
+rpm包安装后的同名文件大小：
+[root@hdfs-client2 ~]# du -sh /usr/bin/* | grep ceph | grep M
+3.0M    /usr/bin/ceph-authtool
+2.9M    /usr/bin/ceph-conf
+13M     /usr/bin/ceph-dencoder
+4.9M    /usr/bin/cephfs-journal-tool
+9.7M    /usr/bin/ceph-mds
+7.9M    /usr/bin/ceph-mon
+13M     /usr/bin/ceph-osd
+6.9M    /usr/bin/ceph-syn

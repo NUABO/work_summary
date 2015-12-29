@@ -6,6 +6,7 @@
 import os
 import sys
 import re
+import subprocess
 
 
 
@@ -36,7 +37,7 @@ umount /dev/sdb2
     
     cmd_args = []
     for range_str in range_list:
-        ragge_str = range_str[1:-1] #去掉[]
+        ragge_str = range_str[1:-1] #?绘.[]
         start_end = ragge_str.split("-")
         if start_end[0].isdigit():
             ran = range(int(start_end[0]),int(start_end[1])+1)
@@ -64,17 +65,25 @@ umount /dev/sdb2
                     for arg in cmd_args:
                         cmd_args_tmp.append(arg + "," + ch)
                 cmd_args = cmd_args_tmp
+
+    process =[]
     for args in cmd_args:
         args_tuple = tuple(args.split(","))
         exec('cmd = g % args_tuple')
         if "-p" in sys.argv:
             print cmd
         else:
-            os.system(cmd)
+            if "-s" not in sys.argv:
+                os.system(cmd)
+            else:
+                p1 = subprocess.Popen(cmd, shell=True)
+                process.append(p1)
+            
+    for i in range(len(process)):
+        process[i].wait()
 
 
 
 
 if __name__ == "__main__":
     sys.exit(main())
-

@@ -1,0 +1,3 @@
+Objecter 有属性last_tid保存最新的tid号（从零开始加）（每个客户端有自己的tid号）
+
+函数 Objecter::_op_submit 会添加tid

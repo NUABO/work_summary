@@ -12,3 +12,5 @@ export http_proxy https_proxy ftp_proxy no_proxy
 no_proxy=191.168.,192.168.45.,192.168.1.
 
 unset http_proxy https_proxy ftp_proxy no_proxy
+
+win客户端 Proxifier

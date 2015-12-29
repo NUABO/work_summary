@@ -1,0 +1,5 @@
+rpm -e libcephfs1-0.87.2-0.el6.x86_64 python-ceph-0.87.2-0.el6.x86_64 ceph-common-0.87.2-0.el6.x86_64 ceph-0.87.2-0.el6.x86_64
+rpm -e librados2-0.87.2-0.el6.x86_64 librbd1-0.87.2-0.el6.x86_64 --nodeps
+yum install boost-program-options -y
+rpm -ivh ceph-9.0.2-0.el6.x86_64.rpm libcephfs1-9.0.2-0.el6.x86_64.rpm librados2-9.0.2-0.el6.x86_64.rpm librbd1-9.0.2-0.el6.x86_64.rpm \
+python-rados-9.0.2-0.el6.x86_64.rpm python-rbd-9.0.2-0.el6.x86_64.rpm ceph-common-9.0.2-0.el6.x86_64.rpm python-cephfs-9.0.2-0.el6.x86_64.rpm

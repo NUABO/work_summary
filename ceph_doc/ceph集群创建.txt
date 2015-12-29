@@ -1,0 +1,86 @@
+/etc/init.d/ceph -a stop
+rm -rf /tmp/monmap 
+rm -rf /var/lib/ceph/mon/mon.0/*
+monmaptool  --create --add 0 70.70.1.12 /tmp/monmap
+ceph-mon --mkfs -i 0 --monmap /tmp/monmap
+/etc/init.d/ceph start mon.0
+
+./umount_conf.py
+vi /etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [0-7] 60.60.1.103 70.70.1.103 iozone-103 /dev/sd[b-i]1 /dev/sdj[5-12]" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [8-15] 60.60.1.104 70.70.1.104 iozone-104 /dev/sd[b-i]1 /dev/sdr[5-12]" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [16-23] 60.60.1.104 70.70.1.104 iozone-104 /dev/sd[j-q]1 /dev/sds[5-12]" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [24-31] 60.60.1.105 70.70.1.105 iozone-105 /dev/sd[b-i]1 /dev/sdr[5-12]" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [32-39] 60.60.1.105 70.70.1.105 iozone-105 /dev/sd[j-q]1 /dev/sds[5-12]" -o  >>/etc/ceph/ceph.conf
+
+sh scp_conf.sh 
+
+
+./mount_conf.py
+./rm_conf.py
+./create_osd.py 0-9
+
+./start_osd.py
+
+ceph osd pool create rep-pool 2048 2048 replicated
+rbd create volume-1 --size 204800 -p rep-pool --stripe-unit 1048576 --stripe-count 16
+--stripe-unit 1048576 --stripe-count 16
+
+ceph osd pool delete rep-pool rep-pool --yes-i-really-really-mean-it
+
+删除集群
+/etc/init.d/ceph -a stop
+rm -rf /tmp/monmap 
+rm -rf /var/lib/ceph/mon/mon.0/*
+sh start_osd.sh
+
+
+创建集群
+monmaptool  --create --add 0 70.70.1.12 /tmp/monmap
+ceph-mon --mkfs -i 0 --monmap /tmp/monmap
+
+[root@iozone-12 ~]# monmaptool --print /tmp/monmap
+monmaptool: monmap file /tmp/monmap
+epoch 0
+fsid f02b7e4d-6c43-4400-92fc-b00ec4d2374f
+last_changed 2015-10-26 14:49:29.214623
+created 2015-10-26 14:49:29.214623
+0: 70.70.1.12:6789/0 mon.0
+
+
+
+/etc/init.d/ceph start mon
+
+ceph health
+
+ceph osd tree
+
+添加osd
+ssh 70.70.1.101
+ceph osd create  #会返回一个id 0,1...
+{
+mkdir /mnt/osd0
+mkdir /mnt/journal0
+fdisk /dev/sdn
+mkfs -t xfs /dev/sdn1
+mkfs -t xfs /dev/sdn2
+mount -o rw,noatime,inode64,logbsize=256k,delaylog /dev/sdn1 /mnt/osd0
+mount -o rw,noatime,inode64,logbsize=256k,delaylog /dev/sdn1 /mnt/journal0
+
+如果已存在，只需：
+rm -rf /mnt/osd0/*
+rm -rf /mnt/journal0/*
+}
+
+修改配置文件 /etc/ceph/ceph.conf
+{
+[osd.0]
+public addr = 70.70.1.101
+cluster addr = 60.60.1.101
+host = iozone-101
+devs = /dev/sdn1
+}
+
+ceph-osd -i {osd-num} --mkfs --mkkey  # osd-num 为 ceph osd create 返回的id
+
+/etc/init.d/ceph start osd

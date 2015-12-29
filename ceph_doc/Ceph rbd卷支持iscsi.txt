@@ -1,0 +1,65 @@
+Ceph rbd卷支持iscsi
+安装支持ceph的iscsi软件
+1.安装依赖
+yum install libibverbs librdmacm lsof perl perl-Config-General perl-Module-Pluggable perl-Pod-Escapes perl-Pod-Simple perl-libs perl-version sg3_utils sg3_utils-libs
+
+2.安装支持ceph卷的iscsi RPM包：
+
+rpm –ivh scsi-target-utils-1.0.38-48.bf6981.ceph.el6.x86_64.rpm
+
+启动 tgtd
+/etc/init.d/tgtd start
+
+
+3.验证是否安装成功
+tgtadm --lld iscsi --op show --mode system | grep rbd
+正确输出：
+
+[root@swift-1 home]# tgtadm --lld iscsi --op show --mode system | grep rbd
+    rbd (bsoflags sync:direct)
+
+配置iscsi
+1.创建ceph卷
+1)创建osd pool
+ceph osd pool create rbd-pool 128 128
+
+2)创建rbd卷
+rbd -p rbd-pool create bar -s 1024
+查看：
+
+2.配置iscsi
+修改配置文件/etc/tgt/targets.conf
+增加以下内容：
+<target iqn.test_ceph_iscsi.finals.com:iscsi>
+    driver iscsi
+    bs-type rbd
+    backing-store rbd-pool/bar
+</target>
+
+
+如果重启tgtd，遇到如下错误：
+
+执行： rm -rf /var/lock/subsys/tgtd
+
+
+iscsi initiator访问ceph rbd卷
+1)发现iscsi target
+iscsiadm -m discovery -t st -p 191.168.45.74
+
+2)登录 iscsi target
+iscsiadm -m node -T iqn.test_ceph_iscsi.finals.com:iscsi -p 191.168.45.74 -l
+
+新增设备/dev/sdb
+
+
+3)target端iscsi卷信息
+
+tgt-admin -s
+
+       
+4)client端块设备信息
+blockdev --report /dev/sdb
+fdisk -l /dev/sdb
+
+登出
+iscsiadm -m node --logoutall=all
