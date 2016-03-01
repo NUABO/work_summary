@@ -6,13 +6,17 @@ parted /dev/sdn rm 1
 #my_cmd.py "mkfs -t xfs /dev/sd[b-q]"
 my_cmd.py "parted /dev/sd[b-q] rm 1"
 my_cmd.py "parted /dev/sd[b-q] mklabel msdos yes"
-my_cmd.py "parted /dev/sd[b-q] mkpart primary  xfs 0GB 280G" -s
+my_cmd.py "parted /dev/sd[b-q] mkpart primary  xfs 0GB 250G" -s
+my_cmd.py "parted /dev/sd[b-q] mkpart primary  xfs 250GB 280G" -s
 my_cmd.py "mkfs -t xfs /dev/sd[b-q]1" -s
+my_cmd.py "mkfs -t xfs /dev/sd[b-q]2" -s
 
 my_cmd.py "parted /dev/sd[b-i] rm 1"
 my_cmd.py "parted /dev/sd[b-i] mklabel msdos yes"
-my_cmd.py "parted /dev/sd[b-i] mkpart primary  xfs 0GB 280G" -s
+my_cmd.py "parted /dev/sd[b-i] mkpart primary  xfs 0GB 250G" -s
+my_cmd.py "parted /dev/sd[b-i] mkpart primary  xfs 250GB 280G" -s
 my_cmd.py "mkfs -t xfs /dev/sd[b-i]1" -s
+my_cmd.py "mkfs -t xfs /dev/sd[b-i]2" -s
 
 
 my_cmd.py "parted /dev/sd[r-s] rm [1-8]"
@@ -26,6 +30,7 @@ my_cmd.py "parted /dev/sd[r-s] mkpart logical  xfs 100GB 120G" -s
 my_cmd.py "parted /dev/sd[r-s] mkpart logical  xfs 120GB 140G" -s
 my_cmd.py "parted /dev/sd[r-s] mkpart logical  xfs 140GB 160G" -s
 my_cmd.py "parted /dev/sd[r-s] mkpart logical  xfs 160GB 180G" -s
+my_cmd.py "mkfs -t xfs /dev/sd[r-s][5-12]" -s
 
 
 my_cmd.py "parted /dev/sd[j-j] rm [1-8]"

@@ -46,6 +46,7 @@ ceph osd pool set ssd hit_set_type bloom
 rbd create volume-1 --size 10240 -p ecpool-2
 rbd create volume-1 --size 20480 -p rep-pool
 rbd resize --size 71680 volume-1 -p rep-pool
+rbd rm volume-1  -p rep-pool
 
 3、然后每台客户端挂载一个，通过修改/etc/tgt/targets.conf文件为自己创建的对应的pool和rbd设备
 [root@iozone-11 ~]# cat /etc/tgt/targets.conf

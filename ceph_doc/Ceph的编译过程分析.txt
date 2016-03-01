@@ -1,6 +1,9 @@
 ./configure  --localstatedir=/var --without-fuse CXXFLAGS="-g -O0"  CCASFLAGS="-g -O0"  CFLAGS="-g -O0"
  
+203
+./configure  --localstatedir=/var --without-fuse CXXFLAGS="-g -O0"  CCASFLAGS="-g -O0"  CFLAGS="-g -O0" --without-tcmalloc
 
+./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-nss --without-cryptopp --without-tcmalloc
 
 
 CEPH的RPM包下载地址：

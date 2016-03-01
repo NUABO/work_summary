@@ -9,6 +9,16 @@ mount /dev/sdn1 /mnt/osd60
 ceph osd create
 ceph-osd –i 60 –mkfs --mkjournal
 
+使用crushmap都是临时修改，可以使用下面这种
+{
+ ceph osd crush add-bucket ssd_cache root
+ ceph osd crush rule create-simple ssd_ruleset ssd_cache osd   #(不能host，老是卡在creating状态)
+ ceph osd crush rule list 
+ 
+ osd配置文件加上
+ osd_crush_location = root=ssd_cache    #host=$HOSTNAME
+}
+
 3、所有的ssd盘都作为osd增加后，到处系统的crushmap
 ceph osd getcrushmap -o ma-crush-map
 
@@ -60,10 +70,16 @@ ceph osd setcrushmap -i map
 创建ssd盘的cache tier
 
 ceph osd pool create ssd 1024 1024 replicated ssd_ruleset
+ceph osd pool set ssd  size 1
 
 ceph osd erasure-code-profile set ec-81 k=8  m=1 ruleset-failure-domain=osd
+ceph osd erasure-code-profile set ec-41 k=4  m=1 ruleset-failure-domain=host
+ceph osd erasure-code-profile set ec-41-isa k=4  m=1 ruleset-failure-domain=host plugin=isa
+ceph osd erasure-code-profile set ec-41-isa-osd k=4  m=1 ruleset-failure-domain=osd plugin=isa
+ceph osd erasure-code-profile set ec-41-osd k=4  m=1 ruleset-failure-domain=osd ruleset-root=ssd_server
 
-ceph osd pool create ecpool-2 1024 1024 erasure ec-81
+#ceph osd pool create ecpool-2 1024 1024 erasure ec-81
+ceph osd pool create ecpool-2 1024 1024 erasure ec-41-isa
 
 ceph osd tier add ecpool-2 ssd
 
@@ -77,15 +93,16 @@ ceph osd pool set ssd hit_set_count 1
 
 ceph osd pool set ssd hit_set_period 60
 
-ceph osd pool set ssd target_max_bytes 20000000000
+ceph osd pool set ssd target_max_bytes 107374182400  
+ceph osd pool set ssd target_max_bytes 21474836480
 
 ceph osd pool set ssd min_read_recency_for_promote 1
 
-ceph osd pool set ssd cache_target_dirty_ratio .4
+ceph osd pool set ssd cache_target_dirty_ratio .9
 
-ceph osd pool set ssd cache_target_full_ratio .8
+ceph osd pool set ssd cache_target_full_ratio .95
 
-rbd create volume-1 --size 1024000 -p ecpool-2
+rbd create volume-1 --size 2048000 -p ecpool-2
 
 rbd create volume-2 --size 20480 -p ecpool-2 --order 20    12673.598522KB/s
 rbd create volume-3 --size 20480 -p ecpool-2 --order 21    15055.5272134KB/s
@@ -104,8 +121,11 @@ rbd create volume-11 --size 20480 -p ecpool-2 --order 23  71671.1780535KB/s
 rbd create volume-12 --size 20480 -p ecpool-2 --order 24  84378.9752208KB/s
 rbd create volume-13 --size 20480 -p ecpool-2 --order 25  77829.5812299KB/s
 
-
+刷缓存
 rados -p ssd cache-flush-evict-all
 
 ceph osd tier remove-overlay  ecpool-2
 ceph osd tier remove ecpool-2 ssd
+
+ceph osd pool delete ssd ssd --yes-i-really-really-mean-it
+ceph osd pool delete ecpool-2 ecpool-2 --yes-i-really-really-mean-it

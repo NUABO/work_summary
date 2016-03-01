@@ -44,10 +44,12 @@ rbd -p rbd-pool create bar -s 1024
 
 iscsi initiator访问ceph rbd卷
 1)发现iscsi target
-iscsiadm -m discovery -t st -p 191.168.45.74
+#iscsiadm -m discovery -t st -p 70.70.1.12
+
+70.70.1.12:3260,1 iqn.test_ceph_iscsi.finals.com:iscsi (拷贝到下面)
 
 2)登录 iscsi target
-iscsiadm -m node -T iqn.test_ceph_iscsi.finals.com:iscsi -p 191.168.45.74 -l
+iscsiadm -m node -T iqn.test_ceph_iscsi.finals.com:iscsi -p 70.70.1.12 -l
 
 新增设备/dev/sdb
 

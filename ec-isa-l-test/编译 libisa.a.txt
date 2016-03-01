@@ -1,0 +1,6 @@
+yum install yasm
+下载  isa-l_open_src_2.13   https://01.org/zh/intel%C2%AE-storage-acceleration-library-open-source-version/downloads?langredirect=1
+cd /root/isa-l_open_src_2.13
+make
+cd ./bin
+isa-l.a    ---------》改名字为 libisa.a

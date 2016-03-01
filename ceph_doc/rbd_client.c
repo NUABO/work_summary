@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 
     char *poolname = "rep-pool";
     char *imagename = "volume-1";
-    char *conf = "/etc/ceph/ceph2.conf";
+    char *conf = "/etc/ceph/ceph.conf";
     uint64_t block = 4 * 1024 * 1024;  // 4M
     uint64_t   offset = 0;
     uint64_t   filesize =16 * 1024 * 1024; //16M
@@ -210,8 +210,10 @@ int main(int argc, char** argv)
         }
     }
     gettimeofday(&tv_end, NULL);
+    double begin_d = tv_begin.tv_sec + tv_begin.tv_usec / 1000000.0;
+    double end_d = tv_end.tv_sec + tv_end.tv_usec / 1000000.0;   
     diff = diff_time(tv_begin, tv_end);
-    printf("time: %f\n", diff);
+    printf("time: %f            start: %f  end: %f\n ", diff, begin_d, end_d);
     printf("speed = %fKB/s \n", filesize/diff/1024);
 
     rbd_close(image);

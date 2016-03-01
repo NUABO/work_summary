@@ -1,0 +1,38 @@
+创建一个快照
+rbd snap create rep-pool/volume-1@snap-1
+
+查看某卷的所有快照
+rbd snap ls rep-pool/volume-1
+
+回退
+rbd snap rollback rep-pool/volume-1@snap-1
+
+删除快照
+rbd snap rm rep-pool/volume-1@snap-1
+
+[root@swift-104 home]# ls -alh /mnt/osd1/current/7.0_head/
+total 8.1M
+drwxr-xr-x  2 root root 4.0K Dec 21 18:04 .
+drwxr-xr-x 91 root root 4.0K Dec 21 14:30 ..
+-rw-r--r--  1 root root    0 Dec 21 14:30 __head_00000000__7
+-rw-r--r--  1 root root 4.0M Dec 21 18:04 rbd\udata.25a126b8b4567.0000000000000000__8_61E15900__7      # 8为快照id(刚创建快照时没有数据的)
+-rw-r--r--  1 root root 4.0M Dec 21 18:04 rbd\udata.25a126b8b4567.0000000000000000__head_61E15900__7
+
+删除所有快照
+rbd snap purge rep-pool/volume-1
+
+克隆之前必须protect，protect的快照不能删除
+rbd snap protect rep-pool/volume-1@snap-1
+
+有子卷不能unprotect，子卷flatten之后就可以,或删除子卷先
+rbd snap unprotect rep-pool/volume-1@snap-1
+
+rbd clone rep-pool/volume-1@snap-1 rep-pool/volume-2
+
+查看快照snap-1的子卷
+rbd children rep-pool/volume-1@snap-1
+
+flatten可以的意思是子卷和快照脱离关系,会拷贝一份数据，后面没数据的内容还会创建文件名
+rbd flatten rep-pool/volume-2
+
+rbd rm volume-2  -p rep-pool

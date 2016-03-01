@@ -23,7 +23,6 @@ def main():
         if key.startswith("osd."):
             osd_num = key.split(".")[1]
             host = conf[key]["public addr"]
-            dev = conf[key]["devs"]
             mount_point = "/mnt/osd" + osd_num
             cmd = "ssh %s /etc/init.d/ceph start %s" % (host, key)
             os.system(cmd)

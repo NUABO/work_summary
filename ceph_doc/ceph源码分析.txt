@@ -1,0 +1,1877 @@
+
+int rados_create2()
+{
+	CephInitParameters iparams(CEPH_ENTITY_TYPE_CLIENT);
+	rados_create_common(pcluster, clustername, &iparams);
+	{
+		
+		CephContext *cct = common_preinit(*iparams, CODE_ENVIRONMENT_LIBRARY, 0);
+			//# ceph_context.cc 361
+			CephContext *cct = new CephContext(iparams.module_type);
+			{
+				_conf = new md_config_t()
+				
+				_log = new ceph::log::Log(&_conf->subsys);
+				//启动一个线程
+				_log->start();
+				
+				_log_obs = new LogObs(_log);
+				_conf->add_observer(_log_obs);
+				
+				_perf_counters_collection = new PerfCountersCollection(this);
+				_admin_socket = new AdminSocket(this);
+				_heartbeat_map = new HeartbeatMap(this);
+
+				_admin_hook = new CephContextHook(this);
+				
+				_crypto_none = new CryptoNone;
+				_crypto_aes = new CryptoAES;
+			}
+				
+		cct->_conf->parse_env()
+		cct->_conf->apply_changes
+		
+		librados::RadosClient *radosp = new librados::RadosClient(cct);
+		{
+			Dispatcher(cct_->get()),
+			conf(cct_->_conf),
+			state(DISCONNECTED),
+			monclient(cct_),
+			messenger(NULL),
+			instance_id(0),
+			objecter(NULL),
+			lock("librados::RadosClient::lock"),
+			timer(cct, lock),
+			refcnt(1),
+			log_last_version(0), log_cb(NULL), log_cb_arg(NULL),
+			finisher(cct)
+		}
+	}
+}
+
+
+ int rados_conf_read_file(cluster, "/etc/ceph/ceph.conf")
+{
+	conf->parse_config_files(path_list, &parse_errors, NULL, 0);
+	conf->parse_env(); // environment variables override
+	conf->apply_changes(NULL);
+	complain_about_parse_errors(client->cct, &parse_errors);
+}	
+
+
+
+
+
+int rados_connect()
+{	
+	client->connect()        // (librados::RadosClient)
+	{
+		common_init_finish(cct);
+		monclient.build_initial_monmap();   //(librados::RadosClient  MonClient monclient)
+		    //解析配置文件中所有mon节点的地址， 放在MonClient::  MonMap monmap   map<string, entity_addr_t> mon_addr   string 为mon的名字 “0”，“1”
+			monmap.build_initial(cct, cerr);
+		/*创建messenger类实例，默认为SimpleMessenger,messenger在构造函数中为NULL*/
+		// (librados::RadosClient  Messenger *messenger)
+		messenger = Messenger::create(cct, cct->_conf->ms_type, entity_name_t::CLIENT(-1),"radosclient", nonce);  
+			new SimpleMessenger(cct, name, lname, nonce);
+			{
+				SimplePolicyMessenger(cct, name,mname, _nonce),
+					 Messenger(cct, name),
+						//entity_inst_t  msg_types.h中定义
+						my_inst()
+						default_send_priority(CEPH_MSG_PRIO_DEFAULT)
+				accepter(this, _nonce),    //SimpleMessenger::  Accepter accepter
+				dispatch_queue(cct, this),  //SimpleMessenger:: DispatchQueue dispatch_queue
+					mqueue(cct->_conf->ms_pq_max_tokens_per_priority,cct->_conf->ms_pq_min_cost),
+					dispatch_thread(this)
+					local_delivery_thread(this),
+				reaper_thread(this),    // A thread used to tear down Pipes when they're complete.
+				// Throttle preventing us from building up a big backlog waiting for dispatch
+				dispatch_throttler(cct, string("msgr_dispatch_throttler-") + mname, cct->_conf->ms_dispatch_throttle_bytes),
+				// con used for sending messages to ourselves
+				local_connection(new PipeConnection(cct, this))   //SimpleMessenger:: ConnectionRef local_connection;
+				{
+					PipeConnection(CephContext *cct, Messenger *m)
+					: Connection(cct, m)
+				}
+				//# 初始化本地连接
+				init_local_connection();
+				{
+					// peer_addr 是 Connection 的属性
+					// 对端的地址和类型 等于 自己
+					local_connection->peer_addr = my_inst.addr;
+					local_connection->peer_type = my_inst.name.type();
+					ms_deliver_handle_fast_connect(local_connection.get());
+					
+				}
+			}
+				
+				
+				
+		// SimplePolicyMessenger 函数，设置默认的协议
+		messenger->set_default_policy(Messenger::Policy::lossy_client(0, CEPH_FEATURE_OSDREPLYMUX));
+		// 创建一个Objecter
+		objecter = new (std::nothrow) Objecter(cct, messenger, &monclient,   // librados::RadosClient  Objecter *objecter
+						  &finisher,
+						  cct->_conf->rados_mon_op_timeout,
+						  cct->_conf->rados_osd_op_timeout);
+		{
+			Dispatcher(cct_),
+			messenger(m),
+			monc(mc), 
+			finisher(fin),
+			osdmap(new OSDMap),                            //Objecter::  OSDMap    *osdmap
+			op_throttle_bytes(cct, "objecter_bytes", cct->_conf->objecter_inflight_op_bytes),
+			op_throttle_ops(cct, "objecter_ops", cct->_conf->objecter_inflight_ops),
+		}
+		//设置属性 keep_balanced_budget =true
+		objecter->set_balanced_budget();
+		
+		// monclient设置它的messenger属性，引用的是RadosClient的messenger属性
+		// monclient.messenger = RadosClient.messenger
+		monclient.set_messenger(messenger);
+		
+		objecter->init();
+		{		
+			m_request_state_hook = new RequestStateHook(this);
+			AdminSocket* admin_socket = cct->get_admin_socket();
+			admin_socket->register_command("objecter_requests",
+					   "objecter_requests",
+					   m_request_state_hook,
+					   "show in-progress osd requests");
+			timer.init();
+		}
+		
+		//把objecter 和 radosclient 添加到 messenger的 list<Dispatcher*> dispatchers;
+		messenger->add_dispatcher_tail(objecter);
+		{
+			first = dispatchers.empty();
+			dispatchers.push_back(d);             //  Messenger::  list<Dispatcher*> dispatchers
+			 // 如果messenger的 list<Dispatcher*> dispatchers为空
+			 if (first)
+			 {
+				 SimpleMessenger.ready()
+					   dispatch_queue.start()
+							dispatch_thread.create();
+								DispatchQueue::entry()
+							local_delivery_thread.create();
+								DispatchQueue::run_local_delivery()
+			}
+		}
+		messenger->add_dispatcher_tail(this);
+		messenger->start();
+		{
+			SimpleMessenger::start()
+				started = true;
+				if (!did_bind)
+					init_local_connection()
+						ms_deliver_handle_fast_connect // ???
+				
+				reaper_started = true;
+				reaper_thread.create();
+					SimpleMessenger::reaper_entry()
+		}
+		monclient.set_want_keys(CEPH_ENTITY_TYPE_MON | CEPH_ENTITY_TYPE_OSD);
+		monclient.init();
+		{
+			//把monclient messenger的 list<Dispatcher*> dispatchers;
+			messenger->add_dispatcher_head(this);
+			keyring = new KeyRing;
+			rotating_secrets = new RotatingKeyRing(cct, cct->get_module_type(), keyring);
+			timer.init();
+			finisher.start();
+			schedule_tick();
+		}
+		//# 建立连接
+		monclient.authenticate(conf->client_mount_timeout);
+		{
+			_sub_want("monmap", monmap.get_epoch() ? monmap.get_epoch() + 1 : 0, 0);
+			if (cur_mon.empty())
+			    //# rank=-1, name=""
+				_reopen_session(int rank, string name)
+					//# 随机挑选一个mon
+					cur_mon = _pick_random_mon();
+					//# 跟mon建立连接
+					cur_con = messenger->get_connection(monmap.get_inst(cur_mon));  (MonClient ConnectionRef cur_con)
+						pipe = connect_rank(dest.addr, dest.name.type(), NULL, NULL);
+							Pipe *pipe = new Pipe(this, Pipe::STATE_CONNECTING,static_cast<PipeConnection*>(con));
+								//每个pipe有一个进程，连接也是在这里进行
+								pipe->start_writer();
+								pipe->register_pipe();
+								pipes.insert(pipe);
+				
+					cur_con->send_keepalive();
+					MAuth *m = new MAuth;
+					 _send_mon_message(m, true);
+		}
+		messenger->set_myname(entity_name_t::CLIENT(monclient.get_global_id()));
+		objecter->set_client_incarnation(0);
+		objecter->start();
+		{
+			_maybe_request_map()            //(Objecter::)
+				if (monc->sub_want("osdmap", epoch, flag))
+					monc->renew_subs();     // (MonClient::)
+						MMonSubscribe *m = new MMonSubscribe;
+						m->what = sub_have;
+						_send_mon_message(m);
+							waiting_for_session.push_back(m);  // (MonClient::)
+		}
+		timer.init();
+		monclient.renew_subs();
+		finisher.start();
+		state = CONNECTED;
+		instance_id = monclient.get_global_id();
+	}
+}
+
+/*
+(gdb) print *osdmap  数据在mon中获取       librados::RadosClient    Objecter *objecter  ->   Objecter  OSDMap    *osdmap
+$10 = {
+
+fsid = {uuid = "g0\034\225?\357Le\262\350\017L \231\361b"}, 
+epoch = 251, created = {tv = {tv_sec = 1446169916, tv_nsec = 159444000}}, 
+modified = {tv = {tv_sec = 1448332248, tv_nsec = 201065000}},
+pool_max = 2, 
+flags = 0, 
+num_osd = 3, 
+max_osd = 3, 
+osd_state = std::vector of length 3, capacity 3 = {3 '\003', 3 '\003', 3 '\003'},  //( CEPH_OSD_EXISTS | CEPH_OSD_UP )
+osd_addrs = std::tr1::shared_ptr (count 1) 0x6128a0, 
+osd_weight = std::vector of length 3, capacity 3 = {65536, 65536, 65536}, 
+osd_info = std::vector of length 3, capacity 3 = {{
+      last_clean_begin = 231, last_clean_end = 245, up_from = 247, up_thru = 249, down_at = 246, lost_at = 0}, {last_clean_begin = 232, 
+      last_clean_end = 243, up_from = 248, up_thru = 249, down_at = 244, lost_at = 0}, {last_clean_begin = 233, last_clean_end = 243, 
+      up_from = 249, up_thru = 249, down_at = 244, lost_at = 0}}, 
+pg_temp = std::tr1::shared_ptr (count 1) 0x608850, 
+primary_temp = std::tr1::shared_ptr (count 1) 0x608790, osd_primary_affinity = std::tr1::shared_ptr (empty) 0x0, 
+pools = std::map with 3 elements = {
+	[0] = {flags = 1, type = 1 '\001', size = 1 '\001', min_size = 1 '\001', crush_ruleset = 0 '\000', 
+		  object_hash = 2 '\002', pg_num = 64, pgp_num = 64, properties = std::map with 0 elements, erasure_code_profile = "", last_change = 1, 
+		  last_force_op_resend = 0, snap_seq = {val = 0}, snap_epoch = 0, auid = 0, crash_replay_interval = 0, quota_max_bytes = 0, 
+		  quota_max_objects = 0, snaps = std::map with 0 elements, removed_snaps = {_size = 0, m = std::map with 0 elements}, pg_num_mask = 63, 
+		  pgp_num_mask = 63, tiers = std::set with 0 elements, tier_of = -1, read_tier = -1, write_tier = -1, 
+		  cache_mode = pg_pool_t::CACHEMODE_NONE, target_max_bytes = 0, target_max_objects = 0, cache_target_dirty_ratio_micro = 0, 
+		  cache_target_full_ratio_micro = 0, cache_min_flush_age = 0, cache_min_evict_age = 0, hit_set_params = {_vptr.Params = 0x7ffff351ca30, 
+			impl = {px = 0x0}}, hit_set_period = 0, hit_set_count = 0, min_read_recency_for_promote = 0, stripe_width = 0, 
+		  expected_num_objects = 0}, 
+		  
+	[1] = {flags = 1, type = 1 '\001', size = 1 '\001', min_size = 1 '\001', crush_ruleset = 0 '\000', 
+		  object_hash = 2 '\002', pg_num = 1024, pgp_num = 1024, properties = std::map with 0 elements, erasure_code_profile = "", 
+		  last_change = 12, last_force_op_resend = 0, snap_seq = {val = 0}, snap_epoch = 0, auid = 0, crash_replay_interval = 0, 
+		  quota_max_bytes = 0, quota_max_objects = 0, snaps = std::map with 0 elements, removed_snaps = {_size = 0, m = std::map with 0 elements
+		}, pg_num_mask = 1023, pgp_num_mask = 1023, tiers = std::set with 0 elements, tier_of = -1, read_tier = -1, write_tier = -1, 
+		  cache_mode = pg_pool_t::CACHEMODE_NONE, target_max_bytes = 0, target_max_objects = 0, cache_target_dirty_ratio_micro = 400000, 
+		  cache_target_full_ratio_micro = 800000, cache_min_flush_age = 0, cache_min_evict_age = 0, hit_set_params = {
+			_vptr.Params = 0x7ffff351ca30, impl = {px = 0x0}}, hit_set_period = 0, hit_set_count = 0, min_read_recency_for_promote = 0, 
+		  stripe_width = 0, expected_num_objects = 0},
+		  
+	[2] = {flags = 1, type = 3 '\003', size = 8 '\b', min_size = 7 '\a', 
+		  crush_ruleset = 1 '\001', object_hash = 2 '\002', pg_num = 128, pgp_num = 128, properties = std::map with 0 elements, 
+		  erasure_code_profile = "ec-7-1", last_change = 237, last_force_op_resend = 0, snap_seq = {val = 0}, snap_epoch = 0, auid = 0, 
+		  crash_replay_interval = 0, quota_max_bytes = 0, quota_max_objects = 0, snaps = std::map with 0 elements, removed_snaps = {_size = 0, 
+			m = std::map with 0 elements}, pg_num_mask = 127, pgp_num_mask = 127, tiers = std::set with 0 elements, tier_of = -1, 
+		  read_tier = -1, write_tier = -1, cache_mode = pg_pool_t::CACHEMODE_NONE, target_max_bytes = 0, target_max_objects = 0, 
+		  cache_target_dirty_ratio_micro = 400000, cache_target_full_ratio_micro = 800000, cache_min_flush_age = 0, cache_min_evict_age = 0, 
+		  hit_set_params = {_vptr.Params = 0x7ffff351ca30, impl = {px = 0x0}}, hit_set_period = 0, hit_set_count = 0, 
+		  min_read_recency_for_promote = 0, stripe_width = 4256, expected_num_objects = 0}},
+		  
+	  
+pool_name = std::map with 3 elements = {[0] = "rbd", [1] = "ecpool-2", [2] = "ecpool"}, 
+
+erasure_code_profiles = std::map with 2 elements = {["default"] = std::map with 5 elements = {[
+    "directory"] = "/usr/lib64/ceph/erasure-code", ["k"] = "2", ["m"] = "1", ["plugin"] = "jerasure", ["technique"] = "reed_sol_van"}, [
+    "ec-7-1"] = std::map with 6 elements = {["directory"] = "/usr/lib64/ceph/erasure-code", ["k"] = "7", ["m"] = "1", ["plugin"] = 
+    "jerasure", ["ruleset-failure-domain"] = "osd", ["technique"] = "reed_sol_van"}}, 
+	
+name_pool = std::map with 3 elements = {[
+    "ecpool"] = 2, ["ecpool-2"] = 1, ["rbd"] = 0}, 
+	
+osd_uuid = std::tr1::shared_ptr (count 1) 0x608ac0, 
+osd_xinfo = std::vector of length 3, capacity 3 = {{down_stamp = {tv = {tv_sec = 1448332242, tv_nsec = 701325000}}, 
+      laggy_probability = 0.000591003103, laggy_interval = 0, features = 70368744177663, old_weight = 0}, {down_stamp = {tv = {
+          tv_sec = 1448286960, tv_nsec = 937085000}}, laggy_probability = 0.260937691, laggy_interval = 14, features = 70368744177663, 
+      old_weight = 0}, {down_stamp = {tv = {tv_sec = 1448286960, tv_nsec = 937085000}}, laggy_probability = 0.261927366, 
+      laggy_interval = 15, features = 70368744177663, old_weight = 0}}, 
+	  
+blacklist = std::tr1::unordered_map with 0 elements, 
+cluster_snapshot_epoch = 0, 
+cluster_snapshot = "", 
+new_blacklist_entries = false, 
+cached_up_osd_features = 70368744177663, 
+crc_defined = false, 
+crc = 0,
+crush = std::tr1::shared_ptr (count 1) 0x612990}
+
+
+
+其中 ：
+
+(gdb) print *osdmap.osd_addrs 
+$7 = (OSDMap::addrs_s &) @0x6128a0: {
+
+client_addr = std::vector of length 3, capacity 3 = {std::tr1::shared_ptr (count 1) 0x7fffd0005fe0, 
+    std::tr1::shared_ptr (count 1) 0x7fffd00060a0, std::tr1::shared_ptr (count 1) 0x7fffd0006160}, 
+  
+cluster_addr = std::vector of length 3, capacity 3 = {std::tr1::shared_ptr (count 1) 0x7fffd0007950, 
+    std::tr1::shared_ptr (count 1) 0x7fffd0007a10, std::tr1::shared_ptr (count 1) 0x7fffd0007ad0},
+	
+hb_back_addr = std::vector of length 3, capacity 3 = {std::tr1::shared_ptr (count 1) 0x7fffd00076b0, 
+    std::tr1::shared_ptr (count 1) 0x7fffd0007740, std::tr1::shared_ptr (count 1) 0x7fffd0007800}, 
+	
+hb_front_addr = std::vector of length 3, capacity 3 = {std::tr1::shared_ptr (count 1) 0x7fffd0007c80, 
+    std::tr1::shared_ptr (count 1) 0x7fffd0007d40, std::tr1::shared_ptr (count 1) 0x7fffd0007e00}, 
+	
+blank = {type = 0, nonce = 0, {
+	addr = {
+			ss_family = 0, __ss_align = 0, __ss_padding = '\000' <repeats 111 times>}, 
+	addr4 = {sin_family = 0, sin_port = 0, sin_addr = {
+			  s_addr = 0}, sin_zero = "\000\000\000\000\000\000\000"}, 
+	addr6 = {sin6_family = 0, sin6_port = 0, sin6_flowinfo = 0, sin6_addr = {
+			  __in6_u = {__u6_addr8 = '\000' <repeats 15 times>, __u6_addr16 = {0, 0, 0, 0, 0, 0, 0, 0}, __u6_addr32 = {0, 0, 0, 0}}}, 
+			sin6_scope_id = 0}}}
+		
+		}
+
+		
+客户端地址		
+print *(entity_addr_t *)0x7fffd0005fe0
+$12 = {type = 0, nonce = 6992, {addr = {ss_family = 2, __ss_align = 0, __ss_padding = '\000' <repeats 111 times>}, addr4 = {sin_family = 2, 
+      sin_port = 36890, sin_addr = {s_addr = 1244506303}, sin_zero = "\000\000\000\000\000\000\000"}, addr6 = {sin6_family = 2, 
+      sin6_port = 36890, sin6_flowinfo = 1244506303, sin6_addr = {__in6_u = {__u6_addr8 = '\000' <repeats 15 times>, __u6_addr16 = {0, 0, 0, 
+            0, 0, 0, 0, 0}, __u6_addr32 = {0, 0, 0, 0}}}, sin6_scope_id = 0}}}
+如果配置文件没有设置cluster_addr 那么就等于 client_addr
+			
+1244506303 => 4A 2D A8 BF => 74 45 168 191
+  */
+
+
+
+int rados_ioctx_create()
+{
+	client->create_ioctx(name, &ctx);
+	{
+		poolid = lookup_pool(name);
+			//等待osdmap->get_epoch() !=0 应该前面有个线程是获取 osdmap信息的 
+			r = wait_for_osdmap()
+			{
+				OSDMap *osdmap = objecter->get_osdmap_read();  //Objecter:: OSDMap    *osdmap
+			}
+			//加锁
+			OSDMap *osdmap = objecter->get_osdmap_read();
+			poolid = osdmap->lookup_pg_pool_name(name); // OSDMap.h  709 #此时 OSDMap 已有数据（epoch ！=0 ？）
+			//解锁
+			objecter->put_osdmap_read();
+		*io = new librados::IoCtxImpl(this, objecter, poolid, CEPH_NOSNAP);
+	}
+}	
+
+/*
+(gdb) print ctx
+$3 = (librados::IoCtxImpl *) 0x61dce0
+
+(gdb) print *ctx
+
+$4 = {
+
+ref_cnt = {val = 1}, 
+client = 0x60ccd0, 
+poolid = 1, 
+snap_seq = {val = 18446744073709551614}, 
+snapc = {seq = {val = 0}, 
+snaps = std::vector of length 0, capacity 0}, 
+assert_ver = 0, 
+assert_src_version = std::map with 0 elements, last_objver = 0, 
+notify_timeout = 10, 
+oloc = {pool = 1, key = "", nspace = "", hash = -1}, 
+aio_write_list_lock = {
+    name = 0x7ffff2faee40 "librados::IoCtxImpl::aio_write_list_lock", id = -1, recursive = false, lockdep = true, backtrace = false, _m = {
+      __data = {__lock = 0, __count = 0, __owner = 0, __nusers = 0, __kind = 2, __spins = 0, __list = {__prev = 0x0, __next = 0x0}}, 
+      __size = '\000' <repeats 16 times>, "\002", '\000' <repeats 22 times>, __align = 0}, nlock = 0, locked_by = 0, cct = 0x0, 
+    logger = 0x0}, 
+	
+aio_write_seq = 0, 
+aio_write_cond = {_vptr.Cond = 0x7ffff351c290, _c = {__data = {__lock = 0, __futex = 0, 
+        __total_seq = 0, __wakeup_seq = 0, __woken_seq = 0, __mutex = 0x0, __nwaiters = 0, __broadcast_seq = 0}, 
+      __size = '\000' <repeats 47 times>, __align = 0}, waiter_mutex = 0x0}, 
+
+aio_write_list = {_front = 0x0, _back = 0x0, _size = 0}, 
+aio_write_waiters = std::map with 0 elements, 
+
+cached_pool_names_lock = {
+    name = 0x7ffff2faee70 "librados::IoCtxImpl::cached_pool_names_lock", id = -1, recursive = false, lockdep = true, backtrace = false, 
+    _m = {__data = {__lock = 0, __count = 0, __owner = 0, __nusers = 0, __kind = 2, __spins = 0, __list = {__prev = 0x0, __next = 0x0}}, 
+      __size = '\000' <repeats 16 times>, "\002", '\000' <repeats 22 times>, __align = 0}, nlock = 0, locked_by = 0, cct = 0x0, 
+    logger = 0x0}, 
+	
+cached_pool_names = empty std::list, objecter = 0x612040}
+*/
+
+	
+int rbd_open( io, name, &image, NULL)
+{
+	//实例化好了
+	librados::IoCtx io_ctx;
+	librados::IoCtx::from_rados_ioctx_t(p, io_ctx);	
+	{
+		IoCtxImpl *io_ctx_impl = (IoCtxImpl*)p;
+		io.io_ctx_impl = io_ctx_impl;
+	}
+	librbd::ImageCtx *ictx = new librbd::ImageCtx(name, "", snap_name, io_ctx, false);
+	{
+		cct((CephContext*)p.cct()),    //ImageCtx:: CephContext *cct
+		object_map(*this)              //ImageCtx:: ObjectMap object_map
+		// deep copy
+		md_ctx.dup(p);                 //ImageCtx:: IoCtx data_ctx
+		data_ctx.dup(p);               //ImageCtx:: IoCtx md_ctx
+		// 配置项 rbd cache = true 
+		if (cct->_conf->rbd_cache)
+			writeback_handler = new LibrbdWriteback(this, cache_lock);
+			object_cacher = new ObjectCacher(cct, pname, *writeback_handler, cache_lock,
+			object_set = new ObjectCacher::ObjectSet(NULL, data_ctx.get_id(), 0);
+			object_set->return_enoent = true;
+			object_cacher->start();
+		int r = librbd::open_image(ictx);
+			ictx->init();
+			if (!ictx->read_only)
+				ictx->register_watch();
+			ictx_refresh(ictx);
+			r = _snap_set(ictx, ictx->snap_name.c_str())
+		*image = (rbd_image_t)ictx;
+		
+		if (cct->_conf->rbd_clone_copy_on_read)
+			copyup_finisher = new Finisher(cct);
+			copyup_finisher->start();
+	}
+	librbd::open_image(ictx);
+	{
+		ictx->init();
+			detect_format(md_ctx, name, &old_format, NULL);
+				io_ctx.stat(old_header_name(name), size, NULL);  //(librados::IoCtx::)
+					//# oid="volume-1.rbd", psize=0x0, pmtime=0x0
+					io_ctx_impl->stat(oid, psize, pmtime);       // librados::IoCtxImpl::
+						:ObjectOperation rd;
+						rd.stat(psize, &mtime, NULL);
+						int r = operate_read(oid, &rd, NULL);
+						Objecter::Op *objecter_op = objecter->prepare_read_op(oid, oloc,
+	                                      *o, snap_seq, pbl, flags,
+	                                      onack, &ver);
+						objecter->op_submit(objecter_op);
+						_op_submit_with_budget(op, lc, ctx_budget);
+						tid = _op_submit(op, lc);
+							//# 先选择一个osd
+							_calc_target(&op->target)
+							//# 与osd建立连接
+							_get_session(op->target.osd, &s, lc);
+							
+							
+			header_oid = old_header_name(name);
+	}
+}			
+
+/*
+(gdb) print *ictx   //(librbd::ImageCtx * const)
+$13 = {
+cct = 0x607150, 
+perfcounter = 0x611680, 
+
+header = {
+	text = "<<< Rados Block Device Image >>>\n\000\000\000\000\000\000", 
+    block_name = "rb.0.1011.6b8b4567\000\000\000\000\000", 
+	signature = "RBD", 
+	version = "001.005", 
+	options = {order = 22 '\026', 
+    crypt_type = 0 '\000', 
+	comp_type = 0 '\000', 
+	unused = 0 '\000'}, 
+	image_size = {v = 2147483648}, 
+	snap_seq = {v = 0}, 
+	snap_count = {v = 0}, 
+	reserved = {v = 0}, 
+	snap_names_len = {v = 0}, 
+	snaps = 0x61e0b0}, 
+	  
+snapc = {seq = {val = 0}, 
+    snaps = std::vector of length 0, capacity 0}, 
+	
+snaps = std::vector of length 0, capacity 0, 
+snap_info = std::map with 0 elements, 
+snap_ids = std::map with 0 elements,
+snap_id = 18446744073709551614, 
+snap_exists = true, 
+read_only = false, 
+flush_encountered = false, 
+lockers = std::map with 0 elements, 
+exclusive_locked = false, 
+lock_tag = "", 
+name = "volume-1", 
+snap_name = "", 
+data_ctx = {io_ctx_impl = 0x61e8f0}, 
+md_ctx = {io_ctx_impl = 0x615430}, 
+image_watcher = 0x624d20, 
+refresh_seq = 0, 
+last_refresh = 0, 
+owner_lock = {
+    _vptr.RWLock = 0x7ffff5f3a650, L = {__data = {__lock = 0, __nr_readers = 0, __readers_wakeup = 0, __writer_wakeup = 0, 
+        __nr_readers_queued = 0, __nr_writers_queued = 0, __writer = 0, __shared = 0, __pad1 = 0, __pad2 = 0, __flags = 0}, 
+      __size = '\000' <repeats 55 times>, __align = 0}, name = 0x7ffff597385b "librbd::ImageCtx::owner_lock", id = -1, nrlock = {val = 0}, 
+    nwlock = {val = 0}}, 
+	
+md_lock = {_vptr.RWLock = 0x7ffff5f3a650, L = {__data = {__lock = 0, __nr_readers = 0, __readers_wakeup = 0, 
+        __writer_wakeup = 0, __nr_readers_queued = 0, __nr_writers_queued = 0, __writer = 17964, __shared = 0, __pad1 = 0, __pad2 = 0, 
+        __flags = 0}, __size = '\000' <repeats 24 times>, ",F", '\000' <repeats 29 times>, __align = 0}, 
+    name = 0x7ffff5973878 "librbd::ImageCtx::md_lock", id = -1, nrlock = {val = 0}, nwlock = {val = 1}}, 
+
+cache_lock = {
+    name = 0x7ffff5973892 "librbd::ImageCtx::cache_lock", id = -1, recursive = false, lockdep = true, backtrace = false, _m = {__data = {
+        __lock = 0, __count = 0, __owner = 0, __nusers = 0, __kind = 2, __spins = 0, __list = {__prev = 0x0, __next = 0x0}}, 
+      __size = '\000' <repeats 16 times>, "\002", '\000' <repeats 22 times>, __align = 0}, nlock = 0, locked_by = 0, cct = 0x0, 
+    logger = 0x0}, 
+	
+snap_lock = {_vptr.RWLock = 0x7ffff5f3a650, L = {__data = {__lock = 0, __nr_readers = 0, __readers_wakeup = 0, 
+        __writer_wakeup = 0, __nr_readers_queued = 0, __nr_writers_queued = 0, __writer = 0, __shared = 0, __pad1 = 0, __pad2 = 0, 
+        __flags = 0}, __size = '\000' <repeats 55 times>, __align = 0}, name = 0x7ffff59738af "librbd::ImageCtx::snap_lock", id = -1, 
+    nrlock = {val = 0}, nwlock = {val = 0}}, 
+
+parent_lock = {_vptr.RWLock = 0x7ffff5f3a650, L = {__data = {__lock = 0, __nr_readers = 0, 
+        __readers_wakeup = 0, __writer_wakeup = 0, __nr_readers_queued = 0, __nr_writers_queued = 0, __writer = 0, __shared = 0, __pad1 = 0, 
+        __pad2 = 0, __flags = 0}, __size = '\000' <repeats 55 times>, __align = 0}, name = 0x7ffff59738cb "librbd::ImageCtx::parent_lock", 
+    id = -1, nrlock = {val = 0}, nwlock = {val = 0}}, 
+	
+refresh_lock = {name = 0x7ffff59738f0 "librbd::ImageCtx::refresh_lock", id = -1, 
+    recursive = false, lockdep = true, backtrace = false, _m = {__data = {__lock = 0, __count = 0, __owner = 0, __nusers = 0, __kind = 2, 
+        __spins = 0, __list = {__prev = 0x0, __next = 0x0}}, __size = '\000' <repeats 16 times>, "\002", '\000' <repeats 22 times>, 
+---Type <return> to continue, or q <return> to quit---
+      __align = 0}, nlock = 0, locked_by = 0, cct = 0x0, logger = 0x0}, 
+	  
+object_map_lock = {_vptr.RWLock = 0x7ffff5f3a650, L = {__data = {
+        __lock = 0, __nr_readers = 0, __readers_wakeup = 0, __writer_wakeup = 0, __nr_readers_queued = 0, __nr_writers_queued = 0, 
+        __writer = 0, __shared = 0, __pad1 = 0, __pad2 = 0, __flags = 0}, __size = '\000' <repeats 55 times>, __align = 0}, 
+    name = 0x7ffff5973910 "librbd::ImageCtx::object_map_lock", id = -1, nrlock = {val = 0}, nwlock = {val = 0}}, 
+	
+async_ops_lock = {
+    name = 0x7ffff5973938 "librbd::ImageCtx::async_ops_lock", id = -1, recursive = false, lockdep = true, backtrace = false, _m = {__data = {
+        __lock = 0, __count = 0, __owner = 0, __nusers = 0, __kind = 2, __spins = 0, __list = {__prev = 0x0, __next = 0x0}}, 
+      __size = '\000' <repeats 16 times>, "\002", '\000' <repeats 22 times>, __align = 0}, nlock = 0, locked_by = 0, cct = 0x0, 
+    logger = 0x0}, 
+	
+copyup_list_lock = {name = 0x7ffff5973960 "librbd::ImageCtx::copyup_list_lock", id = -1, recursive = false, 
+    lockdep = true, backtrace = false, _m = {__data = {__lock = 0, __count = 0, __owner = 0, __nusers = 0, __kind = 2, __spins = 0, 
+        __list = {__prev = 0x0, __next = 0x0}}, __size = '\000' <repeats 16 times>, "\002", '\000' <repeats 22 times>, __align = 0}, 
+    nlock = 0, locked_by = 0, cct = 0x0, logger = 0x0}, 
+	
+extra_read_flags = 0, 
+old_format = true, 
+order = 22 '\026', 
+size = 2147483648, 
+features = 0, 
+object_prefix = "rb.0.1011.6b8b4567", 
+format_string = 0x61cba0 "rb.0.1011.6b8b4567.%012llx", 
+header_oid = "volume-1.rbd", 
+id = "", 
+parent_md = {spec = {pool_id = -1, image_id = "", snap_id = {val = 18446744073709551614}}, overlap = 0}, 
+parent = 0x0, 
+stripe_unit = 4194304, 
+stripe_count = 1, 
+flags = 0, 
+layout = {fl_stripe_unit = {v = 4194304}, fl_stripe_count = {v = 1}, fl_object_size = {
+      v = 4194304}, fl_cas_hash = {v = 0}, fl_object_stripe_unit = {v = 0}, fl_unused = {v = 0}, fl_pg_pool = {v = 1}},
+
+object_cacher = 0x0, 
+writeback_handler = 0x0, 
+object_set = 0x0, 
+readahead = {static NO_LIMIT = 18446744073709551615, m_trigger_requests = 10, 
+    m_readahead_min_bytes = 0, m_readahead_max_bytes = 524288, m_alignments = std::vector of length 3, capacity 3 = {4194304, 4194304, 
+      4194304}, m_lock = {name = 0x7ffff5a13074 "Readahead::m_lock", id = -1, recursive = false, lockdep = true, backtrace = false, _m = {
+        __data = {__lock = 0, __count = 0, __owner = 0, __nusers = 0, __kind = 2, __spins = 0, __list = {__prev = 0x0, __next = 0x0}}, 
+        __size = '\000' <repeats 16 times>, "\002", '\000' <repeats 22 times>, __align = 0}, nlock = 0, locked_by = 0, cct = 0x0, 
+      logger = 0x0}, m_nr_consec_read = 0, m_consec_read_bytes = 0, m_last_pos = 0, m_readahead_pos = 0, m_readahead_trigger_pos = 0, 
+    m_readahead_size = 0, m_pending = 0, m_pending_lock = {name = 0x7ffff5a13086 "Readahead::m_pending_lock", id = -1, recursive = false, 
+      lockdep = true, backtrace = false, _m = {__data = {__lock = 0, __count = 0, __owner = 0, __nusers = 0, __kind = 2, __spins = 0, 
+          __list = {__prev = 0x0, __next = 0x0}}, __size = '\000' <repeats 16 times>, "\002", '\000' <repeats 22 times>, __align = 0}, 
+      nlock = 0, locked_by = 0, cct = 0x0, logger = 0x0}, m_pending_cond = {_vptr.Cond = 0x7ffff5f39a50, _c = {__data = {__lock = 0, 
+          __futex = 0, __total_seq = 0, __wakeup_seq = 0, __woken_seq = 0, __mutex = 0x0, __nwaiters = 0, __broadcast_seq = 0}, 
+        __size = '\000' <repeats 47 times>, __align = 0}, waiter_mutex = 0x0}}, 
+		
+total_bytes_read = 0, 
+copyup_finisher = 0x0, 
+
+copyup_list = std::map with 0 elements, async_ops = {_front = 0x0, _back = 0x0, _size = 0}, 
+async_requests = {_front = 0x0, _back = 0x0, _size = 0}, 
+	
+async_requests_cond = {_vptr.Cond = 0x7ffff5f39a50, _c = {__data = {__lock = 0, __futex = 0, __total_seq = 0, 
+        __wakeup_seq = 0, __woken_seq = 0, __mutex = 0x0, __nwaiters = 0, __broadcast_seq = 0}, __size = '\000' <repeats 47 times>, 
+      __align = 0}, waiter_mutex = 0x0}, 
+	  
+object_map = {m_image_ctx = @0x61e0b0, m_object_map = {static BITS_PER_BYTE = 8 '\b', 
+      static ELEMENTS_PER_BLOCK = <optimized out>, static MASK = <optimized out>, static BIT_COUNT = <optimized out>, m_data = {
+        _buffers = empty std::list, _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {bl = 0x61e848, 
+          ls = 0x61e848, off = 0, p = {_raw = , _off = 0, _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, 
+        static CLAIM_ALLOW_NONSHAREABLE = 1}, m_size = 0, m_crc_enabled = true, m_header_crc = 0, 
+      m_data_crcs = std::vector of length 0, capacity 0}, m_enabled = false}, 
+	  
+async_request_seq = {val = 0},
+async_resize_reqs = { _front = 0x0, _back = 0x0, _size = 0}}
+
+
+*/
+
+
+
+
+	
+int rbd_write()
+{
+	librbd::write(ictx, ofs, len, buf, 0);
+	{
+		start_time = ceph_clock_now(ictx->cct);
+		//加锁
+		ictx->snap_lock.get_read();
+		//修改io大小，如果超出image总的大小
+		int r = clip_io(ictx, off, &mylen);
+		ictx->snap_lock.put_read();
+		
+		Context *ctx = new C_SafeCond(&mylock, &cond, &done, &ret);
+		//# librbd::AioCompletion
+		AioCompletion *c = aio_create_completion_internal(ctx, rbd_ctx_cb);
+		r = aio_write(ictx, off, mylen, buf, c, op_flags);       // (librbd::)
+		{
+			 ictx->get_parent_overlap(ictx->snap_id, &overlap);
+			 Striper::file_to_extents(ictx->cct, ictx->format_string,&ictx->layout, off, clip_len, 0, extents);
+			{
+				      ex->oid = oid;
+					  ex->objectno = objectno;
+					  ex->oloc = OSDMap::file_to_object_locator(*layout);
+			}
+			 c->add_request();
+			 if (ictx->object_cacher)//如果有rbd_cache
+			 {
+				 ictx->write_to_cache(p->oid, bl, p->length, p->offset, req_comp, op_flags);
+					 ObjectCacher::OSDWrite *wr = object_cacher->prepare_write(snapc, bl, utime_t(), fadvise_flags);
+					 ObjectExtent extent(o, 0, off, len, 0);
+					 extent.oloc.pool = data_ctx.get_id();
+					 extent.buffer_extents.push_back(make_pair(0, len));
+					 wr->extents.push_back(extent);
+					 object_cacher->writex(wr, object_set, cache_lock, onfinish);
+			}
+			 else
+			{
+				// 把条带又组装成文件,是不是没有rbd cache不能分条带
+				Striper::extent_to_file(ictx->cct, &ictx->layout,p->objectno, 0, ictx->layout.fl_object_size,objectx);
+				//获取覆盖 parent 内容的大小
+				object_overlap = ictx->prune_parent_extents(objectx, overlap);
+				req = new AioWrite(ictx, p->oid.name, p->objectno, p->offset,objectx, object_overlap,bl, snapc, snap_id, req_comp);
+				{
+					AioWrite
+						 AbstractWrite
+							AioRequest
+				}		
+				r = req->send();                       (librbd::AioWrite::)
+				{
+					if (send_pre()) 
+						return 0
+					else
+					{
+						send_write();                  (librbd::AioWrite::)
+						{
+							m_state = LIBRBD_AIO_WRITE_FLAT;
+							//跟快照有关
+							guard_write();
+							add_write_ops(&m_write);  (librbd::AioWrite::)
+							{
+							    // AbstractWrite的属性  librados::ObjectWriteOperation m_write; 默认值初始化
+								m_write->set_alloc_hint(m_ictx->get_object_size(), m_ictx->get_object_size());  //  (librados::ObjectWriteOperation)
+								{
+									// librados::ObjectWriteOperation有属性 ObjectOperationImpl *impl;  #ObjectOperationImpl是个空的类(可能作用相当于void,来存放各种类的指针)
+									// librados::ObjectWriteOperation初始化时有      impl = (ObjectOperationImpl *)new ::ObjectOperation;
+									// 全局的ObjectOperation 在 Objecter.h:1012
+									::ObjectOperation *o = (::ObjectOperation *)impl;
+									o->set_alloc_hint(expected_object_size, expected_write_size);                //   (ObjectOperation:: )  librados::ObjectWriteOperation  ObjectOperationImpl *impl
+										//CEPH_OSD_OP_SETALLOCHINT使用宏定义的 __CEPH_FORALL_OSD_OPS(GENERATE_ENUM_ENTRY) rados.h
+										add_alloc_hint(CEPH_OSD_OP_SETALLOCHINT, expected_object_size, expected_write_size);\
+											OSDOp& osd_op = add_op(op);      // (ObjectOperation:: )     vector<OSDOp> ops;
+											   //vector<OSDOp> ops;
+												int s = ops.size();
+												ops.resize(s+1);
+												ops[s].op.op = op;
+												out_bl.resize(s+1);
+												out_bl[s] = NULL;
+												out_handler.resize(s+1);
+												out_handler[s] = NULL;
+												out_rval.resize(s+1);
+												out_rval[s] = NULL;
+												return ops[s];
+											osd_op.op.op = op;
+											osd_op.op.alloc_hint.expected_object_size = expected_object_size;
+											osd_op.op.alloc_hint.expected_write_size = expected_write_size;
+								}
+								m_write->write(m_object_off, m_write_data);
+								{
+									// Objecter.h: 332
+									o->write(off, c);                       //(ObjectOperation:: )  librados::ObjectWriteOperation ObjectOperationImpl *impl
+										add_data(CEPH_OSD_OP_WRITE, off, bl.length(), bl);
+										    OSDOp& osd_op = add_op(op);
+												osd_op.op.op = op;
+												osd_op.op.extent.offset = off;
+												osd_op.op.extent.length = len;
+												osd_op.indata.claim_append(bl);
+											osd_op.op.op = op;
+											osd_op.op.extent.offset = off;
+											osd_op.op.extent.length = len;
+											osd_op.indata.claim_append(bl);	
+										OSDOp& o = *ops.rbegin();
+										o.op.extent.truncate_size = truncate_size;
+										o.op.extent.truncate_seq = truncate_seq;
+								}
+								m_write->set_op_flags2(m_op_flags);
+								{
+									// librados.cc 86
+									::set_op_flags(o, flags);
+										// Objecter.h
+										o->set_last_op_flags(rados_flags);
+											ops.rbegin()->op.flags = flags;
+								}
+							}
+							//# librados::AioCompletion
+							librados::AioCompletion *rados_completion = librados::Rados::aio_create_completion(this, NULL, rados_req_cb);	
+							// IoCtx data_ctx  ; ImageCtx * m_ictx
+							//AioRequest 的属性 ImageCtx *ictx 是全局 ImageCtx *ictx 的引用，write时传进来的
+							//data_ctx ImageCtx实例化时对全局IoCtx的dup  是data_ctx.dup(p);
+							m_ictx->data_ctx.aio_operate(m_oid, rados_completion, &m_write, m_snap_seq, m_snaps);   //(librados::IoCtx::)
+							{
+								object_t obj(oid);
+								vector<snapid_t> snv;
+								snv.resize(snaps.size());
+								for (size_t i = 0; i < snaps.size(); ++i)
+									snv[i] = snaps[i];
+								SnapContext snapc(snap_seq, snv);
+								//librados::IoCtx的属性 IoCtxImpl *io_ctx_impl;  是对全局 librados::IoCtxImpl的指针
+								return io_ctx_impl->aio_operate(obj, (::ObjectOperation*)o->impl, c->pc, snapc, 0);   // (librados::IoCtxImpl::)
+								{
+									utime_t ut = ceph_clock_now(client->cct);
+									/* can't write to a snapshot */
+									if (snap_seq != CEPH_NOSNAP)
+										return -EROFS;
+
+									Context *onack = new C_aio_Ack(c);
+									Context *oncommit = new C_aio_Safe(c);
+
+									c->io = this;
+									queue_aio_write(c);
+									{
+										aio_write_list_lock.Lock();
+										c->aio_write_seq = ++aio_write_seq;
+										aio_write_list.push_back(&c->aio_write_list_item);         //(librados::IoCtxImpl::  xlist<AioCompletionImpl*> aio_write_list)
+									}
+
+									c->tid = objecter->mutate(oid, oloc, *o, snap_context, ut, flags, onack, oncommit, &c->objver);   //(Objecter::)   librados::IoCtxImpl::  Objecter *objecter
+									{	
+										Op *o = prepare_mutate_op(oid, oloc, op, snapc, mtime, flags, onack, oncommit, objver);
+										{
+											//Op的属性 vector<OSDOp> ops 会和librados::ObjectWriteOperation::impl (::ObjectOperation) sawp
+											Op *o = new Op(oid, oloc, op.ops, flags | global_op_flags.read() | CEPH_OSD_FLAG_WRITE, onack, oncommit, objver);
+												//pg的一些信息都在这里
+												target(o, ol, f)  // op_target_t target
+												ops.swap(op);
+											o->priority = op.priority;
+											o->mtime = mtime;
+											o->snapc = snapc;
+											o->out_rval.swap(op.out_rval);
+										}
+										return op_submit(o);
+										{
+											return _op_submit_with_budget(op, lc, ctx_budget);
+											{
+												ceph_tid_t tid = _op_submit(op, lc);         //(Objecter::)   librados::IoCtxImpl::  Objecter *objecter
+												{
+													bool const check_for_latest_map = _calc_target(&op->target) == RECALC_OP_TARGET_POOL_DNE;
+													{
+														// 每个pool关于pg的信息都在这里
+														const pg_pool_t *pi = osdmap->get_pg_pool(t->base_oloc.pool);   //(OSDMap::)      Objecter  OSDMap    *osdmap
+														t->target_oid = t->base_oid;
+														t->target_oloc = t->base_oloc;
+														ret = osdmap->object_locator_to_pg(t->target_oid, t->target_oloc,pgid);
+															//计算hash值
+															ps = pool->hash_key(oid.name, loc.nspace);  // "rb.0.1011.6b8b4567.0..."  ""
+																string n = make_hash_str(key, ns);
+																return ceph_str_hash(object_hash, n.c_str(), n.length());
+															pg = pg_t(ps, loc.get_pool(), -1);
+														//根据hash值计算osd
+														osdmap->pg_to_up_acting_osds(pgid, &up, &up_primary,&acting, &acting_primary);
+															_pg_to_osds(*pool, pg, &raw, &_up_primary, &pps);
+																ps_t pps = pool.raw_pg_to_pps(pg);
+																	if (flags & FLAG_HASHPSPOOL)
+																		return  crush_hash32_2(CRUSH_HASH_RJENKINS1, ceph_stable_mod(pg.ps(), pgp_num, pgp_num_mask),pg.pool());
+																	else 
+																		    return ceph_stable_mod(pg.ps(), pgp_num, pgp_num_mask) + pg.pool();
+																ruleno = crush->find_rule(pool.get_crush_ruleset(), pool.get_type(), size);
+																	return  crush_find_rule(crush, ruleset, type, size);	
+																crush->do_rule(ruleno, pps, *osds, size, osd_weight);
+																	int numrep = crush_do_rule(crush, rule, x, rawout, maxout, &weight[0], weight.size(), scratch);
+																_remove_nonexistent_osds(pool, *osds);
+															_raw_to_up_osds(*pool, raw, &_up, &_up_primary);
+															_apply_primary_affinity(pps, *pool, &_up, &_up_primary);
+															_get_temp_osds(*pool, pg, &_acting, &_acting_primary);
+													}
+													// 根据osd获取一个OSDSession   OSDSession有属性ConnectionRef con 对SimpleMessenger中对应pipe的引用		
+													int r = _get_session(op->target.osd, &s, lc);      //(Objecter::  map<int,OSDSession*> osd_sessions)
+													
+													_send_op_account(op);
+													MOSDOp * m = _prepare_osd_op(op); //新建一个消息类型
+													
+													if (op->tid == 0)
+														op->tid = last_tid.inc();
+													// OSDSession *s OSDSession的作用
+													_session_op_assign(s, op);
+													_send_op(op, m);
+													{
+														ConnectionRef con = op->session->con;
+														// 0
+														op->incarnation = op->session->incarnation;
+														// 1
+														m->set_tid(op->tid);
+														//# PipeConnection.cc:77  PipeConnection::send_message
+														op->session->con->send_message(m);                     //(PipeConnection::)
+															// PipeConnection 继承 Connection ,Connection 有属性 Messenger *msgr
+															return static_cast<SimpleMessenger*>(msgr)->send_message(m, this);
+																return _send_message(m, con);                       //   (SimpleMessenger::)
+																	submit_message(m, static_cast<PipeConnection*>(con),con->get_peer_addr(), con->get_peer_type(), false);
+																		static_cast<PipeConnection*>(con)->try_get_pipe(&pipe);
+																		pipe->_send(m);
+																			out_q[m->get_priority()].push_back(m);
+																			cond.Signal();
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}												
+
+		}								
+		elapsed = ceph_clock_now(ictx->cct) - start_time;
+		ictx->perfcounter->tinc(l_librbd_wr_latency, elapsed);
+		ictx->perfcounter->inc(l_librbd_wr);
+		ictx->perfcounter->inc(l_librbd_wr_bytes, mylen);
+	}	
+}
+	
+/*
+(gdb) print m
+$3 = (MOSDOp *) 0x62c0e0
+(gdb) print *m
+
+$4 = {<Message> = {
+
+<RefCountedObject> = {_vptr.RefCountedObject = 0x7ffff351da90, nref = {val = 1}, cct = 0x0}, header = {seq = {v = 0}, 
+      tid = {v = 0}, type = {v = 42}, priority = {v = 63}, version = {v = 5}, front_len = {v = 0}, middle_len = {v = 0}, data_len = {v = 0}, 
+      data_off = {v = 0}, src = {type = 0 '\000', num = {v = 0}}, compat_version = {v = 3}, reserved = {v = 0}, crc = {v = 0}}, footer = {
+      front_crc = {v = 0}, middle_crc = {v = 0}, data_crc = {v = 0}, sig = {v = 0}, flags = 0 '\000'}, payload = {_buffers = empty std::list
+    , _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {bl = 0x62c148, ls = 0x62c148, off = 0, p = {
+          _raw = , _off = 0, _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, middle = {
+      _buffers = empty std::list, _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {bl = 0x62c198, 
+        ls = 0x62c198, off = 0, p = {_raw = , _off = 0, _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, 
+      static CLAIM_ALLOW_NONSHAREABLE = 1}, data = {_buffers = empty std::list, _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, 
+        _off = 0, _len = 0}, last_p = {bl = 0x62c1e8, ls = 0x62c1e8, off = 0, p = {_raw = , _off = 0, _len = 0}, p_off = 0}, 
+      static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, recv_stamp = {tv = {tv_sec = 0, tv_nsec = 0}}, dispatch_stamp = {tv = {
+        tv_sec = 0, tv_nsec = 0}}, throttle_stamp = {tv = {tv_sec = 0, tv_nsec = 0}}, recv_complete_stamp = {tv = {tv_sec = 0, 
+        tv_nsec = 0}}, connection = {px = 0x0}, magic = 0, 
+    dispatch_q = {<boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void*>, boost::intrusive::member_tag, (boost::intrusive::link_mode_type)1, 0>> = {<boost::intrusive::detail::no_default_definer> = {<No data fields>}, <boost::intrusive::list_node<void*>> = {next_ = 0x0, prev_ = 0x0}, <No data fields>}, <No data fields>}, completion_hook = 0x0, byte_throttler = 0x0, msg_throttler = 0x0, 
+    dispatch_throttle_size = 0}, 
+	
+static HEAD_VERSION = 5, 
+static COMPAT_VERSION = 3, 
+client_inc = 0, 
+osdmap_epoch = 258, 
+flags = 4194341, 
+mtime = {tv = {tv_sec = 1448432410, tv_nsec = 912041424}}, 
+reassert_version = {version = 0, 
+epoch = 0, __pad = 0}, 
+retry_attempt = 0, 
+oid = {name = "rb.0.1011.6b8b4567.", '0' <repeats 12 times>}, 
+oloc = {pool = 1, key = "", nspace = "", hash = -1}, 
+pgid = {m_pool = 1, m_seed = 1817778731, m_preferred = -1}, 
+ops = std::vector of length 2, capacity 2 = {
+
+	{op = {op = {v = 8739}, flags = {v = 2}, {extent = {
+            offset = {v = 4194304}, length = {v = 4194304}, truncate_size = {v = 0}, truncate_seq = {v = 0}}, xattr = {name_len = {
+              v = 4194304}, value_len = {v = 0}, cmp_op = 0 '\000', cmp_mode = 0 '\000'}, cls = {class_len = 0 '\000', 
+            method_len = 0 '\000', argc = 64 '@', indata_len = {v = 0}}, pgls = {count = {v = 4194304}, start_epoch = {v = 4194304}}, 
+          snap = {snapid = {v = 4194304}}, watch = {cookie = {v = 4194304}, ver = {v = 4194304}, op = 0 '\000', gen = 0}, notify = {
+            cookie = {v = 4194304}}, assert_ver = {unused = {v = 4194304}, ver = {v = 4194304}}, clonerange = {offset = {v = 4194304}, 
+            length = {v = 4194304}, src_offset = {v = 0}}, copy_get = {max = {v = 4194304}}, copy_from = {snapid = {v = 4194304}, 
+            src_version = {v = 4194304}, flags = 0 '\000'}, hit_set_get = {stamp = {tv_sec = {v = 4194304}, tv_nsec = {v = 0}}}, 
+          tmap2omap = {flags = 0 '\000'}, alloc_hint = {expected_object_size = {v = 4194304}, expected_write_size = {v = 4194304}}}, 
+        payload_len = {v = 0}}, soid = {oid = {name = ""}, snap = {val = 0}}, indata = {_buffers = empty std::list, _len = 0, 
+        _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {bl = 0x62c388, ls = 0x62c388, off = 0, p = {_raw = , 
+            _off = 0, _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, outdata = {
+        _buffers = empty std::list, _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {bl = 0x62c3d8, 
+          ls = 0x62c3d8, off = 0, p = {_raw = , _off = 0, _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, 
+        static CLAIM_ALLOW_NONSHAREABLE = 1}, rval = 0}, 
+		
+	{op = {op = {v = 8705}, flags = {v = 0}, {extent = {offset = {v = 0}, length = {
+              v = 4194304}, truncate_size = {v = 0}, truncate_seq = {v = 0}}, xattr = {name_len = {v = 0}, value_len = {v = 0}, 
+            cmp_op = 0 '\000', cmp_mode = 0 '\000'}, cls = {class_len = 0 '\000', method_len = 0 '\000', argc = 0 '\000', indata_len = {
+              v = 0}}, pgls = {count = {v = 0}, start_epoch = {v = 4194304}}, snap = {snapid = {v = 0}}, watch = {cookie = {v = 0}, ver = {
+              v = 4194304}, op = 0 '\000', gen = 0}, notify = {cookie = {v = 0}}, assert_ver = {unused = {v = 0}, ver = {v = 4194304}}, 
+          clonerange = {offset = {v = 0}, length = {v = 4194304}, src_offset = {v = 0}}, copy_get = {max = {v = 0}}, copy_from = {snapid = {
+              v = 0}, src_version = {v = 4194304}, flags = 0 '\000'}, hit_set_get = {stamp = {tv_sec = {v = 0}, tv_nsec = {v = 0}}}, 
+          tmap2omap = {flags = 0 '\000'}, alloc_hint = {expected_object_size = {v = 0}, expected_write_size = {v = 4194304}}}, 
+        payload_len = {v = 0}}, soid = {oid = {name = ""}, snap = {val = 0}}, indata = {_buffers = std::list = {[0] = {_raw = 0x628a00, 
+            _off = 0, _len = 4194304}}, _len = 4194304, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {
+          bl = 0x62c468, ls = 0x62c468, off = 0, p = {_raw = , _off = 0, _len = 4194304}, p_off = 0}, static CLAIM_DEFAULT = 0, 
+        static CLAIM_ALLOW_NONSHAREABLE = 1}, outdata = {_buffers = empty std::list, _len = 0, _memcopy_count = 0, append_buffer = {
+          _raw = 0x0, _off = 0, _len = 0}, last_p = {bl = 0x62c4b8, ls = 0x62c4b8, off = 0, p = {_raw = , _off = 0, _len = 0}, p_off = 0}, 
+        static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, rval = 0}},
+
+snapid = {val = 18446744073709551614}, 
+snap_seq = {val = 0}, 
+snaps = std::vector of length 0, capacity 0, features = 1125899906842623}
+
+
+*/
+
+
+/*
+(gdb) bt
+#0  Objecter::_send_op (this=0x611720, op=0x62bee0, m=0x622440) at osdc/Objecter.cc:2786
+
+(gdb) print *op
+$8 = {
+<RefCountedObject> = {_vptr.RefCountedObject = 0x7ffff351cf70, nref = {val = 1}, cct = 0x0}, 
+session = 0x61d1b0, 
+incarnation = 0, 
+target = {flags = 32, base_oid = {name = 
+    "rbd_data.101f6b8b4567.", '0' <repeats 15 times>, "1"}, base_oloc = {pool = 1, key = "", nspace = "", 
+      hash = -1}, target_oid = {name = "rbd_data.101f6b8b4567.", '0' <repeats 15 times>, "1"}, 
+    target_oloc = {pool = 1, key = "", nspace = "", hash = -1}, precalc_pgid = false, base_pgid = {
+      m_pool = 0, m_seed = 0, m_preferred = -1}, pgid = {m_pool = 1, m_seed = 3454271937, 
+      m_preferred = -1}, pg_num = 128, up = std::vector of length 2, capacity 2 = {3, 7}, 
+    acting = std::vector of length 2, capacity 2 = {3, 7}, up_primary = 3, acting_primary = 3, 
+    min_size = 1, used_replica = false, paused = false, osd = 3}, 
+con = {px = 0x0}, 
+features = 1125899906842623, 
+ops = std::vector of length 2, capacity 2 = {
+	{op = {
+		op = {v = 8739}, 
+        flags = {v = 2}, {extent = {offset = {v = 4194304}, length = {v = 4194304}, truncate_size = {
+              v = 0}, truncate_seq = {v = 0}}, xattr = {name_len = {v = 4194304}, value_len = {v = 0}, 
+            cmp_op = 0 '\000', cmp_mode = 0 '\000'}, cls = {class_len = 0 '\000', method_len = 0 '\000', 
+            argc = 64 '@', indata_len = {v = 0}}, pgls = {count = {v = 4194304}, start_epoch = {
+              v = 4194304}}, snap = {snapid = {v = 4194304}}, watch = {cookie = {v = 4194304}, ver = {
+              v = 4194304}, op = 0 '\000', gen = 0}, notify = {cookie = {v = 4194304}}, assert_ver = {
+            unused = {v = 4194304}, ver = {v = 4194304}}, clonerange = {offset = {v = 4194304}, length = {
+              v = 4194304}, src_offset = {v = 0}}, copy_get = {max = {v = 4194304}}, copy_from = {
+            snapid = {v = 4194304}, src_version = {v = 4194304}, flags = 0 '\000'}, hit_set_get = {
+            stamp = {tv_sec = {v = 4194304}, tv_nsec = {v = 0}}}, tmap2omap = {flags = 0 '\000'}, 
+          alloc_hint = {expected_object_size = {v = 4194304}, expected_write_size = {v = 4194304}}}, 
+        payload_len = {v = 0}}, soid = {oid = {name = ""}, snap = {val = 0}}, indata = {
+        _buffers = empty std::list, _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, 
+          _len = 0}, last_p = {bl = 0x62bbb8, ls = 0x62bbb8, off = 0, p = {_raw = , _off = 0, _len = 0}, 
+          p_off = 0}, static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, outdata = {
+        _buffers = empty std::list, _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, 
+          _len = 0}, last_p = {bl = 0x62bc08, ls = 0x62bc08, off = 0, p = {_raw = , _off = 0, _len = 0}, 
+          p_off = 0}, static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, rval = 0}, 
+	
+	{op = {
+        op = {v = 8705}, flags = {v = 0}, {extent = {offset = {v = 0}, length = {v = 4194304}, 
+            truncate_size = {v = 0}, truncate_seq = {v = 0}}, xattr = {name_len = {v = 0}, value_len = {
+              v = 0}, cmp_op = 0 '\000', cmp_mode = 0 '\000'}, cls = {class_len = 0 '\000', 
+            method_len = 0 '\000', argc = 0 '\000', indata_len = {v = 0}}, pgls = {count = {v = 0}, 
+            start_epoch = {v = 4194304}}, snap = {snapid = {v = 0}}, watch = {cookie = {v = 0}, ver = {
+              v = 4194304}, op = 0 '\000', gen = 0}, notify = {cookie = {v = 0}}, assert_ver = {unused = {
+              v = 0}, ver = {v = 4194304}}, clonerange = {offset = {v = 0}, length = {v = 4194304}, 
+            src_offset = {v = 0}}, copy_get = {max = {v = 0}}, copy_from = {snapid = {v = 0}, 
+            src_version = {v = 4194304}, flags = 0 '\000'}, hit_set_get = {stamp = {tv_sec = {v = 0}, 
+              tv_nsec = {v = 0}}}, tmap2omap = {flags = 0 '\000'}, alloc_hint = {expected_object_size = {
+              v = 0}, expected_write_size = {v = 4194304}}}, payload_len = {v = 0}}, soid = {oid = {name = 
+    ""}, snap = {val = 0}}, indata = {_buffers = std::list = {[0] = {_raw = 0x62b870, _off = 0, 
+            _len = 4194304}}, _len = 4194304, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, 
+          _len = 0}, last_p = {bl = 0x62bc98, ls = 0x62bc98, off = 0, p = {_raw = , _off = 0, _len = 0}, 
+          p_off = 0}, static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, outdata = {
+        _buffers = empty std::list, _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, 
+          _len = 0}, last_p = {bl = 0x62bce8, ls = 0x62bce8, off = 0, p = {_raw = , _off = 0, _len = 0}, 
+          p_off = 0}, static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, rval = 0}},
+		  
+snapid = {val = 18446744073709551614}, 
+snapc = {seq = {val = 0}, 
+snaps = std::vector of length 0, capacity 0}, mtime = {tv = {tv_sec = 1449632140, 
+      tv_nsec = 392341232}}, 
+outbl = 0x0, 
+out_bl = std::vector of length 2, capacity 2 = {0x0, 0x0}, 
+out_handler = std::vector of length 2, capacity 2 = {0x0, 0x0}, 
+out_rval = std::vector of length 2, capacity 2 = {0x0, 0x0}, 
+priority = 0, 
+onack = 0x61a6b0, 
+oncommit = 0x62bec0, 
+ontimeout = 0x0, 
+oncommit_sync = 0x0, 
+tid = 13, 
+replay_version = {version = 0, 
+    epoch = 0, __pad = 0}, 
+attempts = 1, 
+objver = 0x62bdf8, 
+reply_epoch = 0x0, 
+stamp = {tv = {tv_sec = 1449633383, tv_nsec = 651119063}}, 
+map_dne_bound = 0, 
+budgeted = true, 
+should_resend = true, 
+ctx_budgeted = false, 
+data_offset = 0x0}
+  
+  
+  (gdb) print m
+$9 = (MOSDOp *) 0x622440
+(gdb) print *m
+$10 = {
+<Message> = {
+	<RefCountedObject> = {_vptr.RefCountedObject = 0x7ffff351da90, nref = {val = 1}, cct = 0x0}, 
+	header = {seq = {v = 0}, 
+	tid = {v = 13}, 
+	type = {v = 42}, 
+	priority = {v = 63}, 
+    version = {v = 5}, 
+	front_len = {v = 0}, 
+	middle_len = {v = 0}, 
+	data_len = {v = 0}, 
+	data_off = {v = 0}, 
+	src = {type = 0 '\000', num = {v = 0}}, 
+	compat_version = {v = 3}, 
+	reserved = {v = 0}, 
+    crc = {v = 0}}, 
+	footer = {front_crc = {v = 0}, 
+	middle_crc = {v = 0}, 
+	data_crc = {v = 0}, 
+	sig = {v = 0}, 
+	flags = 0 '\000'}, 
+	payload = {_buffers = empty std::list, _len = 0, _memcopy_count = 0, 
+      append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {bl = 0x6224a8, ls = 0x6224a8, off = 0, 
+        p = {_raw = , _off = 0, _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, 
+      static CLAIM_ALLOW_NONSHAREABLE = 1}, 
+	middle = {_buffers = empty std::list, _len = 0, 
+      _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {bl = 0x6224f8, 
+        ls = 0x6224f8, off = 0, p = {_raw = , _off = 0, _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, 
+      static CLAIM_ALLOW_NONSHAREABLE = 1}, 
+	data = {_buffers = empty std::list, _len = 0, 
+      _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {bl = 0x622548, 
+        ls = 0x622548, off = 0, p = {_raw = , _off = 0, _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, 
+      static CLAIM_ALLOW_NONSHAREABLE = 1}, 
+	recv_stamp = {tv = {tv_sec = 0, tv_nsec = 0}}, 
+    dispatch_stamp = {tv = {tv_sec = 0, tv_nsec = 0}}, 
+	throttle_stamp = {tv = {tv_sec = 0, tv_nsec = 0}}, 
+    recv_complete_stamp = {tv = {tv_sec = 0, tv_nsec = 0}}, 
+	connection = {px = 0x0}, 
+	magic = 0, 
+    dispatch_q = {<boost::intrusive::detail::generic_hook<boost::intrusive::get_list_node_algo<void*>, boost::intrusive::member_tag, (boost::intrusive::link_mode_type)1, 0>> = {<boost::intrusive::detail::no_default_definer> = {<No data fields>}, <boost::intrusive::list_node<void*>> = {next_ = 0x0, 
+          prev_ = 0x0}, <No data fields>}, <No data fields>}, 
+	completion_hook = 0x0, 
+	byte_throttler = 0x0, 
+    msg_throttler = 0x0, 
+	dispatch_throttle_size = 0}, 
+	
+static HEAD_VERSION = 5, 
+static COMPAT_VERSION = 3, 
+client_inc = 0, 
+osdmap_epoch = 25, 
+flags = 4194341, 
+mtime = {tv = {tv_sec = 1449632140, tv_nsec = 392341232}}, 
+reassert_version = {version = 0, epoch = 0, __pad = 0}, 
+retry_attempt = 0, 
+oid = {name = "rbd_data.101f6b8b4567.", '0' <repeats 15 times>, "1"}, 
+oloc = {pool = 1, key = "", nspace = "", hash = -1}, 
+pgid = {m_pool = 1, m_seed = 3454271937, m_preferred = -1}, 
+ops = std::vector of length 2, capacity 2 = {{op = {op = {v = 8739}, flags = {v = 2}, {extent = {
+            offset = {v = 4194304}, length = {v = 4194304}, truncate_size = {v = 0}, truncate_seq = {
+              v = 0}}, xattr = {name_len = {v = 4194304}, value_len = {v = 0}, cmp_op = 0 '\000', 
+            cmp_mode = 0 '\000'}, cls = {class_len = 0 '\000', method_len = 0 '\000', argc = 64 '@', 
+            indata_len = {v = 0}}, pgls = {count = {v = 4194304}, start_epoch = {v = 4194304}}, snap = {
+            snapid = {v = 4194304}}, watch = {cookie = {v = 4194304}, ver = {v = 4194304}, op = 0 '\000', 
+            gen = 0}, notify = {cookie = {v = 4194304}}, assert_ver = {unused = {v = 4194304}, ver = {
+              v = 4194304}}, clonerange = {offset = {v = 4194304}, length = {v = 4194304}, src_offset = {
+              v = 0}}, copy_get = {max = {v = 4194304}}, copy_from = {snapid = {v = 4194304}, 
+            src_version = {v = 4194304}, flags = 0 '\000'}, hit_set_get = {stamp = {tv_sec = {
+                v = 4194304}, tv_nsec = {v = 0}}}, tmap2omap = {flags = 0 '\000'}, alloc_hint = {
+            expected_object_size = {v = 4194304}, expected_write_size = {v = 4194304}}}, payload_len = {
+          v = 0}}, soid = {oid = {name = ""}, snap = {val = 0}}, indata = {_buffers = empty std::list, 
+        _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {
+          bl = 0x6226e8, ls = 0x6226e8, off = 0, p = {_raw = , _off = 0, _len = 0}, p_off = 0}, 
+        static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, outdata = {
+        _buffers = empty std::list, _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, 
+          _len = 0}, last_p = {bl = 0x622738, ls = 0x622738, off = 0, p = {_raw = , _off = 0, _len = 0}, 
+          p_off = 0}, static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, rval = 0}, {op = {
+        op = {v = 8705}, flags = {v = 0}, {extent = {offset = {v = 0}, length = {v = 4194304}, 
+            truncate_size = {v = 0}, truncate_seq = {v = 0}}, xattr = {name_len = {v = 0}, value_len = {
+              v = 0}, cmp_op = 0 '\000', cmp_mode = 0 '\000'}, cls = {class_len = 0 '\000', 
+            method_len = 0 '\000', argc = 0 '\000', indata_len = {v = 0}}, pgls = {count = {v = 0}, 
+            start_epoch = {v = 4194304}}, snap = {snapid = {v = 0}}, watch = {cookie = {v = 0}, ver = {
+              v = 4194304}, op = 0 '\000', gen = 0}, notify = {cookie = {v = 0}}, assert_ver = {unused = {
+              v = 0}, ver = {v = 4194304}}, clonerange = {offset = {v = 0}, length = {v = 4194304}, 
+            src_offset = {v = 0}}, copy_get = {max = {v = 0}}, copy_from = {snapid = {v = 0}, 
+            src_version = {v = 4194304}, flags = 0 '\000'}, hit_set_get = {stamp = {tv_sec = {v = 0}, 
+              tv_nsec = {v = 0}}}, tmap2omap = {flags = 0 '\000'}, alloc_hint = {expected_object_size = {
+              v = 0}, expected_write_size = {v = 4194304}}}, payload_len = {v = 0}}, soid = {oid = {name = 
+    ""}, snap = {val = 0}}, indata = {_buffers = std::list = {[0] = {_raw = 0x62b870, _off = 0, 
+            _len = 4194304}}, _len = 4194304, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, 
+          _len = 0}, last_p = {bl = 0x6227c8, ls = 0x6227c8, off = 0, p = {_raw = , _off = 0, 
+            _len = 4194304}, p_off = 0}, static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, 
+      outdata = {_buffers = empty std::list, _len = 0, _memcopy_count = 0, append_buffer = {_raw = 0x0, 
+          _off = 0, _len = 0}, last_p = {bl = 0x622818, ls = 0x622818, off = 0, p = {_raw = , _off = 0, 
+            _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, 
+      rval = 0}}, 
+	  
+snapid = {val = 18446744073709551614},
+snap_seq = {val = 0}, 
+snaps = std::vector of length 0, capacity 0, 
+features = 1125899906842623}
+*/
+
+
+
+  /*#
+  某个pg_pool_t的内存值
+  $3 = {
+  flags = 1, 
+  type = 1 '\001', 
+  size = 1 '\001', 
+  min_size = 1 '\001', 
+  crush_ruleset = 0 '\000', 
+  object_hash = 2 '\002', 
+  pg_num = 1024, 
+  pgp_num = 1024, 
+  properties = std::map with 0 elements,
+  erasure_code_profile = "", 
+  last_change = 12, 
+  last_force_op_resend = 0, 
+  snap_seq = { val = 0}, 
+  snap_epoch = 0, 
+  auid = 0, 
+  crash_replay_interval = 0, 
+  quota_max_bytes = 0, 
+  quota_max_objects = 0, 
+  snaps = std::map with 0 elements, 
+  removed_snaps = {_size = 0, m = std::map with 0 elements}, 
+  pg_num_mask = 1023, 
+  pgp_num_mask = 1023, 
+  tiers = std::set with 0 elements, 
+  tier_of = -1, 
+  read_tier = -1, 
+  write_tier = -1, 
+  cache_mode = pg_pool_t::CACHEMODE_NONE, 
+  target_max_bytes = 0, 
+  target_max_objects = 0, 
+  cache_target_dirty_ratio_micro = 400000, 
+  cache_target_full_ratio_micro = 800000, 
+  cache_min_flush_age = 0, 
+  cache_min_evict_age = 0, 
+  hit_set_params = {_vptr.Params = 0x7ffff351ca30, impl = {px = 0x0}}, 
+  hit_set_period = 0, 
+  hit_set_count = 0, 
+  min_read_recency_for_promote = 0, 
+  stripe_width = 0, 
+  expected_num_objects = 0}
+  */
+
+  //# Objecter::_send_op
+  //# Objecter::handle_osd_op_reply
+ 
+ int rbd_read(rbd_image_t image, uint64_t ofs, size_t len,char *buf)
+ {
+	librbd::read(ictx, ofs, len, buf, 0);
+	{
+	extents.push_back(make_pair(ofs, len));
+	return read(ictx, extents, buf, NULL, op_flags);
+	{
+		Context *ctx = new C_SafeCond(&mylock, &cond, &done, &ret);
+		AioCompletion *c = aio_create_completion_internal(ctx, rbd_ctx_cb);
+		r = aio_read(ictx, image_extents, buf, pbl, c, op_flags);
+		{
+			C_AioRead *req_comp = new C_AioRead(ictx->cct, c);
+			AioRead *req = new AioRead(ictx, q->oid.name,
+                                       q->objectno, q->offset, q->length,
+                                       q->buffer_extents, snapc,
+                                       snap_id, true, req_comp, op_flags);
+									   req_comp->set_req(req);
+			if (ictx->object_cacher)
+				C_CacheRead *cache_comp = new C_CacheRead(req);
+                ictx->aio_read_from_cache(q->oid, q->objectno, &req->data(),
+                                          q->length, q->offset,
+                                          cache_comp, op_flags);
+			else
+			{	
+				//# AioRead::send()
+				r = req->send();
+				{
+					librados::AioCompletion *rados_completion = librados::Rados::aio_create_completion(this, rados_req_cb, NULL);
+					flags = m_ictx->get_read_flags(m_snap_id);
+					if (m_sparse) 
+						op.sparse_read(m_object_off, m_object_len, &m_ext_map, &m_read_data,NULL);
+						{
+							::ObjectOperation *o = (::ObjectOperation *)impl;
+							  //#ObjectOperation::sparse_read Objecter.h:315 
+							o->sparse_read(off, len, m, data_bl, prval);  //# (ObjectOperation::)
+							{
+								add_data(CEPH_OSD_OP_SPARSE_READ, off, len, bl);
+								unsigned p = ops.size() - 1;
+								C_ObjectOperation_sparse_read *h =
+								  new C_ObjectOperation_sparse_read(data_bl, m, prval);
+								out_bl[p] = &h->bl;
+								out_handler[p] = h;
+								out_rval[p] = prval;
+							}
+						}
+					op.set_op_flags2(m_op_flags);
+					//# librados.cc:1371
+					m_ictx->data_ctx.aio_operate(m_oid, rados_completion, &op, flags, NULL);
+					{
+						return io_ctx_impl->aio_operate_read(obj, (::ObjectOperation*)o->impl, c->pc,translate_flags(flags), pbl);
+							Objecter::Op *objecter_op = objecter->prepare_read_op(oid, oloc,
+							  *o, snap_seq, pbl, flags,onack, &c->objver);
+							c->tid = objecter->op_submit(objecter_op);
+								_op_submit_with_budget
+								{
+								 //后面跟write都是一样的
+								}
+					}
+				}
+			}
+		}
+	}
+	}
+ 
+ }
+  
+ int call_back()
+ {
+	Pipe::reader()
+	{
+		//# 读取并解析消息  CEPH_MSG_OSD_OPREPLY 43
+		read_message
+		//# 把消息放到   DispatchQueue PrioritizedQueue<QueueItem, uint64_t> mqueue;
+		if (in_q->can_fast_dispatch(m))
+		{
+			in_q->fast_dispatch(m);
+				Messenger::ms_fast_dispatch
+					Objecter::ms_dispatch
+						Objecter::handle_osd_op_reply
+		}	
+		else
+			in_q->enqueue(m, m->get_priority(), conn_id);
+	}
+ 
+	//# 分发到来的消息
+	DispatchQueue::entry()
+	{
+		QueueItem qitem = mqueue.dequeue();
+		Message *m = qitem.get_message();
+		//# SimpleMessenger *msgr;
+		msgr->ms_deliver_dispatch(m);
+			//# 遍历 list<Dispatcher*> dispatchers; RadosClient 和 Objecter 、MonClient等，判断消息类型是否符合
+			//# 消息 CEPH_MSG_OSD_OPREPLY  走的是 Objecter::ms_dispatch(Message *m)
+			(*p)->ms_dispatch(m) // Objecter::ms_dispatch(Message *m)
+				handle_osd_op_reply(static_cast<MOSDOpReply*>(m)) //# Objecter::
+			
+	}
+ }
+ /*
+ (gdb) print out_ops 
+$12 = std::vector of length 1, capacity 1 = {{
+op = {op = {v = 4613}, flags = {v = 0}, {extent = {offset = {v = 0}, length = {
+            v = 4194304}, truncate_size = {v = 0}, truncate_seq = {v = 0}}, xattr = {name_len = {v = 0}, value_len = {v = 0}, 
+          cmp_op = 0 '\000', cmp_mode = 0 '\000'}, cls = {class_len = 0 '\000', method_len = 0 '\000', argc = 0 '\000', indata_len = {
+            v = 0}}, pgls = {count = {v = 0}, start_epoch = {v = 4194304}}, snap = {snapid = {v = 0}}, watch = {cookie = {v = 0}, ver = {
+            v = 4194304}, op = 0 '\000', gen = 0}, notify = {cookie = {v = 0}}, assert_ver = {unused = {v = 0}, ver = {v = 4194304}}, 
+        clonerange = {offset = {v = 0}, length = {v = 4194304}, src_offset = {v = 0}}, copy_get = {max = {v = 0}}, copy_from = {snapid = {
+            v = 0}, src_version = {v = 4194304}, flags = 0 '\000'}, hit_set_get = {stamp = {tv_sec = {v = 0}, tv_nsec = {v = 0}}}, 
+        tmap2omap = {flags = 0 '\000'}, alloc_hint = {expected_object_size = {v = 0}, expected_write_size = {v = 4194304}}}, 
+      payload_len = {v = 4194328}}, 
+soid = {oid = {name = ""}, snap = {val = 0}}, 
+indata = {_buffers = empty std::list, _len = 0, 
+      _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {bl = 0x7fffac000ef8, ls = 0x7fffac000ef8, off = 0, 
+        p = {_raw = , _off = 0, _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, static CLAIM_ALLOW_NONSHAREABLE = 1}, 
+		
+outdata = {_buffers = std::list = {[0] = {_raw = 0x7fffac001410, _off = 0, _len = 4194304}, [1] = {_raw = 0x7fffac0009a0, _off = 0, 
+          _len = 24}}, _len = 4194328, _memcopy_count = 0, append_buffer = {_raw = 0x0, _off = 0, _len = 0}, last_p = {
+        bl = 0x7fffac000f48, ls = 0x7fffac000f48, off = 0, p = {_raw = , _off = 0, _len = 0}, p_off = 0}, static CLAIM_DEFAULT = 0, 
+      static CLAIM_ALLOW_NONSHAREABLE = 1}, 
+rval = 0}}
+ */
+  
+ int crush()
+ {
+ 
+ }
+
+/*
+gdb) print map
+$2 = (const struct crush_map *) 0x7fffd0006270
+(gdb) print *map
+$3 = {buckets = 0x7fffd00062c0, rules = 0x7fffd0006530, max_buckets = 8, max_rules = 2, max_devices = 3, choose_local_tries = 0, 
+  choose_local_fallback_tries = 0, choose_total_tries = 50, chooseleaf_descend_once = 1, chooseleaf_vary_r = 0 '\000', 
+  straw_calc_version = 0 '\000', allowed_bucket_algs = 22, choose_tries = 0x0}
+
+(gdb) print **map.buckets 
+$17 = {id = -1, type = 10, alg = 4 '\004', hash = 0 '\000', weight = 1965, size = 2, items = 0x7fffd0006220, perm_x = 0, perm_n = 0, 
+  perm = 0x7fffd0006350}
+*/
+
+/*
+crush_do_rule (map=0x7fffe00029a0, ruleno=0, 
+    x=-1419109584, result=0x7fffffffc940, result_max=3, 
+    weight=0x7fffe00021c0, weight_max=9, scratch=0x7fffffffc900
+	
+(gdb) print *map
+$2 = {buckets = 0x7fffe00029f0, rules = 0x7fffe0002d20, 
+  max_buckets = 8, max_rules = 1, max_devices = 9, 
+  choose_local_tries = 0, choose_local_fallback_tries = 0, 
+  choose_total_tries = 50, chooseleaf_descend_once = 1, 
+  chooseleaf_vary_r = 0 '\000', straw_calc_version = 1 '\001', 
+  allowed_bucket_algs = 22, choose_tries = 0x0}	
+  
+  (gdb) print *weight
+$4 = 65536
+
+(gdb) print **map.buckets (数组类型)
+
+ //11790 = 2620 + 3930 + 5240  每个磁盘的weight为2620 3台存储，每台分别有2,3,4个磁盘
+ 
+(gdb) print *map.buckets[0] 
+$73 = {id = -1, type = 10, alg = 4 '\004', hash = 0 '\000', 
+  weight = 11790, size = 3, items = 0x7fffe0002950, perm_x = 0, 
+  perm_n = 0, perm = 0x7fffe0002a80}
+  
+ (gdb) print *map.buckets[1] 
+$74 = {id = -2, type = 1, alg = 4 '\004', hash = 0 '\000', 
+  weight = 2620, size = 2, items = 0x7fffe0002b20, perm_x = 0, 
+  perm_n = 0, perm = 0x7fffe0002b40}
+  
+(gdb) print *map.buckets[2] 
+$75 = {id = -3, type = 1, alg = 4 '\004', hash = 0 '\000', 
+  weight = 3930, size = 3, items = 0x7fffe0002be0, perm_x = 0, 
+  perm_n = 0, perm = 0x7fffe0002c00}
+  
+(gdb) print *map.buckets[3] 
+$76 = {id = -4, type = 1, alg = 4 '\004', hash = 0 '\000', 
+  weight = 5240, size = 4, items = 0x7fffe0002ca0, perm_x = 0, 
+  perm_n = 0, perm = 0x7fffe0002cc0}
+  
+
+(gdb) print map.buckets[0].items[0]  //使用负值是为了区别 host和osd
+$96 = -2  // 对应buckets[1] -1 - (-2)  -2 就是对应的id号
+(gdb) print map.buckets[0].items[1] 
+$97 = -3 // 对应buckets[2]  - - (-3)
+(gdb) print map.buckets[0].items[2] 
+$99 = -4 // 对应buckets[3]  -1 - (-4)
+
+//perm 是指向父吗？？？
+
+//对应osd号
+(gdb) print map.buckets[1].items[0] 
+$90 = 0
+(gdb) print map.buckets[1].items[1] 
+$91 = 1
+(gdb) print map.buckets[2].items[0] 
+$92 = 2
+(gdb) print map.buckets[2].items[1] 
+$93 = 3
+(gdb) print map.buckets[2].items[2] 
+$94 = 4
+(gdb) print map.buckets[3].items[0] 
+$85 = 5
+(gdb) print map.buckets[3].items[1] 
+$86 = 6
+(gdb) print map.buckets[3].items[2] 
+$87 = 7
+(gdb) print map.buckets[3].items[3] 
+$88 = 8
+  
+  
+  
+  
+  
+(gdb) print *map.buckets.items 
+$7 = -2	
+	
+gdb) print **map.rules 
+$9 = {len = 3, mask = {ruleset = 0 '\000', type = 1 '\001', 
+    min_size = 1 '\001', max_size = 10 '\n'}, 
+  steps = 0x7fffe0002d40}
+	
+gdb) print map.rules.steps[0] 
+$11 = {op = 1, arg1 = -1, arg2 = 0}
+(gdb) print map.rules.steps[1] 
+$21 = {op = 6, arg1 = 0, arg2 = 1}
+(gdb) print map.rules.steps[2] 
+$12 = {op = 4, arg1 = 0, arg2 = 0}
+(gdb) print map.rules.steps[3] 
+$13 = {op = 0, arg1 = 0, arg2 = 0}
+(gdb) print map.rules.steps[4] 
+$14 = {op = 69, arg1 = 0, arg2 = 1}
+(gdb) print map.rules.steps[5] 
+$15 = {op = 0, arg1 = -536859152, arg2 = 32767}	
+	
+crush_choose_firstn (map=0x7fffe00029a0, bucket=0x7fffe0002a40, 
+    weight=0x7fffe00021c0, weight_max=9, x=-1419109584, numrep=3, 
+    type=1, out=0x7fffffffc90c, outpos=0, out_size=3, tries=51, 
+    recurse_tries=1, local_retries=0, local_fallback_retries=0, 
+    recurse_to_leaf=1, vary_r=0, out2=0x7fffffffc918, parent_r=0)
+    at crush/mapper.c:426	
+
+(gdb) print *bucket
+$18 = {id = -1, type = 10, alg = 4 '\004', hash = 0 '\000', 
+  weight = 11790, size = 3, items = 0x7fffe0002950, perm_x = 0, 
+  perm_n = 0, perm = 0x7fffe0002a80}	
+	
+	
+Breakpoint 3, crush_choose_firstn (map=0x7fffe00029a0, 
+    bucket=0x7fffe0002ae0, weight=0x7fffe00021c0, weight_max=9, 
+    x=-85859909, numrep=1, type=0, out=0x7fffffffcbb8, outpos=0, 
+    out_size=3, tries=1, recurse_tries=0, local_retries=0, 
+    local_fallback_retries=0, recurse_to_leaf=0, vary_r=0, 
+    out2=0x0, parent_r=0) at crush/mapper.c:426
+426		struct crush_bucket *in = bucket;
+
+is_out (map=0x7fffe00029a0, weight=0x7fffe00021c0, weight_max=9, 
+    item=1, x=-85859909) at crush/mapper.c:377
+377		if (item >= weight_max)	
+
+
+Breakpoint 3, bucket_straw_choose (bucket=0x7fffe0002a40, x=-85859909, r=0) at crush/mapper.c:240
+240		int high = 0;
+(gdb) print *bucket
+$12 = {h = {id = -1, type = 10, alg = 4 '\004', hash = 0 '\000', weight = 11790, size = 3, items = 0x7fffe0002950, perm_x = 0, perm_n = 0, 
+    perm = 0x7fffe0002a80}, item_weights = 0x7fffe0002ac0, straws = 0x7fffe0002aa0}
+
+
+(gdb) print bucket->item_weights[0]
+$14 = 2620
+(gdb) print bucket->item_weights[1]
+$15 = 3930
+(gdb) print bucket->item_weights[2]
+$17 = 5240
+
+
+(gdb) print bucket->straws[0]
+$18 = 65536 //基准   多变量几何概率
+(gdb) print bucket->straws[1]
+$19 = 75674 //  75674/65536 = 1.15469
+(gdb) print bucket->straws[2]
+$20 = 85133 //  85133/75674 = 1.299
+两个变量的几何概率：x<y
+M(x):M(y) =1/2*x*x : 1/2*x*x+(y-x)*x   // M(x) 代表x>y的概率
+三个变量的几何概率：x<y<z
+M(x):M(y):M(z) =1/3*x*x : 1/3*x*x + 1/2*(y-x)*x*y : 1/3*x*x + 1/2*(y-x)*x*y + (z-x)(z-y)*z  //(三个host算出来不一样)
+
+host 1
+Breakpoint 3, bucket_straw_choose (bucket=0x7fffe0002ae0, x=-85859909, r=0) at crush/mapper.c:240
+240		int high = 0;
+(gdb) print bucket->item_weights[1]
+$21 = 1310
+(gdb) print bucket->item_weights[0]
+$22 = 1310
+(gdb) print bucket->straws[1]
+$25 = 65536
+(gdb) print bucket->straws[0]
+$26 = 65536
+
+host 2
+(gdb) print bucket->item_weights[0]
+$27 = 1310
+(gdb) print bucket->item_weights[1]
+$28 = 1310
+(gdb) print bucket->item_weights[2]
+$29 = 1310
+(gdb) print bucket->item_weights[3]
+$30 = 0
+(gdb) print bucket->straws[0]
+$31 = 65536 //# 都是以第一个为基准 65536
+(gdb) print bucket->straws[1]
+$32 = 65536
+(gdb) print bucket->straws[2]
+$33 = 65536
+
+
+
+
+
+
+
+size = 3
+(gdb) print o[0]
+$1 = -2
+(gdb) print o[1]
+$2 = -3
+(gdb) print o[2]
+$3 = -4
+(gdb) print c[0]
+$4 = 1
+(gdb) print c[1]
+$6 = 4
+(gdb) print c[2]
+$7 = 8
+
+size = 4 (只有三个host,结果只有3个)
+(gdb) print o[0]
+$1 = -2
+(gdb) print o[1]
+$2 = -3
+(gdb) print o[2]
+$3 = -4
+(gdb) print o[3]
+$4 = 32767
+(gdb) print c[0]
+$5 = 1
+(gdb) print c[1]
+$6 = 4
+(gdb) print c[2]
+$7 = 8
+(gdb) print c[3]
+$8 = 32767
+
+*/
+
+
+//编解码过程
+int encode()
+{
+// 以pipe:writer()为例, 例如消息类为MOSDOp
+	//# Message.cc:179   crcflags=3 调用message一个encode的通用接口，然后根据消息类型调用自己实现的encode
+    m->encode(features, msgr->crcflags);
+		//# MOSDOp.h:189  //根据消息类型调用自己实现的encode,这里消息类型为MOSDOp
+        encode_payload(features);
+		{
+			//# 把ops[i].indata中的数据放到 data属性中，decode有个对应的解码过程
+			OSDOp::merge_osd_op_vector_in_data(ops, data);
+			            header.version = 1;
+						
+			//# 以下都是对MOSDOp类属性编码，结果放到  bufferlist payload(message 定义的属性); decode有个对应的解码过程
+            ::encode(client_inc, payload);
+
+            __u32 su = 0;
+			//#struct pg_t  pgid ; pgid为结构体类型，每个结构体都有定义自己的encode和decode函数
+			//#结构体定义下面有这个宏 WRITE_CLASS_ENCODER(pg_t); osd_types.h 354
+			//#这个宏是生成对应类型的encode和decode函数,encoding.h中定义,功能主要是调用结构体自己定义的encode和decode函数
+            ::encode(pgid, payload);
+            ::encode(su, payload);
+
+            ::encode(osdmap_epoch, payload);
+			//#  __u32 flags; flags为__u32类型 调用这个宏WRITE_INTTYPE_ENCODER(uint32_t, le32) encoding.h 定义
+			//# WRITE_INTTYPE_ENCODER这个宏是生成对应类型的encode和decode函数(见encoding.h)
+            ::encode(flags, payload);
+            ::encode(mtime, payload);
+            ::encode(reassert_version, payload);
+
+            __u32 oid_len = oid.name.length();
+            ::encode(oid_len, payload);
+            ::encode(snapid, payload);
+            ::encode(snap_seq, payload);
+            __u32 num_snaps = snaps.size();
+            ::encode(num_snaps, payload);
+
+            //::encode(ops, payload);
+            __u16 num_ops = ops.size();
+            ::encode(num_ops, payload);
+            for (unsigned i = 0; i < ops.size(); i++)
+                ::encode(ops[i].op, payload);
+
+            ::encode_nohead(oid.name, payload);
+            ::encode_nohead(snaps, payload);
+		}
+		/*message 中两个属性
+		ceph_msg_header  header
+		ceph_msg_footer  footer
+		其中的属性都是以小端定义的，传输之前没有再编码，整个结构体组成一个iovec发送
+		__le32 实际是 ceph_le32 types.h中定义
+		ceph_le32是一个类，由宏MAKE_LE_CLASS(32)生成  byteorder.h中定义
+		*/
+}
+
+
+
+void Thread::create()
+{}
+/*
+线程 1:
+#0  Thread::create (this=0x609e50, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff2fa964d in ceph::log::Log::start (this=0x609e50) at log/Log.cc:317
+#2  0x00007ffff2c046d6 in CephContext::CephContext (this=0x607150, module_type_=8) at common/ceph_context.cc:380
+#3  0x00007ffff2bfe232 in common_preinit (iparams=..., code_env=CODE_ENVIRONMENT_LIBRARY, flags=0) at common/common_init.cc:42
+#4  0x00007ffff2ac3eb5 in rados_create_common (pcluster=0x7fffffffde68, clustername=0x7fffffffde60 "ceph", iparams=0x7fffffffdd00)
+    at librados/librados.cc:2177
+#5  0x00007ffff2ac419c in rados_create2 (pcluster=0x7fffffffde68, clustername=0x7fffffffde60 "ceph", name=0x7fffffffde50 "client.admin", flags=0)
+    at librados/librados.cc:2219
+#6  0x0000000000400b6d in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:31
+
+线程 2:
+#0  Thread::create (this=0x60de30, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff2c06f3c in CephContext::start_service_thread (this=0x607150) at common/ceph_context.cc:480
+#2  0x00007ffff2bfe842 in common_init_finish (cct=0x607150, flags=0) at common/common_init.cc:121
+#3  0x00007ffff2af2863 in librados::RadosClient::connect (this=0x60ccd0) at librados/RadosClient.cc:191
+#4  0x00007ffff2ac4299 in rados_connect (cluster=0x60ccd0) at librados/librados.cc:2251
+#5  0x0000000000400c20 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:59
+
+线程 3:
+#0  Thread::create (this=0x614d60, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff2be5c67 in SafeTimer::init (this=0x6121b8) at common/Timer.cc:65
+#2  0x00007ffff2b239a3 in Objecter::init (this=0x612040) at osdc/Objecter.cc:276
+#3  0x00007ffff2af2e46 in librados::RadosClient::connect (this=0x60ccd0) at librados/RadosClient.cc:235
+#4  0x00007ffff2ac4299 in rados_connect (cluster=0x60ccd0) at librados/librados.cc:2251
+#5  0x0000000000400c20 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:59
+
+线程 4:
+#0  Thread::create (this=0x611a80, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff2e3f610 in DispatchQueue::start (this=0x6118f8) at msg/simple/DispatchQueue.cc:220
+#2  0x00007ffff2e6a19b in SimpleMessenger::ready (this=0x611730) at msg/simple/SimpleMessenger.cc:74
+#3  0x00007ffff2af8b31 in Messenger::add_dispatcher_tail (this=0x611730, d=0x612048) at ./msg/Messenger.h:363
+#4  0x00007ffff2af2e8b in librados::RadosClient::connect (this=0x60ccd0) at librados/RadosClient.cc:236
+#5  0x00007ffff2ac4299 in rados_connect (cluster=0x60ccd0) at librados/librados.cc:2251
+#6  0x0000000000400c20 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:59
+
+线程 5:
+#0  Thread::create (this=0x611b58, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff2e3f627 in DispatchQueue::start (this=0x6118f8) at msg/simple/DispatchQueue.cc:221
+#2  0x00007ffff2e6a19b in SimpleMessenger::ready (this=0x611730) at msg/simple/SimpleMessenger.cc:74
+#3  0x00007ffff2af8b31 in Messenger::add_dispatcher_tail (this=0x611730, d=0x612048) at ./msg/Messenger.h:363
+#4  0x00007ffff2af2e8b in librados::RadosClient::connect (this=0x60ccd0) at librados/RadosClient.cc:236
+#5  0x00007ffff2ac4299 in rados_connect (cluster=0x60ccd0) at librados/librados.cc:2251
+#6  0x0000000000400c20 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:59
+
+线程 6:
+#0  Thread::create (this=0x611b88, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff2e6c333 in SimpleMessenger::start (this=0x611730) at msg/simple/SimpleMessenger.cc:330
+#2  0x00007ffff2af2ed6 in librados::RadosClient::connect (this=0x60ccd0) at librados/RadosClient.cc:239
+#3  0x00007ffff2ac4299 in rados_connect (cluster=0x60ccd0) at librados/librados.cc:2251
+#4  0x0000000000400c20 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:59
+
+线程 7:
+#0  Thread::create (this=0x6156a0, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff2be5c67 in SafeTimer::init (this=0x60ced8) at common/Timer.cc:65
+#2  0x00007ffff2cbc4e2 in MonClient::init (this=0x60ccf0) at mon/MonClient.cc:392
+#3  0x00007ffff2af3122 in librados::RadosClient::connect (this=0x60ccd0) at librados/RadosClient.cc:244
+#4  0x00007ffff2ac4299 in rados_connect (cluster=0x60ccd0) at librados/librados.cc:2251
+#5  0x0000000000400c20 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:59
+
+线程 8:
+#0  Thread::create (this=0x60d0b8, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff2be94c7 in Finisher::start (this=0x60cfa0) at common/Finisher.cc:15
+#2  0x00007ffff2cbc4f7 in MonClient::init (this=0x60ccf0) at mon/MonClient.cc:393
+#3  0x00007ffff2af3122 in librados::RadosClient::connect (this=0x60ccd0) at librados/RadosClient.cc:244
+#4  0x00007ffff2ac4299 in rados_connect (cluster=0x60ccd0) at librados/librados.cc:2251
+#5  0x0000000000400c20 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:59
+
+线程 9:
+#0  Thread::create (this=0x616150, stacksize=1048576) at common/Thread.cc:123
+#1  0x00007ffff2e493df in Pipe::start_writer (this=0x616110) at msg/simple/Pipe.cc:168
+#2  0x00007ffff2e6c77d in SimpleMessenger::connect_rank (this=0x611730, addr=..., type=1, con=0x0, first=0x0) at msg/simple/SimpleMessenger.cc:368
+#3  0x00007ffff2e6cac6 in SimpleMessenger::get_connection (this=0x611730, dest=...) at msg/simple/SimpleMessenger.cc:409
+#4  0x00007ffff2cbe7b3 in MonClient::_reopen_session (this=0x60ccf0, rank=-1, name="") at mon/MonClient.cc:606
+#5  0x00007ffff2cc5aa6 in MonClient::_reopen_session (this=0x60ccf0) at mon/MonClient.h:190
+#6  0x00007ffff2cbceb4 in MonClient::authenticate (this=0x60ccf0, timeout=300) at mon/MonClient.cc:444
+#7  0x00007ffff2af32ec in librados::RadosClient::connect (this=0x60ccd0) at librados/RadosClient.cc:251
+#8  0x00007ffff2ac4299 in rados_connect (cluster=0x60ccd0) at librados/librados.cc:2251
+#9  0x0000000000400c20 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:59
+
+线程 10:
+#0  Thread::create (this=0x7fffd00013c0, stacksize=1048576) at common/Thread.cc:123
+#1  0x00007ffff2e493df in Pipe::start_writer (this=0x7fffd0001380) at msg/simple/Pipe.cc:168
+#2  0x00007ffff2e6c77d in SimpleMessenger::connect_rank (this=0x611730, addr=..., type=1, con=0x0, first=0x0) at msg/simple/SimpleMessenger.cc:368
+#3  0x00007ffff2e6cac6 in SimpleMessenger::get_connection (this=0x611730, dest=...) at msg/simple/SimpleMessenger.cc:409
+#4  0x00007ffff2cbe7b3 in MonClient::_reopen_session (this=0x60ccf0, rank=-1, name="") at mon/MonClient.cc:606
+#5  0x00007ffff2cc5aa6 in MonClient::_reopen_session (this=0x60ccf0) at mon/MonClient.h:190
+#6  0x00007ffff2cbf755 in MonClient::tick (this=0x60ccf0) at mon/MonClient.cc:699
+#7  0x00007ffff2cc5a73 in MonClient::C_Tick::finish (this=0x60d800, r=0) at mon/MonClient.h:160
+#8  0x00007ffff2acd7cf in Context::complete (this=0x60d800, r=0) at ./include/Context.h:65
+#9  0x00007ffff2be6250 in SafeTimer::timer_thread (this=0x60ced8) at common/Timer.cc:105
+#10 0x00007ffff2be75a2 in SafeTimerThread::entry (this=0x6156a0) at common/Timer.cc:38
+#11 0x00007ffff2c108b0 in Thread::entry_wrapper (this=0x6156a0) at common/Thread.cc:61
+#12 0x00007ffff2c10822 in Thread::_entry_func (arg=0x6156a0) at common/Thread.cc:45
+#13 0x00007ffff19319d1 in start_thread () from /lib64/libpthread.so.0
+#14 0x00007ffff2778b5d in clone () from /lib64/libc.so.6
+
+线程 11:
+#0  Thread::create (this=0x7fffd0001398, stacksize=1048576) at common/Thread.cc:123
+#1  0x00007ffff2e49102 in Pipe::start_reader (this=0x7fffd0001380) at msg/simple/Pipe.cc:150
+#2  0x00007ffff2e55726 in Pipe::connect (this=0x7fffd0001380) at msg/simple/Pipe.cc:1200
+#3  0x00007ffff2e5b592 in Pipe::writer (this=0x7fffd0001380) at msg/simple/Pipe.cc:1705
+#4  0x00007ffff2e628b6 in Pipe::Writer::entry (this=0x7fffd00013c0) at msg/simple/Pipe.h:62
+#5  0x00007ffff2c108b0 in Thread::entry_wrapper (this=0x7fffd00013c0) at common/Thread.cc:61
+#6  0x00007ffff2c10822 in Thread::_entry_func (arg=0x7fffd00013c0) at common/Thread.cc:45
+#7  0x00007ffff19319d1 in start_thread () from /lib64/libpthread.so.0
+#8  0x00007ffff2778b5d in clone () from /lib64/libc.so.6
+
+线程 12:
+#0  Thread::create (this=0x7fffd0009d30, stacksize=1048576) at common/Thread.cc:123
+#1  0x00007ffff2e493df in Pipe::start_writer (this=0x7fffd0009cf0) at msg/simple/Pipe.cc:168
+#2  0x00007ffff2e6c77d in SimpleMessenger::connect_rank (this=0x611730, addr=..., type=1, con=0x0, first=0x0) at msg/simple/SimpleMessenger.cc:368
+#3  0x00007ffff2e6cac6 in SimpleMessenger::get_connection (this=0x611730, dest=...) at msg/simple/SimpleMessenger.cc:409
+#4  0x00007ffff2cbe7b3 in MonClient::_reopen_session (this=0x60ccf0, rank=-1, name="") at mon/MonClient.cc:606
+#5  0x00007ffff2cc5aa6 in MonClient::_reopen_session (this=0x60ccf0) at mon/MonClient.h:190
+#6  0x00007ffff2cbf755 in MonClient::tick (this=0x60ccf0) at mon/MonClient.cc:699
+#7  0x00007ffff2cc5a73 in MonClient::C_Tick::finish (this=0x7fffd0007fc0, r=0) at mon/MonClient.h:160
+#8  0x00007ffff2acd7cf in Context::complete (this=0x7fffd0007fc0, r=0) at ./include/Context.h:65
+#9  0x00007ffff2be6250 in SafeTimer::timer_thread (this=0x60ced8) at common/Timer.cc:105
+#10 0x00007ffff2be75a2 in SafeTimerThread::entry (this=0x6156a0) at common/Timer.cc:38
+#11 0x00007ffff2c108b0 in Thread::entry_wrapper (this=0x6156a0) at common/Thread.cc:61
+#12 0x00007ffff2c10822 in Thread::_entry_func (arg=0x6156a0) at common/Thread.cc:45
+#13 0x00007ffff19319d1 in start_thread () from /lib64/libpthread.so.0
+#14 0x00007ffff2778b5d in clone () from /lib64/libc.so.6
+
+线程 13:
+#0  Thread::create (this=0x7fffd0009d08, stacksize=1048576) at common/Thread.cc:123
+#1  0x00007ffff2e49102 in Pipe::start_reader (this=0x7fffd0009cf0) at msg/simple/Pipe.cc:150
+#2  0x00007ffff2e55726 in Pipe::connect (this=0x7fffd0009cf0) at msg/simple/Pipe.cc:1200
+#3  0x00007ffff2e5b592 in Pipe::writer (this=0x7fffd0009cf0) at msg/simple/Pipe.cc:1705
+#4  0x00007ffff2e628b6 in Pipe::Writer::entry (this=0x7fffd0009d30) at msg/simple/Pipe.h:62
+#5  0x00007ffff2c108b0 in Thread::entry_wrapper (this=0x7fffd0009d30) at common/Thread.cc:61
+#6  0x00007ffff2c10822 in Thread::_entry_func (arg=0x7fffd0009d30) at common/Thread.cc:45
+#7  0x00007ffff19319d1 in start_thread () from /lib64/libpthread.so.0
+#8  0x00007ffff2778b5d in clone () from /lib64/libc.so.6
+
+线程 14:
+#0  Thread::create (this=0x61ba40, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff2be5c67 in SafeTimer::init (this=0x60d348) at common/Timer.cc:65
+#2  0x00007ffff2af3558 in librados::RadosClient::connect (this=0x60ccd0) at librados/RadosClient.cc:263
+#3  0x00007ffff2ac4299 in rados_connect (cluster=0x60ccd0) at librados/librados.cc:2251
+#4  0x0000000000400c20 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:59
+
+线程 15:
+#0  Thread::create (this=0x60d550, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff2be94c7 in Finisher::start (this=0x60d438) at common/Finisher.cc:15
+#2  0x00007ffff2af3580 in librados::RadosClient::connect (this=0x60ccd0) at librados/RadosClient.cc:267
+#3  0x00007ffff2ac4299 in rados_connect (cluster=0x60ccd0) at librados/librados.cc:2251
+#4  0x0000000000400c20 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:59
+
+线程 16:
+#0  Thread::create (this=0x61cd90, stacksize=1048576) at common/Thread.cc:123
+#1  0x00007ffff2e493df in Pipe::start_writer (this=0x61cd50) at msg/simple/Pipe.cc:168
+#2  0x00007ffff2e6c77d in SimpleMessenger::connect_rank (this=0x611730, addr=..., type=4, con=0x0, first=0x0) at msg/simple/SimpleMessenger.cc:368
+#3  0x00007ffff2e6cac6 in SimpleMessenger::get_connection (this=0x611730, dest=...) at msg/simple/SimpleMessenger.cc:409
+#4  0x00007ffff2b2cd76 in Objecter::_get_session (this=0x612040, osd=0, session=0x7fffffffd228, lc=...) at osdc/Objecter.cc:1526
+#5  0x00007ffff2b31be1 in Objecter::_op_submit (this=0x612040, op=0x617870, lc=...) at osdc/Objecter.cc:2102
+#6  0x00007ffff2b3117d in Objecter::_op_submit_with_budget (this=0x612040, op=0x617870, lc=..., ctx_budget=0x0) at osdc/Objecter.cc:2012
+#7  0x00007ffff2b30f51 in Objecter::op_submit (this=0x612040, op=0x617870, ctx_budget=0x0) at osdc/Objecter.cc:1984
+#8  0x00007ffff2b0addb in librados::IoCtxImpl::operate_read (this=0x616c30, oid=..., o=0x7fffffffd680, pbl=0x0, flags=0)
+    at librados/IoCtxImpl.cc:554
+#9  0x00007ffff2b0d3cc in librados::IoCtxImpl::stat (this=0x616c30, oid=..., psize=0x7fffffffd700, pmtime=0x0) at librados/IoCtxImpl.cc:984
+#10 0x00007ffff2abfc19 in librados::IoCtx::stat (this=0x616570, oid="volume-1.rbd", psize=0x0, pmtime=0x0) at librados/librados.cc:1150
+#11 0x00007ffff545c8d0 in librbd::detect_format (io_ctx=..., name="volume-1", old_format=0x6168cc, size=0x0) at librbd/internal.cc:78
+#12 0x00007ffff5435bac in librbd::ImageCtx::init (this=0x6163f0) at librbd/ImageCtx.cc:144
+#13 0x00007ffff547360c in librbd::open_image (ictx=0x6163f0) at librbd/internal.cc:2386
+#14 0x00007ffff540de55 in rbd_open (p=0x6161e0, name=0x4011df "volume-1", image=0x7fffffffde40, snap_name=0x0) at librbd/librbd.cc:1028
+#15 0x0000000000400d01 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:112
+
+线程 17:
+#0  Thread::create (this=0x61cd68, stacksize=1048576) at common/Thread.cc:123
+#1  0x00007ffff2e49102 in Pipe::start_reader (this=0x61cd50) at msg/simple/Pipe.cc:150
+#2  0x00007ffff2e55726 in Pipe::connect (this=0x61cd50) at msg/simple/Pipe.cc:1200
+#3  0x00007ffff2e5b592 in Pipe::writer (this=0x61cd50) at msg/simple/Pipe.cc:1705
+#4  0x00007ffff2e628b6 in Pipe::Writer::entry (this=0x61cd90) at msg/simple/Pipe.h:62
+#5  0x00007ffff2c108b0 in Thread::entry_wrapper (this=0x61cd90) at common/Thread.cc:61
+#6  0x00007ffff2c10822 in Thread::_entry_func (arg=0x61cd90) at common/Thread.cc:45
+#7  0x00007ffff19319d1 in start_thread () from /lib64/libpthread.so.0
+#8  0x00007ffff2778b5d in clone () from /lib64/libc.so.6
+
+线程 18:
+#0  Thread::create (this=0x616088, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff55566e7 in Finisher::start (this=0x615f70) at common/Finisher.cc:15
+#2  0x00007ffff544c040 in librbd::TaskFinisher<librbd::ImageWatcher::Task>::TaskFinisher (this=0x61b650, cct=...) at ./librbd/TaskFinisher.h:27
+#3  0x00007ffff5440a77 in librbd::ImageWatcher::ImageWatcher (this=0x615430, image_ctx=...) at librbd/ImageWatcher.cc:41
+#4  0x00007ffff5439597 in librbd::ImageCtx::register_watch (this=0x6163f0) at librbd/ImageCtx.cc:722
+#5  0x00007ffff5473641 in librbd::open_image (ictx=0x6163f0) at librbd/internal.cc:2391
+#6  0x00007ffff540de55 in rbd_open (p=0x6161e0, name=0x4011df "volume-1", image=0x7fffffffde40, snap_name=0x0) at librbd/librbd.cc:1028
+#7  0x0000000000400d01 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:112
+
+线程 19:
+#0  Thread::create (this=0x61c860, stacksize=0) at common/Thread.cc:123
+#1  0x00007ffff561866f in SafeTimer::init (this=0x615990) at common/Timer.cc:65
+#2  0x00007ffff544c050 in librbd::TaskFinisher<librbd::ImageWatcher::Task>::TaskFinisher (this=0x61b650, cct=...) at ./librbd/TaskFinisher.h:28
+#3  0x00007ffff5440a77 in librbd::ImageWatcher::ImageWatcher (this=0x615430, image_ctx=...) at librbd/ImageWatcher.cc:41
+#4  0x00007ffff5439597 in librbd::ImageCtx::register_watch (this=0x6163f0) at librbd/ImageCtx.cc:722
+#5  0x00007ffff5473641 in librbd::open_image (ictx=0x6163f0) at librbd/internal.cc:2391
+#6  0x00007ffff540de55 in rbd_open (p=0x6161e0, name=0x4011df "volume-1", image=0x7fffffffde40, snap_name=0x0) at librbd/librbd.cc:1028
+#7  0x0000000000400d01 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:112
+
+线程 20:
+#0  Thread::create (this=0x626f00, stacksize=1048576) at common/Thread.cc:123
+#1  0x00007ffff2e493df in Pipe::start_writer (this=0x626ec0) at msg/simple/Pipe.cc:168
+#2  0x00007ffff2e6c77d in SimpleMessenger::connect_rank (this=0x611730, addr=..., type=4, con=0x0, first=0x0) at msg/simple/SimpleMessenger.cc:368
+#3  0x00007ffff2e6cac6 in SimpleMessenger::get_connection (this=0x611730, dest=...) at msg/simple/SimpleMessenger.cc:409
+#4  0x00007ffff2b2cd76 in Objecter::_get_session (this=0x612040, osd=2, session=0x7fffffffcf88, lc=...) at osdc/Objecter.cc:1526
+#5  0x00007ffff2b31be1 in Objecter::_op_submit (this=0x612040, op=0x6233a0, lc=...) at osdc/Objecter.cc:2102
+#6  0x00007ffff2b3117d in Objecter::_op_submit_with_budget (this=0x612040, op=0x6233a0, lc=..., ctx_budget=0x0) at osdc/Objecter.cc:2012
+#7  0x00007ffff2b30f51 in Objecter::op_submit (this=0x612040, op=0x6233a0, ctx_budget=0x0) at osdc/Objecter.cc:1984
+#8  0x00007ffff2b11067 in Objecter::mutate (this=0x612040, oid=..., oloc=..., op=..., snapc=..., mtime=..., flags=0, onack=0x623290, 
+    oncommit=0x6232b0, objver=0x6231c8) at ./osdc/Objecter.h:2032
+#9  0x00007ffff2b0b285 in librados::IoCtxImpl::aio_operate (this=0x616e40, oid=..., o=0x61bdb0, c=0x623120, snap_context=..., flags=0)
+    at librados/IoCtxImpl.cc:602
+#10 0x00007ffff2ac098f in librados::IoCtx::aio_operate (this=0x616568, oid="rb.0.196b.6b8b4567.", '0' <repeats 12 times>, c=0x6160c0, o=0x625c10, 
+    snap_seq=0, snaps=std::vector of length 0, capacity 0) at librados/librados.cc:1336
+#11 0x00007ffff541a00a in librbd::AbstractWrite::send_write (this=0x625b30) at librbd/AioRequest.cc:533
+#12 0x00007ffff5419254 in librbd::AbstractWrite::send (this=0x625b30) at librbd/AioRequest.cc:451
+#13 0x00007ffff547acf7 in librbd::aio_write (ictx=0x6163f0, off=0, len=4194304, buf=0x7fffe49fa010 "", c=0x624900, op_flags=0)
+    at librbd/internal.cc:3368
+#14 0x00007ffff547894a in librbd::write (ictx=0x6163f0, off=0, len=4194304, buf=0x7fffe49fa010 "", op_flags=0) at librbd/internal.cc:3036
+#15 0x00007ffff540fa69 in rbd_write (image=0x6163f0, ofs=0, len=4194304, buf=0x7fffe49fa010 "") at librbd/librbd.cc:1575
+#16 0x0000000000400dc0 in main (argc=1, argv=0x7fffffffdfa8) at test-rbd-2.c:127
+
+线程 21:
+#0  Thread::create (this=0x626ed8, stacksize=1048576) at common/Thread.cc:123
+#1  0x00007ffff2e49102 in Pipe::start_reader (this=0x626ec0) at msg/simple/Pipe.cc:150
+#2  0x00007ffff2e55726 in Pipe::connect (this=0x626ec0) at msg/simple/Pipe.cc:1200
+#3  0x00007ffff2e5b592 in Pipe::writer (this=0x626ec0) at msg/simple/Pipe.cc:1705
+#4  0x00007ffff2e628b6 in Pipe::Writer::entry (this=0x626f00) at msg/simple/Pipe.h:62
+#5  0x00007ffff2c108b0 in Thread::entry_wrapper (this=0x626f00) at common/Thread.cc:61
+#6  0x00007ffff2c10822 in Thread::_entry_func (arg=0x626f00) at common/Thread.cc:45
+#7  0x00007ffff19319d1 in start_thread () from /lib64/libpthread.so.0
+#8  0x00007ffff2778b5d in clone () from /lib64/libc.so.6
+
+
+*/
+
+
+
+
+// -i 0 --pid-file /var/run/ceph/osd.0.pid -c /etc/ceph/ceph.conf --cluster ceph
+
+ int osd_read()
+ {
+	Pipe::reader()
+	{
+		//# 读取并解析消息  CEPH_MSG_OSD_OPREPLY 43
+		read_message
+		//# 把消息放到   DispatchQueue PrioritizedQueue<QueueItem, uint64_t> mqueue;
+		if (in_q->can_fast_dispatch(m))
+		{
+			in_q->fast_dispatch(m); // DispatchQueue::fast_dispatch
+				msgr->ms_fast_dispatch(m); //Messenger::ms_fast_dispatch
+					(*p)->ms_fast_dispatch(m); //OSD::ms_fast_dispatch
+						dispatch_session_waiting(session, nextmap); //OSD::dispatch_session_waiting
+                            dispatch_op_fast //OSD::dispatch_op_fast
+                                OSD::handle_op
+		}	
+		else
+			in_q->enqueue(m, m->get_priority(), conn_id);
+                
+	}
+    
+    //# 线程池
+    ShardedThreadPool::WorkThreadSharded::entry
+        ShardedThreadPool::shardedthreadpool_worker
+            OSD::ShardedOpWQ::_process
+                OSD::dequeue_op
+                    ReplicatedPG::do_request
+                        ReplicatedPG::do_op
+                            execute_ctx(ctx); // ReplicatedPG::execute_ctx
+    
+ }
+ 
+ #0  OSD::handle_op (this=0x4c40000, op=std::tr1::shared_ptr (count 2) 0x4b0ae00, osdmap=std::tr1::shared_ptr (count 175) 0x4fac380) at osd/OSD.cc:7992
+#1  0x00000000013e3eb8 in OSD::dispatch_op_fast (this=0x4c40000, op=std::tr1::shared_ptr (count 2) 0x4b0ae00, osdmap=std::tr1::shared_ptr (count 175) 0x4fac380) at osd/OSD.cc:5665
+#2  0x00000000013e1862 in OSD::dispatch_session_waiting (this=0x4c40000, session=0x4b8d780, osdmap=std::tr1::shared_ptr (count 175) 0x4fac380) at osd/OSD.cc:5311
+#3  0x00000000013e2276 in OSD::ms_fast_dispatch (this=0x4c40000, m=0x4b8b200) at osd/OSD.cc:5422
+#4  0x0000000001bf21cc in Messenger::ms_fast_dispatch (this=0x4b70000, m=0x4b8b200) at ./msg/Messenger.h:538
+#5  0x0000000001c085f2 in DispatchQueue::fast_dispatch (this=0x4b701c8, m=0x4b8b200) at msg/simple/DispatchQueue.cc:71
+#6  0x0000000001bcaf2c in Pipe::reader (this=0x5c6c800) at msg/simple/Pipe.cc:1645
+#7  0x0000000001bd25d0 in Pipe::Reader::entry (this=0x5c6c818) at msg/simple/Pipe.h:50

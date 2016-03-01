@@ -1,0 +1,204 @@
+
+201-205:
+my_cmd.py "cli raidgroup create name=SC0-RG-00[1-16] type=raid0 disk-list=\{1,0,0,[0-15]\}" -o
+my_cmd.py "cli raidlun create name=SC0-LUN-000[1-16] raidgroup-name=SC0-RG-00[1-16] chunk-size=512 lun-size= sync=" -o
+my_cmd.py "cli lv create name=Res-jour-0[1-16] type=nas raidlun=\{SC0-LUN-000[1-16],20G\}" -o
+my_cmd.py "cli lv create name=Res-osd-0[1-16] type=nas raidlun=\{SC0-LUN-000[1-16],250G\}" -o
+my_cmd.py "cli nas resource initialize lv=Res-jour-0[1-16] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+my_cmd.py "cli nas resource initialize lv=Res-osd-0[1-16] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+
+my_cmd.py "cli nas resource mount resourcename=Res-jour-0[1-16]" -o
+my_cmd.py "cli nas resource mount resourcename=Res-osd-0[1-16]" -o
+
+my_cmd.py "cli nas resource umount resourcename=Res-jour-0[1-16]" -o
+my_cmd.py "cli nas resource umount resourcename=Res-osd-0[1-16]" -o
+my_cmd.py "cli lv delete name=Res-jour-0[1-16]" -o
+my_cmd.py "cli lv delete name=Res-osd-0[1-16]" -o
+my_cmd.py "cli raidlun delete name=SC0-LUN-000[1-16]" -o
+my_cmd.py "cli raidgroup delete name=SC0-RG-00[1-16]" -o
+
+my_cmd.py "cli raidgroup create name=SSD-RG-00[1-2] type=raid0 disk-list=\{1,0,0,[20-21]\}" -o
+my_cmd.py "cli raidlun create name=SSD-LUN-00[1-2] raidgroup-name=SSD-RG-00[1-2] chunk-size=512 lun-size= sync=" -o
+my_cmd.py "cli lv create name=SSD-joul-0[1-5] type=nas raidlun=\{SSD-LUN-001,20G\}" -o
+my_cmd.py "cli lv create name=SSD-osd-0[1-5] type=nas raidlun=\{SSD-LUN-002,20G\}" -o
+my_cmd.py "cli nas resource initialize lv=SSD-joul-0[1-5] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+my_cmd.py "cli nas resource initialize lv=SSD-osd-0[1-5] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+
+my_cmd.py "cli nas resource mount resourcename=SSD-joul-0[1-5]" -o
+my_cmd.py "cli nas resource mount resourcename=SSD-osd-0[1-5]" -o
+my_cmd.py "cli nas resource umount resourcename=SSD-joul-0[1-5]" -o
+my_cmd.py "cli nas resource umount resourcename=SSD-osd-0[1-5]" -o
+my_cmd.py "cli lv delete name=SSD-joul-0[1-5]" -o
+my_cmd.py "cli lv delete name=SSD-osd-0[1-5]" -o
+my_cmd.py "cli raidlun delete name=SSD-LUN-00[1-2]" -o
+my_cmd.py "cli raidgroup delete name=SSD-RG-00[1-2]" -o
+
+
+my_cmd.py " parted /dev/sd[b-c]  mklabel msdos yes " -o
+my_cmd.py " parted /dev/sd[b-c]  mkpart primary  0GB 20G " -o
+my_cmd.py " parted /dev/sd[b-c]  mkpart primary  20GB 160G " -o
+my_cmd.py " parted /dev/sd[b-c]  rm [1-2]" 
+
+my_cmd.py " mkdir /mnt/osd[1-2] " -o
+my_cmd.py " mkdir /mnt/jour[1-2] " -o
+
+
+my_cmd.py " mkfs -t xfs /dev/sd[b-c]2 " -o
+my_cmd.py " mkfs -t xfs /dev/sd[b-c]1 " -o
+my_cmd.py " mount -t xfs -o rw,noatime,inode64,logbsize=256k,delaylog /dev/sd[b-c]2 /mnt/osd[1-2]" -o
+my_cmd.py " mount -t xfs -o rw,noatime,inode64,logbsize=256k,delaylog /dev/sd[b-c]1 /mnt/jour[1-2]" -o
+
+my_cmd.py "ceph osd rm [105-112]" -o
+my_cmd.py "rm -rf /mnt/osd[1-2]/*" -o
+my_cmd.py "rm -rf /mnt/jour[1-2]/*" -o
+
+
+parted /dev/sdb mkpart logical 20GB 160G
+
+
+
+
+
+
+
+
+parted /dev/sdi  mklabel msdos yes
+parted /dev/sdi  mkpart primary  0GB 15G
+parted /dev/sdi mkpart extended  15GB 135G
+parted /dev/sdi mkpart logical 15GB 30G
+parted /dev/sdi mkpart logical 30GB 45G
+parted /dev/sdi mkpart logical 45GB 60G
+parted /dev/sdi mkpart logical 60GB 75G
+parted /dev/sdi mkpart logical 75GB 90G
+parted /dev/sdi mkpart logical 90GB 105G
+parted /dev/sdi mkpart logical 105GB 120G
+parted /dev/sdi mkpart logical 120GB 135G
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+204:
+my_cmd.py "cli raidgroup create name=SC0-RG-00[1-16] type=raid0 disk-list=\{1,0,0,[0-15]\}" -o
+my_cmd.py "cli raidlun create name=SC0-LUN-000[1-16] raidgroup-name=SC0-RG-00[1-16] chunk-size=512 lun-size= sync=" -o
+my_cmd.py "cli lv create name=Resource-000[1-16] type=nas raidlun=\{SC0-LUN-000[1-16],250G\}" -o
+my_cmd.py "cli nas resource initialize lv=Resource-000[1-16] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+my_cmd.py "cli nas resource mount resourcename=Resource-000[1-16]" -o
+
+my_cmd.py "cli nas resource umount resourcename=Resource-000[1-16]" -o
+my_cmd.py "cli lv delete name=Resource-000[1-16]" -o
+my_cmd.py "cli raidlun delete name=SC0-LUN-000[1-16]" -o
+my_cmd.py "cli raidgroup delete name=SC0-RG-00[1-16]" -o
+
+cli raidgroup create name=SSD-RG-001 type=raid0 disk-list=\{1,0,0,17\}
+cli raidlun create name=SSD-LUN-001 raidgroup-name=SSD-RG-001 chunk-size=512 lun-size= sync=
+my_cmd.py "cli lv create name=SSD-Res-000[1-8] type=nas raidlun=\{SSD-LUN-001,20G\}" -o
+my_cmd.py "cli nas resource initialize lv=SSD-Res-000[1-8] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+
+cli raidgroup create name=SSD-RG-002 type=raid0 disk-list=\{1,0,0,23\}
+cli raidlun create name=SSD-LUN-002 raidgroup-name=SSD-RG-002 chunk-size=512 lun-size= sync=
+my_cmd.py "cli lv create name=SSD-Res-000[9-16] type=nas raidlun=\{SSD-LUN-002,20G\}" -o
+my_cmd.py "cli nas resource initialize lv=SSD-Res-000[9-16] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+
+my_cmd.py "cli nas resource mount resourcename=SSD-Res-000[1-16]" -o
+my_cmd.py "cli nas resource umount resourcename=SSD-Res-000[1-16]" -o
+my_cmd.py "cli lv delete name=SSD-Res-000[1-16]" -o
+my_cmd.py "cli raidlun delete name=SSD-LUN-00[1-2]" -o
+my_cmd.py "cli raidgroup delete name=SSD-RG-00[1-2]" -o
+
+parted /dev/bdev-ionav-512  mklabel msdos yes
+parted /dev/bdev-ionav-512  mkpart primary  0GB 15G
+parted /dev/bdev-ionav-512 mkpart extended  15GB 135G
+parted /dev/bdev-ionav-512 mkpart logical 15GB 30G
+parted /dev/bdev-ionav-512 mkpart logical 30GB 45G
+parted /dev/bdev-ionav-512 mkpart logical 45GB 60G
+parted /dev/bdev-ionav-512 mkpart logical 60GB 75G
+parted /dev/bdev-ionav-512 mkpart logical 75GB 90G
+parted /dev/bdev-ionav-512 mkpart logical 90GB 105G
+parted /dev/bdev-ionav-512 mkpart logical 105GB 120G
+parted /dev/bdev-ionav-512 mkpart logical 120GB 135G
+
+parted /dev/bdev-ionav-656  mklabel msdos yes
+parted /dev/bdev-ionav-656  mkpart primary  0GB 15G
+parted /dev/bdev-ionav-656 mkpart extended  15GB 135G
+parted /dev/bdev-ionav-656 mkpart logical 15GB 30G
+parted /dev/bdev-ionav-656 mkpart logical 30GB 45G
+parted /dev/bdev-ionav-656 mkpart logical 45GB 60G
+parted /dev/bdev-ionav-656 mkpart logical 60GB 75G
+parted /dev/bdev-ionav-656 mkpart logical 75GB 90G
+parted /dev/bdev-ionav-656 mkpart logical 90GB 105G
+parted /dev/bdev-ionav-656 mkpart logical 105GB 120G
+parted /dev/bdev-ionav-656 mkpart logical 120GB 135G
+
+
+
+205:
+my_cmd.py "cli raidgroup create name=SC0-RG-00[1-16] type=raid0 disk-list=\{1,0,0,[0-15]\}" -o
+my_cmd.py "cli raidlun create name=SC0-LUN-000[1-16] raidgroup-name=SC0-RG-00[1-16] chunk-size=512 lun-size= sync=" -o
+my_cmd.py "cli lv create name=Resource-000[1-16] type=nas raidlun=\{SC0-LUN-000[1-16],250G\}" -o
+my_cmd.py "cli nas resource initialize lv=Resource-000[1-16] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+my_cmd.py "cli nas resource mount resourcename=Resource-000[1-16]" -o
+
+my_cmd.py "cli nas resource umount resourcename=Resource-000[1-16]" -o
+my_cmd.py "cli lv delete name=Resource-000[1-16]" -o
+my_cmd.py "cli raidlun delete name=SC0-LUN-000[1-16]" -o
+my_cmd.py "cli raidgroup delete name=SC0-RG-00[1-16]" -o
+
+cli raidgroup create name=SSD-RG-001 type=raid0 disk-list=\{1,0,0,17\}
+cli raidlun create name=SSD-LUN-001 raidgroup-name=SSD-RG-001 chunk-size=512 lun-size= sync=
+my_cmd.py "cli lv create name=SSD-Res-000[1-8] type=nas raidlun=\{SSD-LUN-001,20G\}" -o
+my_cmd.py "cli nas resource initialize lv=SSD-Res-000[1-8] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+
+cli raidgroup create name=SSD-RG-002 type=raid0 disk-list=\{1,0,0,23\}
+cli raidlun create name=SSD-LUN-002 raidgroup-name=SSD-RG-002 chunk-size=512 lun-size= sync=
+my_cmd.py "cli lv create name=SSD-Res-000[9-16] type=nas raidlun=\{SSD-LUN-002,20G\}" -o
+my_cmd.py "cli nas resource initialize lv=SSD-Res-000[9-16] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+
+my_cmd.py "cli nas resource mount resourcename=SSD-Res-000[1-16]" -o
+my_cmd.py "cli nas resource umount resourcename=SSD-Res-000[1-16]" -o
+my_cmd.py "cli lv delete name=SSD-Res-000[1-16]" -o
+my_cmd.py "cli raidlun delete name=SSD-LUN-00[1-2]" -o
+my_cmd.py "cli raidgroup delete name=SSD-RG-00[1-2]" -o
+
+
+parted /dev/bdev-ionav-448  mklabel msdos yes
+parted /dev/bdev-ionav-448  mkpart primary  0GB 15G
+parted /dev/bdev-ionav-448 mkpart extended  15GB 135G
+parted /dev/bdev-ionav-448 mkpart logical 15GB 30G
+parted /dev/bdev-ionav-448 mkpart logical 30GB 45G
+parted /dev/bdev-ionav-448 mkpart logical 45GB 60G
+parted /dev/bdev-ionav-448 mkpart logical 60GB 75G
+parted /dev/bdev-ionav-448 mkpart logical 75GB 90G
+parted /dev/bdev-ionav-448 mkpart logical 90GB 105G
+parted /dev/bdev-ionav-448 mkpart logical 105GB 120G
+parted /dev/bdev-ionav-448 mkpart logical 120GB 135G
+
+parted /dev/bdev-ionav-656  mklabel msdos yes
+parted /dev/bdev-ionav-656  mkpart primary  0GB 15G
+parted /dev/bdev-ionav-656 mkpart extended  15GB 135G
+parted /dev/bdev-ionav-656 mkpart logical 15GB 30G
+parted /dev/bdev-ionav-656 mkpart logical 30GB 45G
+parted /dev/bdev-ionav-656 mkpart logical 45GB 60G
+parted /dev/bdev-ionav-656 mkpart logical 60GB 75G
+parted /dev/bdev-ionav-656 mkpart logical 75GB 90G
+parted /dev/bdev-ionav-656 mkpart logical 90GB 105G
+parted /dev/bdev-ionav-656 mkpart logical 105GB 120G
+parted /dev/bdev-ionav-656 mkpart logical 120GB 135G
