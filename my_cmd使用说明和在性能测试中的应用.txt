@@ -1,0 +1,128 @@
+性能测试使用的脚本
+
+my_cmd.py 
+
+把脚本放在/usr/local/bin/ 路径下
+chmod 755 /usr/local/bin/my_cmd.py
+
+[root@iozone-105 ~]# whereis my_cmd.py
+my_cmd: /usr/local/bin/my_cmd.py
+
+
+
+
+例如：要删除5个NAS资源里面的内容，你需要执行5条命令
+rm -rf /NAS/nasdevice1/*
+rm -rf /NAS/nasdevice2/*
+rm -rf /NAS/nasdevice3/*
+rm -rf /NAS/nasdevice4/*
+rm -rf /NAS/nasdevice5/*
+
+你可以用一条命令代替
+my_cmd.py "rm -rf /NAS/nasdevice[1-5]/*"
+
+my_cmd.py 会展开中括号里的数字和字母
+
+在后面加上 -p 打印这条命令会执行的所有命令，但不会运行命令
+
+如：
+[root@iozone-103 ~]# my_cmd.py "ls /dev/sd[a-c]" -p
+ls /dev/sda
+ls /dev/sdb
+ls /dev/sdc
+
+如何一个命令有多个中括号，
+如何有 -o 参数表示一对一关系，所已每个中括号的循环数要一样
+
+[root@iozone-103 ~]# my_cmd.py "[a-c][1-3]" -o -p
+a1
+b2
+c3
+
+对比一下没有 -o 参数
+[root@iozone-103 ~]# my_cmd.py "[a-c][1-3]"  -p
+a1
+b1
+c1
+a2
+b2
+c2
+a3
+b3
+c3
+没有 -o 参数 每个中括号的循环可以不一样
+[root@iozone-103 ~]# my_cmd.py "[a-b][1-3]"  -p
+a1
+b1
+a2
+b2
+a3
+b3
+
+
+
+-h 看一下帮助
+
+[root@iozone-12 ~]# my_cmd.py -h
+my_cmd.py cmd -o -p
+        -p : print the cmd, not exec
+example : my_cmd.py "mount /dev/sd[a-c]1 /mnt/osd[1-3]" -o
+mean:
+mount /dev/sda1 /mnt/osd1
+mount /dev/sdb1 /mnt/osd2
+mount /dev/sdc1 /mnt/osd3
+example : my_cmd.py "umount /dev/sd[a-b][1-2]" 
+mean:
+umount /dev/sda1
+umount /dev/sdb1
+umount /dev/sda2
+umount /dev/sdb2
+
+
+
+
+下面是我在性能测试中的应用：
+
+清空所有NAS资源的内容：
+my_cmd.py "ssh 191.168.45.20[1-5] rm -rf /NAS/nasdevice[1-42]/* "
+
+
+启动osd
+my_cmd.py "ssh 191.168.45.20[1-5] /etc/init.d/ceph start osd " -p
+
+创建NAS资源：
+my_cmd.py "cli raidgroup create name=SC0-RG-00[1-16] type=raid0 disk-list=\{1,0,0,[0-15]\}" -o
+my_cmd.py "cli raidlun create name=SC0-LUN-000[1-16] raidgroup-name=SC0-RG-00[1-16] chunk-size=512 lun-size= sync=" -o
+my_cmd.py "cli lv create name=Res-jour-0[1-16] type=nas raidlun=\{SC0-LUN-000[1-16],20G\}" -o
+my_cmd.py "cli lv create name=Res-osd-0[1-16] type=nas raidlun=\{SC0-LUN-000[1-16],250G\}" -o
+my_cmd.py "cli nas resource initialize lv=Res-jour-0[1-16] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+my_cmd.py "cli nas resource initialize lv=Res-osd-0[1-16] filesystem=xfs  blocksize= mount=yes access= quota=" -o
+
+删除NAS资源：
+
+my_cmd.py "cli nas resource umount resourcename=Res-jour-0[1-16]" -o
+my_cmd.py "cli nas resource umount resourcename=Res-osd-0[1-16]" -o
+my_cmd.py "cli lv delete name=Res-jour-0[1-16]" -o
+my_cmd.py "cli lv delete name=Res-osd-0[1-16]" -o
+my_cmd.py "cli raidlun delete name=SC0-LUN-000[1-16]" -o
+my_cmd.py "cli raidgroup delete name=SC0-RG-00[1-16]" -o
+
+创建osd:
+
+my_cmd.py " ssh 191.168.45.201 ceph osd create ; ssh 191.168.45.201 ceph-osd -i [0-15] --mkfs --mkkey"
+my_cmd.py " ssh 191.168.45.202 ceph osd create ; ssh 191.168.45.202 ceph-osd -i [16-31] --mkfs --mkkey"
+my_cmd.py " ssh 191.168.45.203 ceph osd create ; ssh 191.168.45.203 ceph-osd -i [32-47] --mkfs --mkkey"
+my_cmd.py " ssh 191.168.45.204 ceph osd create ; ssh 191.168.45.204 ceph-osd -i [48-63] --mkfs --mkkey"
+my_cmd.py " ssh 191.168.45.205 ceph osd create ; ssh 191.168.45.205 ceph-osd -i [64-79] --mkfs --mkkey"
+
+
+
+
+
+
+
+
+
+
+
+
