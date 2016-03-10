@@ -1,0 +1,75 @@
+﻿PCIE SSD驱动
+
+编译内核需要 yum install ncurses ncurses-devel gcc
+
+http://vault.centos.org/6.2/os/Source/SPackages/  下载内核源码 kernel-2.6.32-220.el6.src.rpm(centos 6.2)  kernel-2.6.32-431.el6.src.rpm(centos 6.5 有nvme驱动)
+http://vault.centos.org/6.2/os/x86_64/Packages/   下载 kernel-devel-2.6.32-220.el6.x86_64.rpm
+
+如何把6.5的驱动拷贝到6.2去（新增部分都是从6.5复制的）
+
+修改drivers/block/Kconfig，新增 （新增之后 make menuconfig就可以选择这个模块）
+
+config BLK_DEV_NVME
+        tristate "NVM Express block device"
+        depends on PCI
+        ---help---
+          The NVM Express driver is for solid state drives directly
+          connected to the PCI or PCI Express bus.  If you know you
+          don't have one of these, it is safe to answer N.
+
+          To compile this driver as a module, choose M here: the
+          module will be called nvme.
+
+
+修改drivers/block/Makefile，新增
+
+obj-$(CONFIG_BLK_DEV_NVME)      += nvme.o
+nvme-y          := nvme-core.o nvme-scsi.o
+
+修改/home/linux-2.6.32-431.el6/include/linux/bitops.h ，新增
+
+#define for_each_set_bit_cont(bit, addr, size) \
+        for ((bit) = find_next_bit((addr), (size), (bit));      \
+             (bit) < (size);                                    \
+             (bit) = find_next_bit((addr), (size), (bit) + 1))
+
+cp /home/linux-2.6.32-431.el6/drivers/block/nvme*.c /home/linux-2.6.32-220.el6/drivers/block/
+cp /home/linux-2.6.32-431.el6/include/linux/nvme.h /home/linux-2.6.32-220.el6/include/linux/
+cp /home/linux-2.6.32-431.el6/include/uapi/nvme.h /home/linux-2.6.32-220.el6/include/uapi/
+
+拷贝完成
+             
+make menuconfig
+
+编译时报warning
+[root@iozone-102 linux-2.6.32-431.el6]# make M=drivers/block/
+
+  WARNING: Symbol version dump /home/linux-2.6.32-431.el6/Module.symvers
+           is missing; modules will have no dependencies and modversions.
+
+加载模块时报 ：
+日志打印： insmod: error inserting 'drivers/block/nvme.ko': -1 Invalid module format          
+Jan 29 11:22:04 iozone-102 kernel: nvme: no symbol version for module_layout
+
+安装 kernel-devel-2.6.32-220.el6.x86_64.rpm
+cp  /usr/src/kernels/2.6.32-220.el6.x86_64/Module.symvers /home/linux-2.6.32-220.el6/
+
+
+{
+内核版本不一样会出问题： uname -a 查看内核版本，下载对应源码
+insmod: error inserting 'drivers/block/nvme.ko': -1 Unknown symbol in module
+日志打印：Jan 29 15:27:21 iozone-102 kernel: nvme: Unknown symbol kmem_cache_alloc_trace
+}
+
+insmod nvme.ko
+rmmod nvme
+lsmod | grep nvme
+
+cp /home/linux-2.6.32-220.el6/drivers/block/nvme.ko  /lib/modules/2.6.32-220.el6.x86_64/kernel/drivers/block/
+insmod /lib/modules/2.6.32-220.el6.x86_64/kernel/drivers/block/nvme.ko
+
+内核启动不会自动加载,http://blog.csdn.net/nemo2011/article/details/7342126
+
+vi /etc/sysconfig/modules/my.modules
+
+insmod /lib/modules/2.6.32-220.el6.x86_64/kernel/drivers/block/nvme.ko
