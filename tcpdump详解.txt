@@ -21,6 +21,7 @@ s.send(d)
 
 60.60.1.101上tcpdump输出  60.60.1.102上tcpdump输出是一样的
 tcpdump  -i  slot1_10GE1  host 60.60.1.102  # and port 2015
+以数字显示主机及端口：tcpdump -n
 
 11:13:01.420610 IP 60.60.1.101.51098 > 60.60.1.102.cypress: Flags [S], seq 3936711372, win 14600, options [mss 1460,sackOK,TS val 2079809395 ecr 0,nop,wscale 7], length 0
 11:13:01.420660 IP 60.60.1.102.cypress > 60.60.1.101.51098: Flags [S.], seq 2569133227, ack 3936711373, win 14480, options [mss 1460,sackOK,TS val 2079916685 ecr 2079809395,nop,wscale 7], length 0

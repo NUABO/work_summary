@@ -1,0 +1,71 @@
+#
+#		specify the root of project
+#
+ROOT := $(shell pwd)/../../../..
+
+#
+#		include the public makefile symbol
+#
+include $(ROOT)/cluster/Makefile.in
+
+#
+#		add debug symbol if debug switch is open
+#
+ifeq ($(SW_DEBUG), y)
+  DBG_FLAGS := -DTO_BE_ADDED
+endif
+
+#
+#  	add compile flags
+#
+CFLAGS += $(DBG_FLAGS)
+CFLAGS += $(SW_CFLAGS)
+CFLAGS += -I$(SW_INC) -I$(USR_INC)
+
+#
+#  the lib needed
+#
+LIB_FLAGS = $(SW_LIB)
+
+BUILDAGENTLIBS=`net-snmp-config --agent-libs`
+
+#
+#	 the app obj name
+#
+obj = alarmd trapd
+obj += email
+obj += beep_exe
+obj += monitor
+#obj += sysmonitor
+obj += sms
+#
+#		compile threshold
+#
+default: $(obj)
+
+
+alarmd:alarm_center.c
+	$(CC) $(CFLAGS) -o $@  $<  $(LIB_FLAGS)
+	
+trapd:trapd.c
+	$(CC) $(CFLAGS) -o $@  $<  $(BUILDAGENTLIBS) $(LIB_FLAGS)
+	
+email:email_main.c
+	$(CC) $(CFLAGS) -o $@  $<  $(LIB_FLAGS)
+
+beep_exe:beep_exe.c
+	$(CC) $(CFLAGS) -o $@  $<  $(LIB_FLAGS)
+
+monitor:monitor.c
+	$(CC) $(CFLAGS) -o $@  $<  $(LIB_FLAGS)
+#sysmonitor:sysm_monitor.c
+	#$(CC) $(CFLAGS) -o $@  $<  $(LIB_FLAGS)
+
+sms:sms_main.c
+	$(CC) $(CFLAGS) -o $@  $<  $(LIB_FLAGS)
+
+install:
+	@install -c $(obj) $(BIN_INSTALL)	
+
+clean: 
+	@rm -f *.o $(obj)

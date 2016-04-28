@@ -2,9 +2,9 @@
 /etc/init.d/ceph -a stop mon.0
 rm -rf /tmp/monmap 
 rm -rf /var/lib/ceph/mon/mon.0/*
-monmaptool  --create --add 0 70.70.1.12 /tmp/monmap
+monmaptool  --create --add 0 10.10.15.13 /tmp/monmap
 ceph-mon --mkfs -i 0 --monmap /tmp/monmap
-/etc/init.d/ceph start mon.0
+/etc/init.d/ceph -a start mon.0
 
 ceph osd crush add-bucket ssd_cache root
 ceph osd crush rule create-simple ssd_ruleset ssd_cache osd
@@ -122,8 +122,11 @@ ceph osd create  #会返回一个id 0,1...
 mkdir /mnt/osd0
 mkdir /mnt/journal0
 fdisk /dev/sdn
+partprobe
 mkfs -t xfs /dev/sdn1
 mkfs -t xfs /dev/sdn2
+vi /etc/fstab
+mount -a
 mount -o rw,noatime,inode64,logbsize=256k,delaylog /dev/sdn1 /mnt/osd0
 mount -o rw,noatime,inode64,logbsize=256k,delaylog /dev/sdn1 /mnt/journal0
 

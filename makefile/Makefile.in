@@ -1,0 +1,163 @@
+#############################################################################
+# 											Public makefile symbol															#
+#                                                                           #
+#  ------------------------------------------------------------------------ #
+#  Modification History                                                     #
+#  DATE        NAME             DESCRIPTION                                 #
+#  ------------------------------------------------------------------------ #
+#  2010-11-04  chenbo 07066      Created                                    #
+#                                                                           #
+#	 notice:                                                                  #
+#    each makefile must include this file                                   #
+#                                                                           #
+#  usage:                                                                   #
+#    first include this file in your makefile, you can use:                 #
+#    "include $(relatively path)/Makefile.in"                               #
+#############################################################################
+
+#
+#		set SW_DEBUG = (y or n) to enable/disable debugging
+#
+
+#PRO_TYPE:VX1600/SERVER
+PRO_TYPE :=SERVER
+CTDB_VERSION :=2.5.3
+#CTDB_VERSION :=1.0.114
+
+SW_DEBUG := n
+
+#
+#		compile flags
+#
+BIG_END    := n
+LITTLE_END := y
+PCI64      := y
+HOST64     := y
+
+#      set NAS_OPT =(y or n) to enable/disable nas module
+NAS_OPT    := y
+GNAS_OPT	:= y
+
+#
+#		add flags according debug flag
+#
+ifeq ($(SW_DEBUG), y)
+  SW_DBG_FLAGS := -O0 -Wall -g -DSW_DEBUG_VERSION -DIT_TEST
+else
+  SW_DBG_FLAGS := -O2 -Wall
+endif
+
+#
+#		SW_CFLAGS is a global symbol, it will be added to sub makefile CFLAGS
+#
+
+SW_CFLAGS += $(SW_DBG_FLAGS)
+SW_CFLAGS += -DDOUBLE_SCU
+
+ifeq (y,$(NAS_OPT))	
+       SW_CFLAGS += -DUNISTOR_NAS
+endif
+
+ifeq (y,$(GNAS_OPT))	
+       SW_CFLAGS += -DUNISTOR_GNAS
+endif
+
+SW_CFLAGS += -DLITTLE_ENDIAN -DPCI_64 -DHOST_64
+
+SW_CFLAGS += -D'STORWARE_MONITOR="/usr/local/hstor/driver/ENVmonitor"'
+SW_CFLAGS += -D'STORWARE_ROOT="/usr/local/hstor/sms_install"'
+SW_CFLAGS += -D'STORWARE_BIN=STORWARE_ROOT"/usr/bin"'
+SW_CFLAGS += -D'STORWARE_ETC=STORWARE_ROOT"/etc"'
+SW_CFLAGS += -D'STORWARE_LOG=STORWARE_ROOT"/usr/log"'
+SW_CFLAGS += -D'STORWARE_VERSION="V300R001B01D007"'
+PRO_VER :=V300R001B01D007
+#
+#		the Linux source tree directory
+#
+#KERNEL_DIR := /lib/modules/$(shell uname -r)/build
+
+# CentOS 6.2  2012.2.17
+KERNEL_DIR := /usr/src/kernels/2.6.32-220.el6.x86_64
+
+# CentOS 6.0  2011
+#KERNEL_DIR := /usr/src/kernels/2.6.32-17.el6.x86_64
+
+#
+#		storware and products directory
+#
+STORWARE	:= $(ROOT)/cluster
+
+#
+#		public include directory
+#
+SW_INC		:= $(STORWARE)/include
+USR_INC  	:= $(STORWARE)/usr/include
+GNAS_INC     := $(STORWARE)/usr/lib/gnas/include
+NAS_INC     := $(STORWARE)/usr/lib/gnas/include
+#
+#		source code path
+#
+DIR_KERNEL   := $(STORWARE)/kernel
+DIR_USR_LIB      := $(STORWARE)/usr/lib
+DIR_USR_BIN      := $(STORWARE)/usr/bin
+DIR_SCRIPTS      := $(STORWARE)/scripts
+DIR_GUI     := $(STORWARE)/usr/gui
+#DIR_ETC     := $(STORWARE)/etc
+DIR_MIB     := $(STORWARE)/mib
+
+
+#
+#		kernel module directory
+#
+KMOD_SUB_DIR += $(DIR_KERNEL)/kdump
+
+#
+#		usr lib directory
+#
+LIB_SUB_DIR +=  $(DIR_USR_LIB)/util  \
+								$(DIR_USR_LIB)/debug \
+								$(DIR_USR_LIB)/cfgmgt\
+								$(DIR_USR_LIB)/sysm \
+								$(DIR_USR_LIB)/cluster_mgt \
+								$(DIR_USR_LIB)/alarm \
+								$(DIR_USR_LIB)/auto_boot \
+								$(DIR_USR_LIB)/driver_sms \
+								$(DIR_USR_LIB)/ENVmonitor \
+								$(DIR_USR_LIB)/snmp
+				
+#
+#		usr bin directory
+#
+BIN_SUB_DIR += $(DIR_USR_BIN)/cli/src	\
+ 							 $(DIR_USR_BIN)/cluster_mgt \
+ 							 $(DIR_USR_BIN)/debug \
+ 							 $(DIR_USR_BIN)/alarm \
+							 $(DIR_USR_BIN)/sysm \
+							 $(DIR_USR_BIN)/cfgmgt \
+							 $(DIR_USR_BIN)/ENVmonitor 
+ifeq ($(PRO_TYPE), SERVER)
+	BIN_SUB_DIR += $(DIR_USR_BIN)/alarm
+endif
+ 							
+#
+#		distribution directory
+#
+
+INSTALLPATH  := $(ROOT)/cluster_distribution/$(PRO_TYPE)
+
+LIB_INSTALL  := $(INSTALLPATH)/sms_install/usr/lib
+BIN_INSTALL  := $(INSTALLPATH)/sms_install/usr/bin
+ETC_INSTALL  := $(INSTALLPATH)/sms_install/etc
+MIB_INSTALL  := $(INSTALLPATH)/sms_install/usr/mib
+MONITOR_INSTALL  := $(INSTALLPATH)/driver/ENVmonitor
+KDUMP_INSTALL  := $(INSTALLPATH)/driver/kdump
+
+SW_LIB := -L$(LIB_INSTALL) -lcluster_debug -lalarm -lcluster_swutil -lcluster_sysm -lcluster_cfgmgt -lcluster_xml_parse -lwmmpsms -lxml2 -ldl -lcluster -lpcre -lcluster_nas -lrt -lenv
+
+
+#nas module
+ifeq (y,$(NAS_OPT))
+#    SW_LIB += -lcluster_nas
+    BIN_SUB_DIR += $(DIR_USR_BIN)/gnas
+    LIB_SUB_DIR += $(DIR_USR_LIB)/gnas 
+endif

@@ -1,0 +1,43 @@
+
+安装godep
+
+mkdir /home/godep
+mkdir /home/godep/src
+cd /home/godep
+go get github.com/tools/godep
+
+go build github.com/tools/godep
+
+[root@ceph-44 godep]# ls
+bin  godep  pkg  src
+
+cp godep /usr/local/bin/
+
+下载安装依赖包：
+cd comet/policy/Godeps
+
+python dep.py github.com/coreos/etcd/client  #会下载github.com/coreos/etcd/client和它所依赖的所有的包
+
+#下载后把Godeps目录下新增的文件上传，src/github.com/ 和 src/golang.org 目录下的文件可以不用上传
+
+使用godep 编译
+
+在原本的go 编译命令加上godep就可以，如
+godep go build main.go
+
+
+
+
+
+
+
+
+https://github.com/tools/godep
+http://tonybai.com/2014/10/30/a-hole-of-godep/
+http://studygolang.com/articles/4385
+
+
+另外 :
+ go list -json 
+
+列出所有依赖包

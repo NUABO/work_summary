@@ -1,0 +1,60 @@
+#
+#		specify the root of project
+#
+ROOT := $(shell pwd)/../../../..
+
+#
+#		include the public makefile symbol
+#
+include $(ROOT)/cluster/Makefile.in
+
+#
+#		add debug symbol if debug switch is open
+#
+ifeq ($(SW_DEBUG), y)
+  DBG_FLAGS := -DTO_BE_ADDED
+endif
+
+#
+#  	add compile flags
+#
+CFLAGS += $(DBG_FLAGS)
+CFLAGS += $(SW_CFLAGS)
+CFLAGS += -I$(SW_INC) -I$(USR_INC)
+
+#
+#		the .so file we will generate
+#
+TARGET = libalarm.so
+
+#
+#  standard c lib
+#
+LIB_FLAGS += -lc
+
+#
+#		the files to be compiled
+#
+obj := log.o info_parse.o alarm_common.o alarm_dbops.o trapadm.o 
+obj += email_send.o email.o
+obj += alarm_beep.o
+obj += alarm_sysm.o
+obj += sms_dbops.o sysm_sms.o
+#
+#		compile threshold
+#
+default: $(obj)
+	$(CC) -shared -Wall,-soname=$(TARGET) -o $(TARGET) $(obj) $(LIB_FLAGS)
+
+
+%.o:%.c
+	$(CC) $(CFLAGS) -o $@ -c $< -fPIC  
+
+#
+#	copy *.so to dir
+#
+install:
+	@install -c $(TARGET) $(LIB_INSTALL)
+
+clean: 
+	@rm -f *.o  *.so

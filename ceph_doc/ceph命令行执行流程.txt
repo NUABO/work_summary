@@ -1,0 +1,20 @@
+/usr/bin/ceph osd pool create rep-pool 2048 2048 replicated  #python 脚本
+
+调用 /usr/lib/python2.7/site-packages/ceph_argparse.py  json_command 函数
+
+调用 /usr/lib/python2.7/site-packages/ceph_argparse.py  send_command 函数
+
+#调用了两次 第一个获取get_command_descriptions
+target ('mon', '')
+cmd ['{"prefix": "get_command_descriptions"}']
+inbuf 
+
+target ('mon', '')
+cmd ['{"pool_type": "replicated", "prefix": "osd pool create", "pg_num": 2048, "pool": "rep-pool", "pgp_num": 2048}']
+inbuf 
+
+
+
+调用  /usr/lib/python2.7/site-packages/rados.py        mon_command  函数
+
+--》 librados.rados_mon_command

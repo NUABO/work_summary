@@ -1,0 +1,92 @@
+debug default	= 20	
+debug debug lockdep	= 20	
+debug context	= 20	
+debug crush	= 20	
+debug mds	= 20	
+debug mds balancer	= 20	
+debug mds locker	= 20	
+debug mds log	= 20	
+debug mds log expire	= 20	
+debug mds migrator	= 20	
+debug buffer	= 20	
+debug timer	= 20	
+debug filer	= 20	
+debug objecter	= 20	
+debug rados	= 20	
+debug rbd	= 20	
+debug journaler	= 20	
+debug objectcacher	= 20	
+debug client	= 20	
+debug osd	= 20	
+debug optracker	= 20	
+debug objclass	= 20	
+debug filestore	= 20	
+debug journal	= 20	
+debug ms	= 20	
+debug mon	= 20	
+debug monc	= 20	
+debug paxos	= 20	
+debug tp	= 20	
+debug auth	= 20	
+debug finisher	= 20	
+debug heartbeatmap	= 20	
+debug perfcounter	= 20	
+debug rgw	= 20	
+debug javaclient	= 20	
+debug asok	= 20	
+debug throttle	= 20	
+
+
+
+
+  0/ 5 none
+   0/ 1 lockdep
+  20/20 context
+  20/20 crush
+  20/20 mds
+  20/20 mds_balancer
+  20/20 mds_locker
+  20/20 mds_log
+  20/20 mds_log_expire
+  20/20 mds_migrator
+  20/20 buffer
+  20/20 timer
+  20/20 filer
+   0/ 1 striper
+  20/20 objecter
+  20/20 rados
+  20/20 rbd
+   0/ 5 rbd_replay
+  20/20 journaler
+  20/20 objectcacher
+  20/20 client
+  20/20 osd
+  20/20 optracker
+  20/20 objclass
+  20/20 filestore
+   1/ 3 keyvaluestore
+  20/20 journal
+  20/20 ms
+  20/20 mon
+  20/20 monc
+  20/20 paxos
+  20/20 tp
+  20/20 auth
+   1/ 5 crypto
+  20/20 finisher
+  20/20 heartbeatmap
+  20/20 perfcounter
+  20/20 rgw
+   1/10 civetweb
+  20/20 javaclient
+  20/20 asok
+  20/20 throttle
+   0/ 0 refs
+   1/ 5 xio
+   1/ 5 compressor
+   1/ 5 newstore
+  -2/-2 (syslog threshold)
+  99/99 (stderr threshold)
+  max_recent       500
+  max_new         1000
+  log_file /var/log/ceph/messages
