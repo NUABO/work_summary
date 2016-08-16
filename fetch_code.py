@@ -114,14 +114,7 @@ def main():
         
     copy_file_all(opts)
     
-    
-    
-    
-    
-
-
-
-    
+ 
 if __name__ == "__main__":
     sys.exit(main())  
 

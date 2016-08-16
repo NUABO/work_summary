@@ -1,0 +1,40 @@
+yum install nfs-utils
+
+服务端
+
+service rpcbind restart
+service nfs start
+
+vi /etc/exports
+
+/tmp/test1 *(rw,sync,no_root_squash,no_subtree_check)
+/tmp/test2 *(rw,sync,no_root_squash,no_subtree_check)
+/tmp/test3 *(rw,sync,no_root_squash,no_subtree_check)
+
+exportfs -a
+
+
+客户端
+showmount -e 192.168.15.27
+mount -t nfs 192.168.15.27:/tmp/test1 /mnt/nfs/
+
+
+服务端参考： portmap 已改为rpcbind
+http://www.cnblogs.com/mchina/archive/2013/01/03/2840040.html
+
+
+ubuntu
+apt-get install nfs-kernel-server
+
+The following additional packages will be installed:
+  keyutils libnfsidmap2 libpython-stdlib libpython2.7-minimal libpython2.7-stdlib libtirpc1 nfs-common python python-minimal python2.7 python2.7-minimal rpcbind
+
+root@bogon:~# service rpcbind start
+root@bogon:~# service nfs start 
+Failed to start nfs.service: Unit nfs.service not found.
+
+service  nfs-server  start
+
+exportfs命令
+http://www.lx138.com/page.php?ID=Vkd0U1ZtUjNQVDA9
+http://blog.itpub.net/22664653/viewspace-709839/

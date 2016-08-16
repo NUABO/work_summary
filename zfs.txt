@@ -1,0 +1,1296 @@
+mkdir /home/zfstest
+
+cd /home/zfstest
+truncate -s 1G disk1.img
+truncate -s 1G disk2.img
+truncate -s 1G disk3.img
+truncate -s 1G disk4.img
+truncate -s 1G disk5.img
+truncate -s 1G disk6.img
+truncate -s 1G disk7.img
+
+losetup /dev/loop8 disk1.img
+losetup /dev/loop9 disk2.img
+losetup /dev/loop10 disk3.img
+losetup /dev/loop11 disk4.img
+losetup /dev/loop12 disk5.img
+losetup /dev/loop13 disk6.img
+losetup /dev/loop14 disk7.img
+
+
+参考：
+http://hb.qq.com/a/20110307/000146.htm
+http://docs.oracle.com/cd/E19253-01/819-7065/setup-1/index.html
+
+建立简单存储池
+zpool create -f zfstest1 /dev/loop8
+
+root@bogon:/home/zfstest# zpool list
+NAME       SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
+zfstest1  1008M    64K  1008M         -     0%     0%  1.00x  ONLINE  -
+
+
+创建RAID-Z池
+zpool create rzpool -f raidz /dev/loop9 /dev/loop10 /dev/loop11 /dev/loop12
+root@bogon:/home/zfstest# zpool list
+NAME       SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
+rzpool    3.97G   114K  3.97G         -     0%     0%  1.00x  ONLINE  -
+zfstest1  1008M    64K  1008M         -     0%     0%  1.00x  ONLINE  -
+
+
+创建镜像池
+zpool create mpool mirror /dev/loop13 /dev/loop14
+root@bogon:/home/zfstest# zpool list
+NAME       SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
+mpool     1008M    65K  1008M         -     0%     0%  1.00x  ONLINE  -
+rzpool    3.97G   112K  3.97G         -     0%     0%  1.00x  ONLINE  -
+zfstest1  1008M    64K  1008M         -     0%     0%  1.00x  ONLINE  -
+
+
+自动被挂载
+root@bogon:/home/zfstest# df -h
+Filesystem                  Size  Used Avail Use% Mounted on
+udev                        973M     0  973M   0% /dev
+tmpfs                       199M  6.1M  193M   4% /run
+/dev/mapper/bogon--vg-root   18G  1.3G   15G   8% /
+tmpfs                       992M     0  992M   0% /dev/shm
+tmpfs                       5.0M     0  5.0M   0% /run/lock
+tmpfs                       992M     0  992M   0% /sys/fs/cgroup
+/dev/sda1                   472M   55M  393M  13% /boot
+tmpfs                       100K     0  100K   0% /run/lxcfs/controllers
+tmpfs                       199M     0  199M   0% /run/user/1000
+tmpfs                       199M     0  199M   0% /run/user/0
+zfstest1                    976M     0  976M   0% /zfstest1
+rzpool                      2.9G  128K  2.9G   1% /rzpool
+
+mount
+zfstest1 on /zfstest1 type zfs (rw,relatime,xattr,noacl)
+rzpool on /rzpool type zfs (rw,relatime,xattr,noacl)
+
+
+删除存储池
+zpool destroy zfstest1
+
+
+实时监控存储池
+zpool list 
+可以使用 -o 选项请求特定的统计信息
+zpool list -o name,size
+
+
+查看 ZFS 存储池 I/O 统计信息
+root@bogon:/home/zfstest# zpool iostat
+               capacity     operations    bandwidth
+pool        alloc   free   read  write   read  write
+----------  -----  -----  -----  -----  -----  -----
+rzpool       112K  3.97G      0      0      0    410
+zfstest1      64K  1008M      0      0     78  5.00K
+----------  -----  -----  -----  -----  -----  -----
+
+
+确定 ZFS 存储池的运行状况
+root@bogon:/home/zfstest# zpool status
+  pool: rzpool
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME        STATE     READ WRITE CKSUM
+	rzpool      ONLINE       0     0     0
+	  raidz1-0  ONLINE       0     0     0
+	    loop9   ONLINE       0     0     0
+	    loop10  ONLINE       0     0     0
+	    loop11  ONLINE       0     0     0
+	    loop12  ONLINE       0     0     0
+
+errors: No known data errors
+
+  pool: zfstest1
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME        STATE     READ WRITE CKSUM
+	zfstest1    ONLINE       0     0     0
+	  loop8     ONLINE       0     0     0
+
+errors: No known data errors
+
+root@bogon:/home/zfstest# zpool status -x
+all pools are healthy
+
+
+显示一个存储池的详细情况
+zfs get all zfstest1
+
+创建所需的分层结构
+zfs create rzpool/home
+root@bogon:~# zfs list
+NAME          USED  AVAIL  REFER  MOUNTPOINT
+mpool          55K   976M    19K  /mpool
+rzpool        107K  2.88G  25.4K  /rzpool
+rzpool/home  25.4K  2.88G  25.4K  /rzpool/home
+zfstest1       55K   976M    19K  /zfstest1
+
+设置继承的属性
+zfs set mountpoint=/mnt/zfs rzpool/home
+zfs set sharenfs=on rzpool/home
+zfs set compression=on rzpool/home
+获取属性
+zfs get sharenfs rzpool/home
+zfs get compression rzpool/home
+
+可在创建文件系统时设置文件系统属性
+zfs create -o mountpoint=/mnt/zfs -o sharenfs=on -o compression=on rzpool/home
+
+创建各文件系统
+
+
+创建各文件系统
+zfs create rzpool/home/bonwick
+zfs create rzpool/home/billm
+
+设置文件系统特定的属性 , 为用户 bonwick 指定了 10 GB 的配额
+zfs set quota=1G rzpool/home/bonwick
+
+zfs set quota=1G rzpool/home
+root@bogon:~# zfs list
+NAME                  USED  AVAIL  REFER  MOUNTPOINT
+mpool                  55K   976M    19K  /mpool
+rzpool                196K  2.88G  25.4K  /rzpool
+rzpool/home          76.3K  1024M  25.4K  /mnt/zfs
+rzpool/home/billm    25.4K  1024M  25.4K  /mnt/zfs/billm
+rzpool/home/bonwick  25.4K  1024M  25.4K  /mnt/zfs/bonwick
+zfstest1               55K   976M    19K  /zfstest1
+
+取消配额
+root@bogon:~# zfs set quota=none  rzpool/home
+root@bogon:~# zfs list
+NAME                  USED  AVAIL  REFER  MOUNTPOINT
+mpool                  55K   976M    19K  /mpool
+rzpool                196K  2.88G  25.4K  /rzpool
+rzpool/home          76.3K  2.88G  25.4K  /mnt/zfs
+rzpool/home/billm    25.4K  2.88G  25.4K  /mnt/zfs/billm
+rzpool/home/bonwick  25.4K  1024M  25.4K  /mnt/zfs/bonwick
+zfstest1               55K   976M    19K  /zfstest1
+
+
+
+zpool destroy zfstest1
+zpool destroy mpool
+zpool destroy rzpool
+
+创建镜像存储池
+zpool create tank mirror /dev/loop8 /dev/loop9 mirror /dev/loop10 /dev/loop11
+
+第二个 mirror 关键字表示将指定新的顶层虚拟设备。8,9是一个镜像，10,11是一个镜像
+root@bogon:~# zpool status 
+  pool: tank
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME        STATE     READ WRITE CKSUM
+	tank        ONLINE       0     0     0
+	  mirror-0  ONLINE       0     0     0
+	    loop8   ONLINE       0     0     0
+	    loop9   ONLINE       0     0     0
+	  mirror-1  ONLINE       0     0     0
+	    loop10  ONLINE       0     0     0
+	    loop11  ONLINE       0     0     0
+		
+root@bogon:~# zpool list
+NAME   SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
+tank  1.97G  68.5K  1.97G         -     0%     0%  1.00x  ONLINE  -
+
+这样只有一个镜像，4副本
+zpool create tank mirror /dev/loop8 /dev/loop9  /dev/loop10 /dev/loop11
+
+root@bogon:~# zpool list
+NAME   SIZE  ALLOC   FREE  EXPANDSZ   FRAG    CAP  DEDUP  HEALTH  ALTROOT
+tank  1008M    65K  1008M         -     0%     0%  1.00x  ONLINE  -
+
+
+创建 RAID-Z 存储池
+创建单奇偶校验 RAID-Z 池与创建镜像池基本相同，不同之处是使用 raidz 或 raidz1 
+创建池时，使用 raidz2 或 raidz3 关键字可以创建双奇偶校验或三奇偶校验 RAID-Z 配置
+zpool create tank raidz c1t0d0 c2t0d0 c3t0d0 c4t0d0 /dev/dsk/c5t0d0
+
+使用日志设备创建 ZFS 存储池
+zpool create datap mirror c1t1d0 c1t2d0 mirror c1t3d0 c1t4d0 log mirror c1t5d0 c1t8d0
+
+使用高速缓存设备创建 ZFS 存储池
+zpool create tank mirror c2t0d0 c2t1d0 c2t3d0 cache c2t5d0 c2t8d0
+
+
+创建包含一个顶层虚拟设备（由 4 个磁盘组成）的池
+zpool create mypool raidz2 c1d0 c2d0 c3d0 c4d0
+zpool add 命令将另一个顶层虚拟设备添加到此池中
+zpool add mypool raidz2 c2d1 c3d1 c4d1 c5d1
+
+
+可使用 zpool status 命令显示 ZFS 存储池中包含的虚拟设备和物理设备
+zpool status tank
+
+不匹配的复制级别
+建议不要创建包含不同复制级别的虚拟设备的池
+# zpool create tank c1t0d0 mirror c2t0d0 c3t0d0
+invalid vdev specification
+use '-f' to override the following errors:
+mismatched replication level: both disk and mirror vdevs are present
+
+在预运行模式下创建存储池
+zpool create 命令提供了一个额外选项 -n，它模拟创建池，但不真正写入设备
+root@bogon:~# zpool create -n tank /dev/loop12  //同名的pool没有报错
+would create 'tank' with the following layout:
+
+	tank
+	  loop12
+	  
+root@bogon:~# zpool create -n tank /dev/loop11
+invalid vdev specification
+use '-f' to override the following errors:
+/dev/loop11 is part of active pool 'tank'
+
+
+添加和删除镜像日志设备
+# zpool add newpool log mirror c0t6d0 c0t7d0
+# zpool status newpool
+  pool: newpool
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        newpool     ONLINE       0     0     0
+          mirror-0  ONLINE       0     0     0
+            c0t4d0  ONLINE       0     0     0
+            c0t5d0  ONLINE       0     0     0
+        logs
+          mirror-1  ONLINE       0     0     0
+            c0t6d0  ONLINE       0     0     0
+            c0t7d0  ONLINE       0     0     0
+
+errors: No known data errors
+
+可以使用 zpool remove 命令删除日志设备。通过指定 mirror-1 参数，可以删除上例中的镜像日志设备
+
+# zpool remove newpool mirror-1
+# zpool status newpool
+  pool: newpool
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        newpool     ONLINE       0     0     0
+          mirror-0  ONLINE       0     0     0
+            c0t4d0  ONLINE       0     0     0
+            c0t5d0  ONLINE       0     0     0
+
+errors: No known data errors
+
+如果池配置仅包含一个日志设备，则应通过指定设备名称的方式删除该日志设备。
+
+# zpool status pool
+  pool: pool
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        pool        ONLINE       0     0     0
+          raidz1-0  ONLINE       0     0     0
+            c0t8d0  ONLINE       0     0     0
+            c0t9d0  ONLINE       0     0     0
+        logs
+          c0t10d0   ONLINE       0     0     0
+
+errors: No known data errors
+# zpool remove pool c0t10d0
+
+添加和删除高速缓存设备
+高速缓存设备不能镜像或成为 RAID-Z 配置的一部分。
+其他操作跟日志一样，log 改为cache
+
+目前，zpool remove 命令仅支持删除热备件、日志设备和高速缓存设备。
+可以使用 zpool detach 命令删除属于主镜像池配置的设备。非冗余设备和 RAID-Z 
+设备无法从池中删除。
+
+
+附加和分离存储池中的设备
+
+zpool attach 命令将新设备添加到现有镜像设备或非镜像设备中。
+将双向镜像存储池转换为三向镜像存储池
+zeepool 是现有的双向镜像，通过将新设备 c2t1d0 附加到现有设备 c1t1d0 可将其转换为三向镜像。
+# zpool status zeepool
+  pool: zeepool
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        zeepool     ONLINE       0     0     0
+          mirror-0  ONLINE       0     0     0
+            c0t1d0  ONLINE       0     0     0
+            c1t1d0  ONLINE       0     0     0
+
+errors: No known data errors
+# zpool attach zeepool c1t1d0 c2t1d0  //# c1t1d0是已存在的磁盘
+# zpool status zeepool
+  pool: zeepool
+ state: ONLINE
+ scrub: resilver completed after 0h0m with 0 errors on Fri Jan  8 12:59:20 2010
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        zeepool     ONLINE       0     0     0
+          mirror-0  ONLINE       0     0     0
+            c0t1d0  ONLINE       0     0     0
+            c1t1d0  ONLINE       0     0     0
+            c2t1d0  ONLINE       0     0     0  592K resilvered
+
+errors: No known data errors
+
+
+还可以通过使用 zpool attach 命令将非冗余存储池转换为冗余存储池。例如：
+# zpool create tank c0t1d0
+# zpool status tank
+  pool: tank
+ state: ONLINE
+ scrub: none requested
+config:
+        NAME        STATE     READ WRITE CKSUM
+        tank        ONLINE       0     0     0
+          c0t1d0    ONLINE       0     0     0
+
+errors: No known data errors
+# zpool attach tank c0t1d0 c1t1d0
+# zpool status tank
+  pool: tank
+ state: ONLINE
+ scrub: resilver completed after 0h0m with 0 errors on Fri Jan  8 14:28:23 2010
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        tank        ONLINE       0     0     0
+          mirror-0  ONLINE       0     0     0
+            c0t1d0  ONLINE       0     0     0
+            c1t1d0  ONLINE       0     0     0  73.5K resilvered
+
+errors: No known data errors
+
+
+zpool detach 命令从镜像存储池中分离设备
+# zpool detach zeepool c2t1d0
+如果不存在该数据的其他有效副本，此操作将失败。
+# zpool detach newpool c1t2d0
+cannot detach c1t2d0: only applicable to mirror and replacing vdevs
+
+
+通过分割镜像 ZFS 存储池创建新池
+使用 zpool split 命令可以很快将镜像 ZFS 存储池克隆为备用池。
+
+缺省情况下，对镜像池执行 zpool split 操作将分离最后一个磁盘以用于新创建的池。
+分割操作之后，导入新池。例如：
+# zpool split tank tank2
+# zpool import tank2
+
+通过在 zpool split 命令中指定，您可以标识哪个磁盘应用于新创建的池。例如：
+# zpool split tank tank2 c1t0d0
+
+如果要分割的该池具有非缺省的数据集挂载点，并且在同一系统上创建了新池，
+则需要使用 zpool split -R 选项标识新池的备用根目录，使得现有挂载点不会发生冲突。例如：
+# zpool split -R /tank2 tank tank2
+
+
+使设备脱机
+zpool offline 命令使设备脱机。如果设备是磁盘，则可以使用路径或短名称指定设备
+# zpool offline tank c1t0d0
+
+使设备脱机时，请考虑以下几点：
+1、不能将池脱机到它出现故障的点。例如，不能使 raidz1 配置中的两个设备脱机，
+	也不能使顶层虚拟设备脱机。//#也就是不能影响读写
+	
+2、缺省情况下，脱机状态是持久性的。重新引导系统时，设备会一直处于脱机状态。
+	要暂时使设备脱机，请使用 zpool offline -t 选项，重新引导系统时，此设备会自动恢复到 ONLINE 状态。
+3、当设备脱机时，它不会从存储池中分离出来。如果尝试使用其他池中的脱机设备，
+	那么即使在销毁原始池之后，也会看到类似如下内容的消息：
+	device is part of exported or potentially active ZFS pool. Please see zpool(1M)
+	如果要在销毁原始存储池之后使用其他存储池中的脱机设备，请先使该设备恢复联机，然后销毁原始存储池。
+	
+使设备联机
+使设备脱机后，可以使用 zpool online 命令使其恢复联机
+# zpool online tank c1t0d0
+bringing device c1t0d0 online
+使设备联机时，已写入池中的任何数据都将与最新可用的设备重新同步。请注意，不能通过使设备联机来替换磁盘。
+如果使设备脱机，然后替换该设备并尝试使其联机，则设备将一直处于故障状态。
+
+清除存储池设备错误
+如果不指定任何参数，则此命令将清除池中的所有设备错误。
+# zpool clear tank
+如果指定了一个或多个设备，则此命令仅清除与指定设备关联的错误
+# zpool clear tank c1t0d0
+
+
+替换存储池中的设备
+如果使用冗余池中同一位置的另一设备以物理方式替换某一设备，则可能只需标识被替换的设备。
+要通过删除磁盘并在同一位置替换该磁盘来替换出现故障的磁盘 (c1t1d0)
+# zpool replace tank c1t1d0 //# 换了一块盘，盘的位置一样
+如果用位于不同物理位置的磁盘替换存储池中的设备，则需要指定两个设备。
+# zpool replace tank c1t1d0 c1t2d0
+
+下面是替换磁盘的基本步骤：
+1、使用 zpool offline 命令使磁盘脱机（如有必要）。
+2、移除要替换的磁盘。
+3、插入替换磁盘。
+4、运行 zpool replace 命令
+
+替换 ZFS 存储池中的设备时，请考虑以下几点：
+1、如果将池属性 autoreplace 设置为 on，则会自动对在先前属于该池的设备的同一物理位置处找
+	到的任何新设备进行格式化和替换。启用此属性时，你无需使用 zpool replace 命令。此功能可
+	能并不是在所有硬件类型上都可用。
+2、替换设备的大小必须等于或大于镜像或 RAID-Z 配置中最小磁盘的大小。
+3、将大小大于要替换设备的替换设备添加到池中后，它不会自动扩展到完整大小。池属性 autoexpand 
+	的值决定当磁盘添加到池中时，是否将替换 LUN 扩展到其完整大小。缺省情况下，autoexpand 属性
+	禁用。您可以在较大的 LUN 添加到池中之前或之后，启用此属性以扩展 LUN 大小。
+	
+	在以下示例中，两个 72-GB 磁盘替换镜像池中的两个 16-GB 磁盘。磁盘替换后，启用 autoexpand 属性以扩展到完整 LUN 大小。
+	
+# zpool create pool mirror c1t16d0 c1t17d0
+# zpool status
+  pool: pool
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME         STATE     READ WRITE CKSUM
+        pool         ONLINE       0     0     0
+          mirror     ONLINE       0     0     0
+            c1t16d0  ONLINE       0     0     0
+            c1t17d0  ONLINE       0     0     0
+
+zpool list pool
+NAME   SIZE   ALLOC  FREE    CAP  HEALTH  ALTROOT
+pool  16.8G  76.5K  16.7G     0%  ONLINE  -
+# zpool replace pool c1t16d0 c1t1d0
+# zpool replace pool c1t17d0 c1t2d0
+# zpool list pool
+NAME   SIZE   ALLOC  FREE    CAP  HEALTH  ALTROOT
+pool  16.8G  88.5K  16.7G     0%  ONLINE  -
+# zpool set autoexpand=on pool
+# zpool list pool
+NAME   SIZE   ALLOC  FREE    CAP  HEALTH  ALTROOT
+pool  68.2G   117K  68.2G     0%  ONLINE  -
+
+
+在存储池中指定热备件
+以下示例说明创建池时如何将设备指定为热备件：
+# zpool create trinity mirror c1t1d0 c2t1d0 spare c1t2d0 c2t2d0
+# zpool status trinity
+  pool: trinity
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        trinity     ONLINE       0     0     0
+          mirror-0  ONLINE       0     0     0
+            c1t1d0  ONLINE       0     0     0
+            c2t1d0  ONLINE       0     0     0
+        spares
+          c1t2d0    AVAIL   
+          c2t2d0    AVAIL   
+
+errors: No known data errors
+
+以下示例说明创建池之后如何通过向池中添加设备来指定热备件：
+# zpool add neo spare c5t3d0 c6t3d0
+
+可使用 zpool remove 命令从存储池中删除热备件。
+# zpool remove zeepool c2t3d0
+
+如果存储池当前正在使用热备件，则不能将其删除。
+
+要添加磁盘作为热备件，热备件的大小必须等于或大于池中最大磁盘的大小。
+
+在存储池中激活和取消激活热备件
+
+示例 4–8 用热备件手动替换磁盘
+zpool replace 命令将磁盘 c2t1d0 替换为热备件 c2t3d0。
+# zpool replace zeepool c2t1d0 c2t3d0
+# zpool status zeepool
+  pool: zeepool
+ state: ONLINE
+ scrub: resilver completed after 0h0m with 0 errors on Wed Jan 20 10:00:50 2010
+config:
+
+        NAME          STATE     READ WRITE CKSUM
+        zeepool       ONLINE       0     0     0
+          mirror-0    ONLINE       0     0     0
+            c1t2d0    ONLINE       0     0     0
+            spare-1   ONLINE       0     0     0
+              c2t1d0  ONLINE       0     0     0
+              c2t3d0  ONLINE       0     0     0  90K resilvered
+        spares
+          c2t3d0      INUSE     currently in use
+
+errors: No known data errors
+
+然后分离磁盘 c2t1d0。
+# zpool detach zeepool c2t1d0
+# zpool status zeepool
+  pool: zeepool
+ state: ONLINE
+ scrub: resilver completed after 0h0m with 0 errors on Wed Jan 20 10:00:50 2010
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        zeepool     ONLINE       0     0     0
+          mirror-0  ONLINE       0     0     0
+            c1t2d0  ONLINE       0     0     0
+            c2t3d0  ONLINE       0     0     0  90K resilvered
+
+errors: No known data errors
+//# 热备那一项已经消失
+
+
+
+示例 4–9 替换故障磁盘后分离热备件
+zpool replace 命令物理替换磁盘 (c2t1d0) 并通知 ZFS。
+# zpool replace zeepool c2t1d0
+# zpool status zeepool
+  pool: zeepool
+ state: ONLINE
+ scrub: resilver completed after 0h0m with 0 errors on Wed Jan 20 10:08:44 2010
+config:
+
+        NAME          STATE     READ WRITE CKSUM
+        zeepool       ONLINE       0     0     0
+          mirror-0    ONLINE       0     0     0
+            c1t2d0    ONLINE       0     0     0
+            spare-1   ONLINE       0     0     0
+              c2t3d0  ONLINE       0     0     0  90K resilvered
+              c2t1d0  ONLINE       0     0     0
+        spares
+          c2t3d0      INUSE     currently in use
+
+errors: No known data errors
+然后，您可以使用 zpool detach 命令使热备件回到备件池。例如：
+# zpool detach zeepool c2t3d0
+# zpool status zeepool
+  pool: zeepool
+ state: ONLINE
+ scrub: resilver completed with 0 errors on Wed Jan 20 10:08:44 2010
+config:
+
+        NAME               STATE     READ WRITE CKSUM
+        zeepool            ONLINE       0     0     0
+          mirror           ONLINE       0     0     0
+            c1t2d0         ONLINE       0     0     0
+            c2t1d0         ONLINE       0     0     0
+        spares
+          c2t3d0           AVAIL
+
+errors: No known data errors
+
+示例 4–10 分离故障磁盘并使用热备件
+如果想临时或永久性换入用于替换的热备件，以此替换故障磁盘，则应分离原（故障）磁盘。
+故障磁盘完成替换后，可以将其再添加到存储池用作备件。(故障盘好了之后作为热备盘)
+# zpool status zeepool
+  pool: zeepool
+ state: DEGRADED
+status: One or more devices could not be opened.  Sufficient replicas exist for
+        the pool to continue functioning in a degraded state.
+action: Attach the missing device and online it using 'zpool online'.
+   see: http://www.sun.com/msg/ZFS-8000-2Q
+ scrub: resilver in progress for 0h0m, 70.47% done, 0h0m to go
+config:
+
+        NAME          STATE     READ WRITE CKSUM
+        zeepool       DEGRADED     0     0     0
+          mirror-0    DEGRADED     0     0     0
+            c1t2d0    ONLINE       0     0     0
+            spare-1   DEGRADED     0     0     0
+              c2t1d0  UNAVAIL      0     0     0  cannot open
+              c2t3d0  ONLINE       0     0     0  70.5M resilvered
+        spares
+          c2t3d0      INUSE     currently in use
+
+errors: No known data errors
+# zpool detach zeepool c2t1d0
+# zpool status zeepool
+  pool: zeepool
+ state: ONLINE
+ scrub: resilver completed after 0h0m with 0 errors on Wed Jan 20 13:46:46 2010
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        zeepool     ONLINE       0     0     0
+          mirror-0  ONLINE       0     0     0
+            c1t2d0  ONLINE       0     0     0
+            c2t3d0  ONLINE       0     0     0  70.5M resilvered
+
+errors: No known data errors
+(Original failed disk c2t1d0 is physically replaced)
+# zpool add zeepool spare c2t1d0
+# zpool status zeepool
+  pool: zeepool
+ state: ONLINE
+ scrub: resilver completed after 0h0m with 0 errors on Wed Jan 20 13:48:46 2010
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        zeepool     ONLINE       0     0     0
+          mirror-0  ONLINE       0     0     0
+            c1t2d0  ONLINE       0     0     0
+            c2t3d0  ONLINE       0     0     0  70.5M resilvered
+        spares
+          c2t1d0    AVAIL   
+
+errors: No known data errors
+
+
+
+
+管理 ZFS 存储池属性
+可以使用 zpool get 命令来显示池属性信息
+# zpool get all mpool
+
+可以使用 zpool set 命令设置存储池属性。例如：
+# zpool set autoreplace=on mpool
+# zpool get autoreplace mpool
+NAME  PROPERTY     VALUE    SOURCE
+mpool autoreplace  on       default
+
+
+列出有关所有存储池或特定池的信息
+zpool list 命令显示有关系统上所有池的下列信息
+列出特定的存储池统计信息
+# zpool list -o name,size
+NAME                    SIZE
+tank                   80.0G
+dozer                   1.2T
+
+使用脚本处理 ZFS 存储池输出
+可以使用 -H 选项以便不显示列标题，并使用制表符而不是空格分隔字段
+# zpool list -Ho name
+tank
+dozer
+# zpool list -H -o name,size
+tank   80.0G
+dozer  1.2T
+
+显示 ZFS 存储池命令历史记录
+ZFS 会自动记录成功的 zfs 和 zpool 命令（用于修改池状态信息）。使用 zpool history 命令可显示此信息。
+
+历史记录日志有如下特点：
+
+1、不能禁用日志。
+2、日志持久保存在磁盘上，这意味着系统重新引导后，将保存日志。
+3、日志作为环形缓冲区来实现。最小大小为 128 KB。最大大小为 32 MB。
+4、对于较小的池，日志最大大小的上限设置为池大小的 1%，而池大小是在创建池时确定的。
+5、日志无需任何管理，这意味着不需要调整日志大小或更改日志位置。
+
+要确定特定存储池的命令历史记录，请使用类似以下内容的语法：
+# zpool history tank
+可使用 -l 选项显示长格式（包括用户名、主机名和执行操作的区域）
+可使用 -i 选项显示可用于诊断目的的内部事件信息。例如：
+
+
+
+查看 ZFS 存储池的 I/O 统计信息
+列出池范围的 I/O 统计信息
+如果不使用任何选项，则 zpool iostat 命令会显示自引导以来系统中所有池的累积统计信息。
+
+由于这些统计信息是自引导以来累积的，因此，如果池相对空闲，则带宽可能显示为较低。
+通过指定时间间隔，可以请求查看更准确的当前带宽使用情况。例如：
+# zpool iostat tank 2
+
+列出虚拟设备 I/O 统计信息
+除了池范围的 I/O 统计信息外，zpool iostat 命令还可以显示虚拟设备的 I/O 统计信息。
+此命令可用于识别异常缓慢的设备，或者观察 ZFS 生成的 I/O 的分布情况。要请求完整
+的虚拟设备布局以及所有 I/O 统计信息，请使用 zpool iostat -v 命令。
+# zpool iostat -v
+               capacity     operations    bandwidth
+pool        alloc   free   read  write   read  write
+----------  -----  -----  -----  -----  -----  -----
+rpool       6.05G  61.9G      0      0    785    107
+  mirror    6.05G  61.9G      0      0    785    107
+    c1t0d0s0    -      -      0      0    578    109
+    c1t1d0s0    -      -      0      0    595    109
+----------  -----  -----  -----  -----  -----  -----
+tank        36.5G  31.5G      4      1   295K   146K
+  mirror    36.5G  31.5G    126     45  8.13M  4.01M
+    c1t2d0      -      -      0      3   100K   386K
+    c1t3d0      -      -      0      3   104K   386K
+----------  -----  -----  -----  -----  -----  -----
+
+确定 ZFS 存储池的运行状况
+每个设备都可以处于以下状态之一：
+ONLINE
+设备或虚拟设备处于正常工作状态。尽管仍然可能会出现一些瞬态错误，但是设备在
+其他方面处于正常工作状态。
+DEGRADED
+虚拟设备出现过故障，但仍能工作。此状态在镜像或 RAID-Z 设备缺少一个或多个组
+成设备时最为常见。池的容错能力可能会受到损害，因为另一个设备中的后续故障可能无法恢复。
+FAULTED
+设备或虚拟设备完全无法访问。此状态通常表示设备出现全面故障，以致于 ZFS 无法
+向该设备发送数据或从该设备接收数据。如果顶层虚拟设备处于此状态，则完全无法访问池。
+OFFLINE
+管理员已将设备显式脱机。
+UNAVAIL
+无法打开设备或虚拟设备。在某些情况下，包含 UNAVAIL 设备的池会以 DEGRADED 模式
+显示。如果顶层虚拟设备的状态为 UNAVAIL，则无法访问池中的任何设备。
+REMOVED
+
+基本的存储池运行状况
+# zpool status -x
+all pools are healthy
+
+详细运行状况
+使用 -v 选项可以请求更详细的运行状况摘要。
+
+准备迁移 ZFS 存储池
+导出 ZFS 存储池
+# zpool export tank
+此命令将尝试取消挂载池中任何已挂载的文件系统，然后再继续执行。如果无法取
+消挂载任何文件系统，则可以使用 -f 选项强制取消挂载这些文件系统
+
+
+确定要导入的可用存储池
+# zpool import
+从系统中删除池后（通过显式导出或通过强制删除设备），可以将设备附加到目标系统
+ pool: tank
+    id: 11809215114195894163
+ state: ONLINE
+action: The pool can be imported using its name or numeric identifier.
+config:
+
+        tank        ONLINE
+          mirror-0  ONLINE
+            c1t0d0  ONLINE
+            c1t1d0  ONLINE
+			
+从替换目录导入 ZFS 存储池
+缺省情况下，zpool import 命令仅在 /dev/dsk 目录中搜索设备。如果设备存在于其他目录中，
+或者使用的是文件支持的池，则必须使用 -d 选项搜索其他目录。
+# zpool create dozer mirror /file/a /file/b
+# zpool export dozer
+# zpool import -d /file
+
+
+导入 ZFS 存储池
+确定要导入的池后，即可通过将该池的名称或者其数字标识符指定为 zpool import 命令的参数来将其导入
+# zpool import tank
+
+如果多个可用池具有相同名称，则必须使用数字标识符指定要导入的池。
+# zpool import
+  pool: dozer
+    id: 2704475622193776801
+ state: ONLINE
+action: The pool can be imported using its name or numeric identifier.
+config:
+
+        dozer       ONLINE
+          c1t9d0    ONLINE
+
+  pool: dozer
+    id: 6223921996155991199
+ state: ONLINE
+action: The pool can be imported using its name or numeric identifier.
+config:
+
+        dozer       ONLINE
+          c1t8d0    ONLINE
+# zpool import dozer
+cannot import 'dozer': more than one matching pool
+import by numeric ID instead
+# zpool import 6223921996155991199
+
+如果该池的名称与现有的池名称冲突，则可以使用其他名称导入该池。
+# zpool import dozer zeepool
+此命令使用新名称 zeepool 导入已导出的池 dozer
+
+恢复已销毁的 ZFS 存储池
+可以使用 zpool import -D 命令恢复已销毁的存储池。
+# zpool destroy tank
+# zpool import -D
+  pool: tank
+    id: 5154272182900538157
+ state: ONLINE (DESTROYED)
+action: The pool can be imported using its name or numeric identifier.
+config:
+
+        tank        ONLINE
+          mirror-0  ONLINE
+            c1t0d0  ONLINE
+            c1t1d0  ONLINE
+			
+如果已销毁池中的某个设备出现故障或不可用，通过添加 -f 选项也许能够恢复已销毁的池。
+在此情况下，请导入已降级的池，然后尝试修复设备故障。
+
+升级 ZFS 存储池
+可使用 zpool upgrade 命令升级池
+
+可以使用以下语法来确定有关特殊版本和支持的发行版的其他信息：
+# zpool upgrade -v
+
+
+创建 ZFS 文件系统
+在以下示例中，在 tank/home 文件系统中创建了一个名为 bonwick 的文件系统。
+zfs create tank/home/bonwick
+可在创建文件系统时设置文件系统属性
+# zfs create -o mountpoint=/export/zfs tank/home
+
+销毁 ZFS 文件系统
+要销毁 ZFS 文件系统，请使用 zfs destroy 命令。销毁的文件系统将自动取消挂载，并取消共享。
+# zfs destroy tank/home/tabriz
+如果要销毁的文件系统处于繁忙状态而无法取消挂载，则 zfs destroy 命令将失败。
+要销毁活动文件系统，请使用 -f 选项。
+
+如果文件系统具有后代，则 zfs destroy 命令也会失败。要以递归方式销毁文件系统及其所有后代，请使用 -r 选项。
+请注意，递归销毁同时会销毁快照，因此请谨慎使用此选项。
+
+如果要销毁的文件系统具有间接依赖项，那么即使是递归销毁命令也会失败。要强制销毁所有依赖项
+（包括目标分层结构外的克隆文件系统），必须使用 -R 选项。
+
+重命名 ZFS 文件系统
+使用 zfs rename 命令可重命名文件系统。使用 rename 子命令可以执行以下操作：
+1、更改文件系统的名称.
+2、在 ZFS 分层结构内重定位文件系统。
+3、更改文件系统的名称并在 ZFS 分层结构内对其重定位。
+
+以下示例使用 rename 子命令将一个文件系统从 kustarz 重命名为 kustarz_old：
+# zfs rename tank/home/kustarz tank/home/kustarz_old
+
+以下示例说明如何使用 zfs rename 重定位文件系统：
+# zfs rename tank/home/maybee tank/ws/maybee
+通过重命名来重定位文件系统时，新位置必须位于同一池中，并且必须具有足够的
+磁盘空间来存放这一新文件系统。（配额的限制）
+
+ZFS 属性介绍
+http://docs.oracle.com/cd/E19253-01/819-7065/gavwq/index.html
+
+列出基本 ZFS 信息
+zfs list  此命令可显示系统中所有数据集的名称
+另外，还可使用此命令通过在命令行中提供数据集名称来显示特定数据集。此外，
+使用 -r 选项将以递归方式显示该数据集的所有后代。
+使用 -r 选项将以递归方式显示该数据集的所有后代。
+
+创建复杂的 ZFS 查询
+使用 o、-t 和 -H 选项可对 -zfs list 输出进行自定义。
+通过使用 -o 选项以及所需属性的逗号分隔列表可以自定义属性值输出。
+# zfs list -o name,sharenfs,mountpoint
+
+可以使用 -t 选项指定要显示的数据集的类型。下表中介绍了有效的类型。
+filesystem，volume，snapshot
+
+使用 -H 选项可从生成的输出中省略 zfs list 标题。使用 -H 选项时，
+所有空格都被 Tab 字符取代。当需要可解析的输出
+
+设置 ZFS 属性
+# zfs set atime=off tank/home
+
+继承 ZFS 属性
+可以使用 zfs inherit 命令清除属性值，从而促使从父数据集继承该值。
+# zfs set compression=on tank/home/bonwick
+# zfs get -r compression tank
+NAME             PROPERTY      VALUE                    SOURCE
+tank             compression   off                      default
+tank/home        compression   off                      default
+tank/home/bonwick compression   on                      local
+# zfs inherit compression tank/home/bonwick
+# zfs get -r compression tank
+NAME             PROPERTY      VALUE                    SOURCE
+tank             compression   off                      default
+tank/home        compression   off                      default
+tank/home/bonwick compression  off                      default //再次从父继承
+
+如果指定了 -r 选项，则会以递归方式应用 inherit 子命令。在以下示例中，该命令将
+使 tank/home 以及它可能具有的所有后代都继承 compression 属性的值：
+
+查询 ZFS 属性
+查询属性值的最简单方法是使用 zfs list 命令。
+可以使用 zfs get 命令检索任何数据集属性。
+可以使用特殊关键字 all 检索所有数据集属性值。以下示例使用 all 关键字:
+
+
+通过 zfs get 的 -s 选项，可以按源类型指定要显示的属性。通过此选项可获取
+一个逗号分隔列表，用于指明所需的源类型。仅会显示具有指定源类型的属性。
+有效的源类型包括 local、default、inherited、temporary 和 none。以下示例
+显示了已对 pool 本地设置的所有属性。
+
+
+管理 ZFS 挂载点
+http://docs.oracle.com/cd/E19253-01/819-7065/gavwq/index.html
+
+自动挂载点
+使用临时挂载属性
+取消挂载 ZFS 文件系统
+
+
+
+共享和取消共享 ZFS 文件系统
+控制共享语义
+
+zfs set sharenfs=on tank/home/eschrock
+
+root@bogon:~# zfs set sharenfs=on tank
+cannot share 'tank': share(1M) failed
+property may be set but unable to reshare filesystem
+#应该是没有安装nfs相关的软件
+
+apt-get install nfs-kernel-server
+service rpcbind start
+service  nfs-server  start
+
+
+sharenfs属性是继承的，如果文件系统继承的属性不为 off，则这些文件系统在创建时会自动进行共享。
+zfs set sharenfs=ro tank/home/tabriz
+将该属性设置为 ro（只读）后，无论为 tank/home 设置的 sharenfs 属性为何值，都会以只读方式共享 tank/home/tabriz。
+
+
+取消共享 ZFS 文件系统
+zfs unshare tank/home/tabriz
+此命令会取消共享 tank/home/tabriz 文件系统。要取消共享系统中的所有 ZFS 文件系统，需要使用 -a 选项。
+
+# zfs unshare -a
+
+共享 ZFS 文件系统
+# zfs share tank/home/tabriz
+另外，还可以通过使用 -a 选项共享系统中的所有 ZFS 文件系统。
+# zfs share -a
+
+
+传统共享行为
+如果 sharenfs 属性设置为 off，则 ZFS 在任何时候都不会尝试共享或取消共享文件系统。
+
+
+设置 ZFS 文件系统的配额
+# zfs set quota=10G tank/home/bonwick
+
+可对数据集设置 refquota，以限制该数据集可以使用的磁盘空间量。硬限制不包括后代所占用的磁盘空间。例如：
+# zfs set refquota=10g students/studentA
+# zfs list
+NAME                USED  AVAIL  REFER  MOUNTPOINT
+profs               106K  33.2G    18K  /profs
+students           57.7M  33.2G    19K  /students
+students/studentA  57.5M  9.94G  57.5M  /students/studentA
+# zfs snapshot students/studentA@today
+# zfs list
+NAME                      USED  AVAIL  REFER  MOUNTPOINT
+profs                     106K  33.2G    18K  /profs
+students                 57.7M  33.2G    19K  /students
+students/studentA        57.5M  9.94G  57.5M  /students/studentA
+students/studentA@today      0      -  57.5M  -
+
+在上例中，zfs list 输出显示两个配额中的较小者（10 GB 与 20 GB 相比较小）。要查看两个配额的值，请使用 zfs get 命令。例如：
+# zfs get refquota,quota students/studentA
+NAME               PROPERTY  VALUE              SOURCE
+students/studentA  refquota  10G                local
+students/studentA  quota     20G                local
+
+在 ZFS 文件系统中设置用户和组配额
+可以使用 zfs userquota 或 zfs groupquota 命令分别设置用户配额或组配额：
+
+# zfs create students/compsci
+# zfs set userquota@student1=10G students/compsci
+# zfs create students/labstaff
+# zfs set groupquota@staff=20GB students/labstaff
+
+按以下方式显示当前用户配额或组配额：
+# zfs get userquota@student1 students/compsci
+NAME              PROPERTY            VALUE               SOURCE
+students/compsci  userquota@student1  10G                 local
+# zfs get groupquota@staff students/labstaff
+NAME               PROPERTY          VALUE             SOURCE
+students/labstaff  groupquota@staff  20G               local
+
+可以通过查询以下属性来显示一般用户或组的磁盘空间使用情况：
+# zfs userspace students/compsci
+TYPE        NAME      USED  QUOTA  
+POSIX User  root      227M   none  
+POSIX User  student1  455M    10G  
+# zfs groupspace students/labstaff
+TYPE         NAME   USED  QUOTA  
+POSIX Group  root   217M   none  
+POSIX Group  staff  217M    20G  
+
+要确定个别用户或组的磁盘空间使用情况，可以查询以下属性：
+# zfs get userused@student1 students/compsci
+NAME              PROPERTY           VALUE              SOURCE
+students/compsci  userused@student1  455M               local
+# zfs get groupused@staff students/labstaff
+NAME               PROPERTY         VALUE            SOURCE
+students/labstaff  groupused@staff  217M             local
+
+可以按以下方式删除用户配额或组配额：
+# zfs set userquota@user1=none students/compsci
+# zfs set groupquota@staff=none students/labstaff
+
+
+设置 ZFS 文件系统的预留空间
+
+# zfs set reservation=5G tank/home/moore
+# zfs get reservation tank/home/moore
+NAME             PROPERTY     VALUE   SOURCE
+tank/home/moore  reservation  5G      local
+
+预留空间可能会影响 zfs list 命令的输出
+
+# zfs list
+NAME                   USED  AVAIL  REFER  MOUNTPOINT
+tank/home             5.00G  33.5G  8.50K  /export/home   //# USED为5G
+tank/home/moore       15.0K  33.5G  8.50K  /export/home/moore //# 不影响自己的used,影响是父数据集
+
+可通过设置 refreservation 预留空间来保证用于数据集的磁盘空间，该空间不包括快照和克隆使用的磁盘空间。
+此预留空间计算在父数据集的使用空间内，并会针对父数据集的配额和预留空间进行计数。例如：
+
+# zfs set refreservation=10g profs/prof1
+# zfs list
+NAME                      USED  AVAIL  REFER  MOUNTPOINT
+profs                    10.0G  23.2G    19K  /profs
+profs/prof1                10G  33.2G    18K  /profs/prof1
+
+还可以对同一数据集设置预留空间，以保证数据集空间和快照空间。例如：
+# zfs set reservation=20g profs/prof1
+# zfs list
+NAME                      USED  AVAIL  REFER  MOUNTPOINT
+profs                    20.0G  13.2G    19K  /profs
+profs/prof1                10G  33.2G    18K  /profs/prof1
+
+在上例中，zfs list 输出显示两个配额中的较小者（10 GB 与 20 GB 相比较小）。
+要查看两个配额的值，请使用 zfs get 命令。例如：
+
+# zfs get reservation,refreserv profs/prof1
+NAME         PROPERTY        VALUE        SOURCE
+profs/prof1  reservation     20G          local
+profs/prof1  refreservation  10G          local
+
+
+
+
+创建和销毁 ZFS 快照
+在以下示例中，将创建 tank/home/ahrens 的快照，其名称为 friday
+# zfs snapshot tank/home/ahrens@friday
+
+通过使用 -r 选项可为所有后代文件系统创建快照。
+# zfs snapshot -r tank/home@now
+# zfs list -t snapshot
+NAME                       USED  AVAIL  REFER  MOUNTPOINT
+rpool/ROOT/zfs2BE@zfs2BE  78.3M      -  4.53G  -
+tank/home@now                 0      -    26K  -
+tank/home/ahrens@now          0      -   259M  -
+tank/home/anne@now            0      -   156M  -
+tank/home/bob@now             0      -   156M  -
+tank/home/cindys@now          0      -   104M  -
+
+快照没有可修改的属性。也不能将数据集属性应用于快照
+# zfs set compression=on tank/home/ahrens@now
+cannot set compression property for 'tank/home/ahrens@now': snapshot
+properties cannot be modified
+
+使用 zfs destroy 命令可以销毁快照
+# zfs destroy tank/home/ahrens@now
+
+如果数据集存在快照，则不能销毁该数据集
+# zfs destroy tank/home/ahrens
+cannot destroy 'tank/home/ahrens': filesystem has children
+use '-r' to destroy the following datasets:
+tank/home/ahrens@tuesday
+tank/home/ahrens@wednesday
+tank/home/ahrens@thursday
+
+此外，如果已从快照创建克隆，则必须先销毁克隆，才能销毁快照。
+
+保持快照可以防止它被销毁。
+可以保持一个快照或一组快照。例如，以下语法对 tank/home/cindys/snap@1 设置一个保持标志 keep。
+# zfs hold keep tank/home/cindys@snap1
+可以使用 -r 选项递归保持所有后代文件系统的快照
+# zfs snapshot -r tank/home@now
+# zfs hold -r keep tank/home@now
+
+如果一个快照上存在一个保持，尝试使用 zfs destroy 命令销毁受保持的快照将失败。
+# zfs destroy tank/home/cindys@snap1
+cannot destroy 'tank/home/cindys@snap1': dataset is busy
+
+要销毁受保持的快照，须使用 -d 选项。
+# zfs destroy -d tank/home/cindys@snap1
+使用 zfs holds 命令显示受保持的快照列表。
+# zfs holds tank/home@now
+NAME           TAG   TIMESTAMP                 
+tank/home@now  keep  Thu Jul 15 11:25:39 2010  
+
+# zfs holds -r tank/home@now
+NAME                  TAG   TIMESTAMP                 
+tank/home/cindys@now  keep  Thu Jul 15 11:25:39 2010  
+tank/home/mark@now    keep  Thu Jul 15 11:25:39 2010  
+tank/home@now         keep  Thu Jul 15 11:25:39 2010  
+
+可以使用 zfs release 命令释放对一个快照或一组快照的保持。例如：
+# zfs release -r keep tank/home@now
+
+重命名 ZFS 快照
+# zfs rename tank/home/cindys@083006 tank/home/cindys@today
+# zfs rename tank/home/cindys@083006 today
+不支持以下快照 rename 操作，因为目标池和文件系统名称与从中创建快照的池和文件系统不同：
+# zfs rename tank/home/cindys@today pool/home/cindys@saturday
+cannot rename to 'pool/home/cindys@today': snapshots must be part of same dataset
+
+可以使用 zfs rename -r 命令以递归方式重命名快照
+
+
+您可以通过 listsnapshots 池属性启用或禁用 zfs list 输出中的快照列表显示。缺省情况下，此属性处于启用状态。
+# zpool get listsnapshots tank
+NAME  PROPERTY       VALUE      SOURCE
+tank  listsnapshots  on        default
+
+在文件系统的根的 .zfs/snapshot 目录中，可以访问文件系统的快照。例如，如果在 /home/ahrens 
+上挂载 tank/home/ahrens，则可以在 /home/ahrens/.zfs/snapshot/thursday 目录中访问
+tank/home/ahrens@thursday 快照数据。
+
+可以列出快照，
+# zfs list -t snapshot
+NAME                        USED  AVAIL  REFER  MOUNTPOINT
+pool/home/anne@monday          0      -   780K  -
+pool/home/bob@monday           0      -  1.01M  -
+tank/home/ahrens@tuesday   8.50K      -   780K  -
+tank/home/ahrens@wednesday 8.50K      -  1.01M  -
+tank/home/ahrens@thursday      0      -  1.77M  -
+tank/home/cindys@today     8.50K      -   524K  -
+
+可以列出为特定文件系统创建的快照，如下所示：
+# zfs list -r -t snapshot -o name,creation tank/home
+NAME                  CREATION
+tank/home@now         Wed Jun 30 16:16 2010
+tank/home/ahrens@now  Wed Jun 30 16:16 2010
+tank/home/anne@now    Wed Jun 30 16:16 2010
+tank/home/bob@now     Wed Jun 30 16:16 2010
+tank/home/cindys@now  Wed Jun 30 16:16 2010
+
+
+回滚 ZFS 快照
+可以使用 zfs rollback 命令放弃自特定快照创建以来对文件系统所做的全部更改。
+要回滚到早期快照，必须销毁所有的中间快照。可以通过指定 -r 选项销毁早期的快照。
+如果存在任何中间快照的克隆，则还必须指定 -R 选项以销毁克隆。
+
+在以下示例中，会将 tank/home/ahrens 文件系统回滚到 tuesday 快照：
+# zfs rollback tank/home/ahrens@tuesday
+cannot rollback to 'tank/home/ahrens@tuesday': more recent snapshots exist
+use '-r' to force deletion of the following snapshots:
+tank/home/ahrens@wednesday
+tank/home/ahrens@thursday
+# zfs rollback -r tank/home/ahrens@tuesday
+在本示例中，因为已回滚到以前的 tuesday 快照，所以销毁了 wednesday 和 thursday 快照
+
+
+ZFS 克隆
+克隆只能从快照创建。克隆快照时，会在克隆和快照之间建立隐式相关性。即使克隆是在数据集分层
+结构中的某个其他位置创建的，但只要克隆存在，就无法销毁原始快照。
+
+由于克隆最初与原始快照共享其所有磁盘空间，因此其 used 属性值最初为零。随着不断对克隆进行更改，
+它使用的磁盘空间将越来越多。原始快照的 used 属性不包括克隆所占用的磁盘空间。
+
+
+创建 ZFS 克隆
+
+新文件系统或卷可以位于 ZFS 分层结构中的任意位置。新数据集与从其中创建克隆的快照属同一类型
+（例如文件系统或卷）。不能在原始文件系统快照所在池以外的池中创建该文件系统的克隆。
+
+在以下示例中，将创建一个名为 tank/home/ahrens/bug123 的新克隆，其初始内容与快照 tank/ws/gate@yesterday 的内容相同：
+# zfs snapshot tank/ws/gate@yesterday
+# zfs clone tank/ws/gate@yesterday tank/home/ahrens/bug123
+
+在以下示例中，将从 projects/newproject@today 快照为临时用户创建克隆工作区 projects/teamA/tempuser。
+然后，在克隆工作区上设置属性。
+
+# zfs snapshot projects/newproject@today
+# zfs clone projects/newproject@today projects/teamA/tempuser
+# zfs set sharenfs=on projects/teamA/tempuser
+# zfs set quota=5G projects/teamA/tempuser
+
+销毁 ZFS 克隆
+使用 zfs destroy 命令可以销毁 ZFS 克隆。
+# zfs destroy tank/home/ahrens/bug123
+必须先销毁克隆，才能销毁父快照。
+
+使用 ZFS 克隆替换 ZFS 文件系统
+
+在以下示例中，对 tank/test/productA 文件系统进行了克隆，然后克隆文件系统 tank/test/productAbeta 
+成为原始 tank/test/productA 文件系统。
+
+# zfs create tank/test
+# zfs create tank/test/productA
+# zfs snapshot tank/test/productA@today
+# zfs clone tank/test/productA@today tank/test/productAbeta
+# zfs list -r tank/test
+NAME                       USED  AVAIL  REFER  MOUNTPOINT
+tank/test                  104M  66.2G    23K  /tank/test
+tank/test/productA         104M  66.2G   104M  /tank/test/productA
+tank/test/productA@today      0      -   104M  -
+tank/test/productAbeta        0  66.2G   104M  /tank/test/productAbeta
+# zfs promote tank/test/productAbeta
+# zfs list -r tank/test
+NAME                           USED  AVAIL  REFER  MOUNTPOINT
+tank/test                      104M  66.2G    24K  /tank/test
+tank/test/productA                0  66.2G   104M  /tank/test/productA
+tank/test/productAbeta         104M  66.2G   104M  /tank/test/productAbeta
+tank/test/productAbeta@today      0      -   104M  -
+
+可以通过重命名文件系统完成克隆替换过程。
+# zfs rename tank/test/productA tank/test/productAlegacy
+# zfs rename tank/test/productAbeta tank/test/productA
+# zfs list -r tank/test
+或者，也可以删除传统的文件系统。
+# zfs destroy tank/test/productAlegacy
+
+
+发送 ZFS 快照
+可以使用 zfs send 命令来发送某个快照流的副本，并在同一系统的另一个池中或用于存储备份数据的
+不同系统上的另一个池中接收快照流。
+# zfs send tank/data@snap1 | zfs recv spool/ds01
+可以将 zfs recv 用作 zfs receive 命令的别名。
+
+如果要将快照流发送到不同的系统，请通过 ssh 命令传输 zfs send 输出。
+host1# zfs send tank/dana@snap1 | ssh host2 zfs recv newtank/dana
+发送完整的流时，目标文件系统必须不能存在。
+
+使用 zfs send -i 选项可以发送增量数据。例如：
+host1# zfs send -i tank/dana@snap1 tank/dana@snap2 | ssh host2 zfs recv newtank/dana
+请注意，第一个参数 (snap1) 是较早的快照，第二个参数 (snap2) 是较晚的快照。这种情况下，
+newtank/dana 文件系统必须已经存在，增量接收才能成功。
+也可以： host1# zfs send -i snap1 tank/dana@snap2 > ssh host2 zfs recv newtank/dana
+
+如果需要存储许多副本，可以考虑使用 gzip 命令压缩 ZFS 快照流表示。
+# zfs send pool/fs@snap | gzip > backupfile.gz
+
+接收 ZFS 快照
+# zfs send tank/gozer@0830 > /bkups/gozer.083006
+# zfs receive tank/gozer2@today < /bkups/gozer.083006
+# zfs rename tank/gozer tank/gozer.old
+# zfs rename tank/gozer2 tank/gozer
+
+第 8 章 使用 ACL 保护 Oracle Solaris ZFS 文件
+
+第 9 章 Oracle Solaris ZFS 委托管理
+
+第 10 章 Oracle Solaris ZFS 高级主题
+
+ZFS 卷
+以下示例将创建 5 GB 的 ZFS 卷 tank/vol：
+# zfs create -V 5gb tank/vol
+创建卷时，会自动设置卷初始大小的预留空间，以防发生意外行为。
+
+使用 ZFS 卷作为交换设备或转储设备
+
+使用 ZFS 卷作为 Solaris iSCSI 目标
+# zfs create -V 2g tank/volumes/v2
+# zfs set shareiscsi=on tank/volumes/v2
+# iscsitadm list target
+Target: tank/volumes/v2
+    iSCSI Name: iqn.1986-03.com.sun:02:984fe301-c412-ccc1-cc80-cf9a72aa062a
+    Connections: 0
+	
+重命名 ZFS 卷时，iSCSI 目标名将保持不变。
+导出包含共享 ZFS 卷的池会导致目标被删除。导入包含共享 ZFS 卷的池会导致目标被共享。

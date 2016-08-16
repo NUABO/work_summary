@@ -28,3 +28,16 @@ git push origin master
 2、基于某个tag创建某个分支
 
 git checkout -b v9.2.0-comment v9.2.0
+
+
+3、创建repository
+cd go-test
+git init
+git add src
+git commit -m "add src"
+web界面创建一个go-test repository
+git remote add origin https://github.com/chenzhongtao/go-test.git
+git push origin master
+git fetch origin
+git pull origin master
+git push --set-upstream origin master

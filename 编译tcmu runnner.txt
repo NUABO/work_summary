@@ -1,0 +1,24 @@
+
+
+apt-get install -y cmake libglib2.0-dev libkmod-dev libnl-genl-3-dev linux-libc-dev pkg-config psmisc python-tox
+
+
+git clone https://github.com/agrover/tcmu-runner.git
+
+
+cd tcmu-runner
+
+git checkout v1.0.4
+
+
+mkdir build 
+cmake .  -Dwith-glfs=false
+make
+
+
+cp scsi_defs.h /usr/local/include/
+cp libtcmu.h  /usr/local/include/
+cp libtcmu_common.h  /usr/local/include/
+
+cp libtcmu.so /usr/local/lib/
+cp libtcmu_static.a /usr/local/lib/libtcmu.a

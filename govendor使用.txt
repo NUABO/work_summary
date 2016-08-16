@@ -1,0 +1,70 @@
+下载安装govendor
+
+在你的工程路径下下载
+go get -u github.com/kardianos/govendor
+go build github.com/kardianos/govendor
+mv govendor /local/usr/bin/
+
+
+以Costor工程为例,
+首先 吃的./Costor/src/costor   // main package 所在文件夹
+
+govendor init  // 初始化生成vendor文件夹
+govendor list  // 查看依赖包
+
+ e  api                               
+ e  backend                           
+ e  client                            
+ e  client/flags                      
+ e  controller                        
+ e  daemon                            
+ e  errno                             
+ e  proto                             
+ e  util                              
+ e  code.google.com/p/go-uuid/uuid    
+ e  github.com/Sirupsen/logrus        
+ e  github.com/Unknwon/goconfig       
+ e  github.com/codegangsta/cli        
+ e  github.com/gorilla/context        
+ e  github.com/gorilla/mux            
+ e  github.com/mcuadros/go-version    
+ e  golang.org/x/sys/unix             
+pl  costor                      
+
+
+添加所有依赖包
+
+govendor add code.google.com/p/go-uuid/uuid
+govendor add github.com/Sirupsen/logrus
+.....
+govendor add golang.org/x/sys/unix
+
+
+如果要下载新的依赖包
+govendor fetch  github.com/....
+
+把vendor 目录考到src目录下
+
+mv  vendor ../
+
+然后就可以用 go run/build/test 等命令了
+
+把vendor目录上传
+
+
+如果下次要添加新的依赖包,又要把vendor目录拷贝到 costor目录下, 再用 govendor fetch ...., 然后再拷贝到src路径下
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
