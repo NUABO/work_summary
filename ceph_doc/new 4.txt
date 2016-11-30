@@ -1,0 +1,138 @@
+
+172.16.251.187 comet1 
+172.16.251.36 comet2 
+172.16.251.16 comet3
+
+172.16.251.187 
+172.16.251.36  
+172.16.251.16 
+
+
+ssh-copy-id 172.16.251.187 
+ssh-copy-id 172.16.251.36  
+ssh-copy-id 172.16.251.16 
+
+[global]
+public network = 172.16.251.0/24
+cluster network = 172.16.251.0/24
+pid file = /var/run/ceph/$name.pid
+log file = /var/log/ceph/$name.log
+auth cluster required = none
+auth service required = none
+auth client required = none
+keyring = /etc/ceph/keyring.$name
+osd pool default size = 1
+osd pool default min size = 1
+osd pool default crush rule = 0
+osd crush chooseleaf type = 1
+
+[client]
+rbd cache=false
+
+[mon]
+mon data = /var/lib/ceph/mon/$name
+mon clock drift allowed = .15
+keyring = /etc/ceph/keyring.$name
+
+[mon.0]
+host = comet1
+mon addr = 172.16.251.187:6789
+
+[osd]
+osd max write size = 512
+osd data = /mnt/osd$id
+osd recovery max active = 5
+osd journal = /mnt/journal$id/journal
+osd journal size = 1000
+keyring = /etc/ceph/keyring.$name
+#osd op threads = 8
+
+
+[osd.0]
+public addr = 172.16.251.187 
+cluster addr = 172.16.251.187 
+osd data = /comet/chain/pd-8d06e166-02a5-44f1-a2c7-18d8f421cc4e/ceph
+osd journal = /comet/chain/pd-8d06e166-02a5-44f1-a2c7-18d8f421cc4e/ceph/journal
+host = comet1
+
+[osd.1]
+public addr = 172.16.251.36 
+cluster addr = 172.16.251.36
+osd data = /comet/chain/pd-311d68e4-e866-4488-acbe-7a3e2fae2e6e/ceph
+osd journal = /comet/chain/pd-311d68e4-e866-4488-acbe-7a3e2fae2e6e/ceph/journal
+host = comet2
+
+[osd.2]
+public addr = 172.16.251.16
+cluster addr = 172.16.251.16 
+osd data = /comet/chain/pd-06dcfc2d-6396-4b3e-8649-b6024f842cbf/ceph
+osd journal = /comet/chain/pd-06dcfc2d-6396-4b3e-8649-b6024f842cbf/ceph/journal
+host = comet3
+
+
+
+
+
+
+
+
+systemctl stop  ceph-mon@0
+rm -rf /tmp/monmap 
+rm -rf /var/lib/ceph/mon/mon.0/*
+monmaptool  --create --add 0 172.16.251.187 /tmp/monmap
+ceph-mon --mkfs -i 0 --monmap /tmp/monmap
+chown -R ceph:ceph /var/lib/ceph/
+systemctl start  ceph-mon@0
+systemctl status  ceph-mon@0
+rm -rf /mnt/osd0/*
+ceph osd create
+ceph-osd -i 0 --mkfs --mkkey 
+ceph osd create
+ceph-osd -i 1 --mkfs --mkkey 
+ceph osd create
+ceph-osd -i 2 --mkfs --mkkey 
+chown -R ceph:ceph /mnt/osd0
+systemctl start  ceph-osd@0
+systemctl status  ceph-osd@0
+ceph osd pool create rep-pool 256 256 replicated
+ceph osd pool create rep-pool-3 256 256 replicated
+ceph osd pool set rep-pool-3 size 3
+rbd create volume-1 --size 102400 -p rep-pool  --image-format 2
+rbd create volume-3 --size 102400 -p rep-pool-3  --image-format 2
+
+rbd feature disable rep-pool/volume-1 deep-flatten
+rbd feature disable rep-pool/volume-1 fast-diff
+rbd feature disable rep-pool/volume-1 object-map
+rbd feature disable rep-pool/volume-1 exclusive-lock
+
+rbd feature disable rep-pool-3/volume-3 deep-flatten
+rbd feature disable rep-pool-3/volume-3 fast-diff
+rbd feature disable rep-pool-3/volume-3 object-map
+rbd feature disable rep-pool-3/volume-3 exclusive-lock
+
+ceph-authtool -C  /etc/ceph/keyring.client.admin
+rbd map  rep-pool/volume-1
+
+rbd unmap  rep-pool/volume-1
+
+
+rbd rm volume-1 -p rep-pool
+ceph osd pool rm rep-pool rep-pool --yes-i-really-really-mean-it
+
+ceph osd pool create rep-pool 128 128 replicated
+
+ceph osd crush add-bucket ssd_cache root
+ceph osd crush rule create-simple ssd_ruleset ssd_cache osd
+
+ceph osd crush add-bucket ssd_server root
+ceph osd crush rule create-simple ssd_server_ruleset ssd_server osd
+
+
+
+
+
+
+
+
+
+

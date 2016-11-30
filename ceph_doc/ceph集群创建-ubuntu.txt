@@ -1,0 +1,183 @@
+/etc/init.d/ceph -a stop
+/etc/init.d/ceph -a stop mon.0
+systemctl stop  ceph-mon@0
+rm -rf /tmp/monmap 
+rm -rf /var/lib/ceph/mon/mon.0/*
+monmaptool  --create --add 0 192.168.3.202 /tmp/monmap
+ceph-mon --mkfs -i 0 --monmap /tmp/monmap
+chown -R ceph:ceph /var/lib/ceph/
+systemctl start  ceph-mon@0
+systemctl status  ceph-mon@0
+rm -rf /mnt/osd0/*
+ceph osd create
+ceph-osd -i 0 --mkfs --mkkey 
+chown -R ceph:ceph /mnt/osd0
+(
+或者把 
+/lib/systemd/system/ceph-osd@.service 中
+ExecStart=/usr/bin/ceph-osd -f --cluster ${CLUSTER} --id %i --setuser ceph --setgroup ceph
+ExecStart=/usr/bin/ceph-osd -f --cluster ${CLUSTER} --id %i
+)
+
+systemctl start  ceph-osd@0
+systemctl status  ceph-osd@0
+ceph osd pool create rep-pool 256 256 replicated
+ceph osd pool set rep-pool size 3
+rbd create volume-1 --size 10240 -p rep-pool  --image-format 2
+
+rbd feature disable rep-pool/volume-1 deep-flatten
+rbd feature disable rep-pool/volume-1 fast-diff
+rbd feature disable rep-pool/volume-1 object-map
+rbd feature disable rep-pool/volume-1 exclusive-lock
+
+ceph-authtool -C  /etc/ceph/keyring.client.admin
+rbd map  rep-pool/volume-1
+
+rbd unmap  rep-pool/volume-1
+
+rbd rm volume-1 -p rep-pool
+ceph osd pool rm rep-pool rep-pool --yes-i-really-really-mean-it
+
+ceph osd pool create rep-pool 128 128 replicated
+
+ceph osd crush add-bucket ssd_cache root
+ceph osd crush rule create-simple ssd_ruleset ssd_cache osd
+
+ceph osd crush add-bucket ssd_server root
+ceph osd crush rule create-simple ssd_server_ruleset ssd_server osd
+
+./umount_conf.py
+vi /etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [0-7] 70.70.1.103 60.60.1.103 iozone-103 /dev/sd[b-i]1 /dev/sdj[5-12]" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [8-15] 70.70.1.104 60.60.1.104 iozone-104 /dev/sd[b-i]1 /dev/sdr[5-12]" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [16-23] 70.70.1.104 60.60.1.104 iozone-104 /dev/sd[j-q]1 /dev/sds[5-12]" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [24-31] 70.70.1.105 60.60.1.105 iozone-105 /dev/sd[b-i]1 /dev/sdr[5-12]" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [32-39] 70.70.1.105 60.60.1.105 iozone-105 /dev/sd[j-q]1 /dev/sds[5-12]" -o  >>/etc/ceph/ceph.conf
+
+my_cmd.py "/root/osd_conf.py [0-7] 70.70.1.103 60.60.1.103 iozone-103 /dev/sd[b-i]1 " -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [8-15] 70.70.1.104 60.60.1.104 iozone-104 /dev/sd[b-i]1 " -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [16-23] 70.70.1.104 60.60.1.104 iozone-104 /dev/sd[j-q]1 " -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [24-31] 70.70.1.105 60.60.1.105 iozone-105 /dev/sd[b-i]1 " -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf.py [32-39] 70.70.1.105 60.60.1.105 iozone-105 /dev/sd[j-q]1 " -o  >>/etc/ceph/ceph.conf
+
+
+my_cmd.py "/root/osd_conf_2.py [0-7] 70.70.1.103 60.60.1.103 iozone-103  /NAS/nasdevice[1-8] /NAS/nasdevice[9-16]/journal" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_2.py [8-23] 70.70.1.104 60.60.1.104 iozone-104 /NAS/nasdevice[1-16] /NAS/nasdevice[17-32]/journal" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_2.py [24-39] 70.70.1.105 60.60.1.105 iozone-105 /NAS/nasdevice[1-16] /NAS/nasdevice[17-32]/journal" -o  >>/etc/ceph/ceph.conf
+
+
+my_cmd.py "/root/osd_conf_2.py [0-7] 70.70.1.103 60.60.1.103 iozone-103  /NAS/nasdevice[1-8] /NAS/nasdevice[9-16]/journal" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_2.py [8-15] 70.70.1.104 60.60.1.104 iozone-104 /NAS/nasdevice[1-8] /NAS/nasdevice[17-24]/journal" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_2.py [16-23] 70.70.1.105 60.60.1.105 iozone-105 /NAS/nasdevice[1-8] /NAS/nasdevice[17-24]/journal" -o  >>/etc/ceph/ceph.conf
+
+ec
+
+ceph osd crush add-bucket ssd_cache root
+ceph osd crush rule create-simple ssd_ruleset ssd_cache host
+
+my_cmd.py "rm -rf /NAS/nasdevice[1-42]/*"
+rm -rf /etc/ceph/keyring.osd*
+
+my_cmd.py "/root/osd_conf_2.py [0-15] 70.70.1.101 60.60.1.101 iozone-101  /NAS/nasdevice[17-32] /NAS/nasdevice[1-16]/journal" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_2.py [16-31] 70.70.1.102 60.60.1.102 iozone-102  /NAS/nasdevice[17-32] /NAS/nasdevice[1-16]/journal" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_2.py [32-47] 70.70.1.103 60.60.1.103 iozone-103  /NAS/nasdevice[17-32] /NAS/nasdevice[1-16]/journal" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_2.py [48-63] 70.70.1.104 60.60.1.104 iozone-104 /NAS/nasdevice[17-32] /NAS/nasdevice[1-16]/journal" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_2.py [64-79] 70.70.1.105 60.60.1.105 iozone-105 /NAS/nasdevice[17-32] /NAS/nasdevice[1-16]/journal" -o  >>/etc/ceph/ceph.conf
+
+my_cmd.py "/root/osd_conf_3.py [80-80] 70.70.1.101 60.60.1.101 iozone-101  /NAS/nasdevice[34-34] /NAS/nasdevice[33-33]/journal root=ssd_cache" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [81-81] 70.70.1.102 60.60.1.102 iozone-102  /NAS/nasdevice[34-34] /NAS/nasdevice[33-33]/journal root=ssd_cache" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [82-82] 70.70.1.103 60.60.1.103 iozone-103  /NAS/nasdevice[34-34] /NAS/nasdevice[33-33]/journal root=ssd_cache" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [83-83] 70.70.1.104 60.60.1.104 iozone-104  /NAS/nasdevice[34-34] /NAS/nasdevice[33-33]/journal root=ssd_cache" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [84-84] 70.70.1.105 60.60.1.105 iozone-105  /NAS/nasdevice[34-34] /NAS/nasdevice[33-33]/journal root=ssd_cache" -o  >>/etc/ceph/ceph.conf
+
+my_cmd.py "/root/osd_conf_3.py [80-84] 70.70.1.101 60.60.1.101 iozone-101  /NAS/nasdevice[38-42] /NAS/nasdevice[33-37]/journal root=ssd_cache" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [85-89] 70.70.1.102 60.60.1.102 iozone-102  /NAS/nasdevice[38-42] /NAS/nasdevice[33-37]/journal root=ssd_cache" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [90-94] 70.70.1.103 60.60.1.103 iozone-103  /NAS/nasdevice[38-42] /NAS/nasdevice[33-37]/journal root=ssd_cache" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [95-99] 70.70.1.104 60.60.1.104 iozone-104  /NAS/nasdevice[38-42] /NAS/nasdevice[33-37]/journal root=ssd_cache" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [100-104] 70.70.1.105 60.60.1.105 iozone-105  /NAS/nasdevice[38-42] /NAS/nasdevice[33-37]/journal root=ssd_cache" -o  >>/etc/ceph/ceph.conf
+
+my_cmd.py "/root/osd_conf_3.py [105-106] 70.70.1.11 60.60.1.11 iozone-11  /mnt/osd[1-2] /mnt/jour[1-2]/journal \{root=ssd_server,host=iozone-11\}" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [107-108] 70.70.1.12 60.60.1.12 iozone-12  /mnt/osd[1-2] /mnt/jour[1-2]/journal \{root=ssd_server,host=iozone-12\}" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [109-110] 70.70.1.14 60.60.1.14 iozone-14  /mnt/osd[1-2] /mnt/jour[1-2]/journal \{root=ssd_server,host=iozone-14\}" -o  >>/etc/ceph/ceph.conf
+my_cmd.py "/root/osd_conf_3.py [111-112] 70.70.1.15 60.60.1.15 iozone-15  /mnt/osd[1-2] /mnt/jour[1-2]/journal \{root=ssd_server,host=iozone-15\}" -o  >>/etc/ceph/ceph.conf
+
+my_cmd.py "ceph osd crush add [80-84] 1.0 root=ssd_cache " -o  这个也是临时的
+
+
+
+osd_conf_2.py
+
+sh scp_conf.sh 
+
+
+./mount_conf.py
+./rm_conf.py
+./create_osd.py 0-9
+
+./start_osd.py
+
+ceph osd pool create rep-pool 2048 2048 replicated
+rbd create volume-1 --size 2048000 -p rep-pool --stripe-unit 1048576 --stripe-count 16 --image-format 2
+--stripe-unit 1048576 --stripe-count 16
+
+ceph osd pool delete rep-pool rep-pool --yes-i-really-really-mean-it
+
+删除集群
+/etc/init.d/ceph -a stop
+rm -rf /tmp/monmap 
+rm -rf /var/lib/ceph/mon/mon.0/*
+sh start_osd.sh
+
+
+创建集群
+monmaptool  --create --add 0 70.70.1.12 /tmp/monmap
+ceph-mon --mkfs -i 0 --monmap /tmp/monmap
+
+[root@iozone-12 ~]# monmaptool --print /tmp/monmap
+monmaptool: monmap file /tmp/monmap
+epoch 0
+fsid f02b7e4d-6c43-4400-92fc-b00ec4d2374f
+last_changed 2015-10-26 14:49:29.214623
+created 2015-10-26 14:49:29.214623
+0: 70.70.1.12:6789/0 mon.0
+
+
+
+/etc/init.d/ceph start mon
+
+ceph health
+
+ceph osd tree
+
+添加osd
+ssh 70.70.1.101
+ceph osd create  #会返回一个id 0,1...
+{
+mkdir /mnt/osd0
+mkdir /mnt/journal0
+fdisk /dev/sdn
+partprobe
+mkfs -t xfs /dev/sdn1
+mkfs -t xfs /dev/sdn2
+vi /etc/fstab
+mount -a
+mount -o rw,noatime,inode64,logbsize=256k,delaylog /dev/sdn1 /mnt/osd0
+mount -o rw,noatime,inode64,logbsize=256k,delaylog /dev/sdn1 /mnt/journal0
+
+如果已存在，只需：
+rm -rf /mnt/osd0/*
+rm -rf /mnt/journal0/*
+}
+
+修改配置文件 /etc/ceph/ceph.conf
+{
+[osd.0]
+public addr = 70.70.1.101
+cluster addr = 60.60.1.101
+host = iozone-101
+devs = /dev/sdn1
+}
+
+ceph-osd -i {osd-num} --mkfs --mkkey  # osd-num 为 ceph osd create 返回的id
+
+/etc/init.d/ceph start osd

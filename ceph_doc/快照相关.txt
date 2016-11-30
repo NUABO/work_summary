@@ -1,3 +1,6 @@
+rbd create volume-1 --size 2048 -p rep-pool --image-format 2
+rbd rm volume-1  -p rep-pool
+
 创建一个快照
 rbd snap create rep-pool/volume-1@snap-1
 
@@ -28,6 +31,7 @@ rbd snap protect rep-pool/volume-1@snap-1
 rbd snap unprotect rep-pool/volume-1@snap-1
 
 rbd clone rep-pool/volume-1@snap-1 rep-pool/volume-2
+克隆后的卷没有快照信息
 
 查看快照snap-1的子卷
 rbd children rep-pool/volume-1@snap-1

@@ -353,18 +353,48 @@ macro GDoxyInsBlockComment()
     lnIter = lnCursor
     strHeader = GGetHeaderSpaceByLn(hbuf, lnCursor)
 
-	InsBufLine(hbuf, lnIter, strHeader#"// add by chenzhongtao")
-	lnIter = lnIter+ 1
+	//InsBufLine(hbuf, lnIter, strHeader#"// add by chenzhongtao")
+	//lnIter = lnIter+ 1
     InsBufLine(hbuf, lnIter, strHeader#"/**")
 	lnIter = lnIter+ 1
-    InsBufLine(hbuf, lnIter, strHeader#" *")
-	lnIter = lnIter+ 1
-    InsBufLine(hbuf, lnIter, strHeader#" *")
+    InsBufLine(hbuf, lnIter, strHeader#" * ")
 	lnIter = lnIter+ 1
     InsBufLine(hbuf, lnIter, strHeader#" */")
 
 
-    SetBufIns(hbuf, lnCursor + 1, strlen(strHeader#" *"))
+    SetBufIns(hbuf, lnCursor + 1, strlen(strHeader#" * "))
+}
+
+macro GDoxyInsLineComment()
+{
+    var hbuf
+    hbuf = GetCurrentBuf()
+    if(hbuf == hnil)
+    {
+        msg("Current file handler is invalid.")
+        stop
+    }
+
+
+    var lnCursor
+    lnCursor = GetBufLnCur(hbuf)
+
+
+    var strHeader
+    var lnIter
+    lnIter = lnCursor
+    strHeader = GGetHeaderSpaceByLn(hbuf, lnCursor)
+
+	//InsBufLine(hbuf, lnIter, strHeader#"// add by chenzhongtao")
+	//lnIter = lnIter+ 1
+    //InsBufLine(hbuf, lnIter, strHeader#"/**")
+	//lnIter = lnIter+ 1
+    //InsBufLine(hbuf, lnIter, strHeader#" * ")
+	//lnIter = lnIter+ 1
+    InsBufLine(hbuf, lnIter, strHeader#"/*  */")
+
+
+    SetBufIns(hbuf, lnCursor , strlen(strHeader#"/* "))
 }
 
 
