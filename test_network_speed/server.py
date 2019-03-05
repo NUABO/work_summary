@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#! /usr/bin/env python
 # coding=utf-8
 
 import time
@@ -32,7 +32,7 @@ class MyRequestHandler(SRH):
         while True:
             #阻塞在这里
             buf = self.request.recv(1024*1024)
-			print buf
+            #print buf
             #print "buf" ,repr(buf)
             if not buf: #客户端终止或close 都会受到"" 空串
                 print "return"

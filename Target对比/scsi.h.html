@@ -1,0 +1,1639 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+.AlignLeft { text-align: left; }
+.AlignCenter { text-align: center; }
+.AlignRight { text-align: right; }
+body { font-family: sans-serif; font-size: 11pt; }
+td { vertical-align: top; padding-left: 4px; padding-right: 4px; }
+
+tr.SectionGap td { font-size: 4px; border-left: none; border-top: none; border-bottom: 1px solid Black; border-right: 1px solid Black; }
+tr.SectionAll td { border-left: none; border-top: none; border-bottom: 1px solid Black; border-right: 1px solid Black; }
+tr.SectionBegin td { border-left: none; border-top: none; border-right: 1px solid Black; }
+tr.SectionEnd td { border-left: none; border-top: none; border-bottom: 1px solid Black; border-right: 1px solid Black; }
+tr.SectionMiddle td { border-left: none; border-top: none; border-right: 1px solid Black; }
+tr.SubsectionAll td { border-left: none; border-top: none; border-bottom: 1px solid Gray; border-right: 1px solid Black; }
+tr.SubsectionEnd td { border-left: none; border-top: none; border-bottom: 1px solid Gray; border-right: 1px solid Black; }
+table.fc { border-top: 1px solid Black; border-left: 1px solid Black; width: 100%; font-family: monospace; font-size: 10pt; }
+td.TextItemInsigAdd { color: #000000; background-color: #EEEEFF; }
+td.TextItemInsigDel { color: #000000; background-color: #EEEEFF; text-decoration: line-through; }
+td.TextItemInsigMod { color: #000000; background-color: #EEEEFF; }
+td.TextItemInsigOrphan { color: #000000; background-color: #FAEEFF; }
+td.TextItemNum { color: #696969; background-color: #F0F0F0; }
+td.TextItemSame { color: #000000; background-color: #FFFFFF; }
+td.TextItemSigAdd { color: #000000; background-color: #FFE3E3; }
+td.TextItemSigDel { color: #000000; background-color: #FFE3E3; text-decoration: line-through; }
+td.TextItemSigMod { color: #000000; background-color: #FFE3E3; }
+td.TextItemSigOrphan { color: #000000; background-color: #F1E3FF; }
+.TextSegInsigDiff { color: #0000FF; }
+.TextSegReplacedDiff { color: #0000FF; font-style: italic; }
+.TextSegSigDiff { color: #FF0000; }
+.TextSegElementIdentifier { }
+.TextSegElementNumber { color: #2E9269; }
+.TextSegElementCompiler_32Directive { color: #681717; }
+.TextSegElementComment { color: #786A41; }
+</style>
+<title>Text Compare</title>
+</head>
+<body>
+Text Compare<br/>
+Produced: 2017/11/28 19:53:12<br/>
+&nbsp; &nbsp;
+<br/>
+Mode:&nbsp; All &nbsp;
+<br/>
+Left base folder: D:\Users\zhong\Desktop\Target-5.2 &nbsp;
+<br/>
+Right base folder: D:\Users\zhong\Desktop\Target-5.3 &nbsp;
+<br/>
+&nbsp; &nbsp;
+<br/>
+File: usr\scsi.h &nbsp;
+<br/>
+<table class="fc" cellspacing="0" cellpadding="0">
+<tr class="SectionBegin">
+<td class="TextItemSame"><span class="TextSegElementComment">/*</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* taken from kernel.h</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* taken from kernel.h</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* better if we include kernel's one directly.</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* better if we include kernel's one directly.</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*/</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*/</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#ifndef</span> <span class="TextSegElementIdentifier">__SCSI_H</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#ifndef</span> <span class="TextSegElementIdentifier">__SCSI_H</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">__SCSI_H</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">__SCSI_H</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TEST_UNIT_READY</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TEST_UNIT_READY</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">REZERO_UNIT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x01</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">REZERO_UNIT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">REQUEST_SENSE</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x03</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">REQUEST_SENSE</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x03</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">FORMAT_UNIT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x04</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">FORMAT_UNIT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x04</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_BLOCK_LIMITS</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x05</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_BLOCK_LIMITS</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x05</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">REASSIGN_BLOCKS</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x07</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">REASSIGN_BLOCKS</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x07</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">INITIALIZE_ELEMENT_STATUS</span> <span class="TextSegElementNumber">0x07</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">INITIALIZE_ELEMENT_STATUS</span> <span class="TextSegElementNumber">0x07</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_6</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x08</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_6</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x08</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_6</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0a</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_6</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0a</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEEK_6</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0b</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEEK_6</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0b</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_REVERSE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0f</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_REVERSE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0f</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_FILEMARKS</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x10</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_FILEMARKS</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x10</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SPACE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x11</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SPACE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x11</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">INQUIRY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x12</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">INQUIRY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x12</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RECOVER_BUFFERED_DATA</span> <span class="TextSegElementNumber">0x14</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RECOVER_BUFFERED_DATA</span> <span class="TextSegElementNumber">0x14</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MODE_SELECT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x15</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MODE_SELECT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x15</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RESERVE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x16</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RESERVE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x16</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RELEASE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x17</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RELEASE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x17</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">COPY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x18</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">COPY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x18</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ERASE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x19</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ERASE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x19</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MODE_SENSE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x1a</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MODE_SENSE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x1a</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">START_STOP</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x1b</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">START_STOP</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x1b</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RECEIVE_DIAGNOSTIC</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x1c</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RECEIVE_DIAGNOSTIC</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x1c</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEND_DIAGNOSTIC</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x1d</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEND_DIAGNOSTIC</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x1d</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ALLOW_MEDIUM_REMOVAL</span>&nbsp; <span class="TextSegElementNumber">0x1e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ALLOW_MEDIUM_REMOVAL</span>&nbsp; <span class="TextSegElementNumber">0x1e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SET_WINDOW</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x24</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SET_WINDOW</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x24</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_CAPACITY</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x25</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_CAPACITY</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x25</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x28</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x28</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2a</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2a</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEEK_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2b</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEEK_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2b</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">POSITION_TO_ELEMENT</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0x2b</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">POSITION_TO_ELEMENT</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0x2b</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_VERIFY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_VERIFY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">VERIFY_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2f</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">VERIFY_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2f</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_HIGH</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x30</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_HIGH</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x30</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_EQUAL</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x31</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_EQUAL</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x31</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_LOW</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x32</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_LOW</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x32</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SET_LIMITS</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x33</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SET_LIMITS</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x33</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PRE_FETCH_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x34</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PRE_FETCH_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x34</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_POSITION</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x34</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_POSITION</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x34</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SYNCHRONIZE_CACHE</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x35</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SYNCHRONIZE_CACHE</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x35</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">LOCK_UNLOCK_CACHE</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x36</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">LOCK_UNLOCK_CACHE</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x36</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_DEFECT_DATA</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x37</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_DEFECT_DATA</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x37</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">INITIALIZE_ELEMENT_STATUS_WITH_RANGE</span> <span class="TextSegElementNumber">0x37</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">INITIALIZE_ELEMENT_STATUS_WITH_RANGE</span> <span class="TextSegElementNumber">0x37</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MEDIUM_SCAN</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x38</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MEDIUM_SCAN</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x38</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">COMPARE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x39</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">COMPARE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x39</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">COPY_VERIFY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3a</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">COPY_VERIFY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3a</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_BUFFER</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3b</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_BUFFER</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3b</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_BUFFER</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3c</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_BUFFER</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3c</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">UPDATE_BLOCK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3d</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">UPDATE_BLOCK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3d</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_LONG</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_LONG</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_LONG</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3f</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_LONG</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3f</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CHANGE_DEFINITION</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x40</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CHANGE_DEFINITION</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x40</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_SAME</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x41</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_SAME</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x41</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">UNMAP</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x42</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">UNMAP</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x42</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_TOC</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x43</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_TOC</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x43</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">GET_CONFIGURATION</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x46</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">GET_CONFIGURATION</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x46</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">LOG_SELECT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x4c</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">LOG_SELECT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x4c</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">LOG_SENSE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x4d</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">LOG_SENSE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x4d</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_DISK_INFO</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x51</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_DISK_INFO</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x51</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_TRACK_INFO</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x52</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_TRACK_INFO</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x52</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MODE_SELECT_10</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x55</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MODE_SELECT_10</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x55</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RESERVE_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x56</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RESERVE_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x56</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RELEASE_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x57</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RELEASE_10</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x57</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MODE_SENSE_10</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x5a</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MODE_SENSE_10</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x5a</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CLOSE_TRACK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x5b</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CLOSE_TRACK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x5b</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_BUFFER_CAP</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x5c</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_BUFFER_CAP</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x5c</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PERSISTENT_RESERVE_IN</span> <span class="TextSegElementNumber">0x5e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PERSISTENT_RESERVE_IN</span> <span class="TextSegElementNumber">0x5e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PERSISTENT_RESERVE_OUT</span> <span class="TextSegElementNumber">0x5f</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PERSISTENT_RESERVE_OUT</span> <span class="TextSegElementNumber">0x5f</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">VARLEN_CDB</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x7f</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">VARLEN_CDB</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x7f</span></td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">-+</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">EXTENDED_COPY</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">0x83</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RECEIVE_COPY_RESULTS</span><span class="TextSegInsigDiff">&nbsp; </span><span class="TextSegSigDiff">0x84</span><span class="TextSegInsigDiff"> </span><span class="TextSegInsigDiff">/* RECEIVE COPY STATUS */</span></td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_16</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x88</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_16</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x88</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">COMPARE_AND_WRITE</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x89</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">COMPARE_AND_WRITE</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x89</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_16</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x8a</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_16</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x8a</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ORWRITE_16</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x8b</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ORWRITE_16</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x8b</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_VERIFY_16</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x8e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_VERIFY_16</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x8e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">VERIFY_16</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x8f</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">VERIFY_16</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x8f</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PRE_FETCH_16</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x90</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PRE_FETCH_16</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x90</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SYNCHRONIZE_CACHE_16</span>&nbsp; <span class="TextSegElementNumber">0x91</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SYNCHRONIZE_CACHE_16</span>&nbsp; <span class="TextSegElementNumber">0x91</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_SAME_16</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x93</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_SAME_16</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x93</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SERVICE_ACTION_IN</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x9e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SERVICE_ACTION_IN</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x9e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAI_READ_CAPACITY_16</span>&nbsp; <span class="TextSegElementNumber">0x10</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAI_READ_CAPACITY_16</span>&nbsp; <span class="TextSegElementNumber">0x10</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAI_GET_LBA_STATUS</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x12</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAI_GET_LBA_STATUS</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x12</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">REPORT_LUNS</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xa0</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">REPORT_LUNS</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xa0</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MAINT_PROTOCOL_IN</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xa3</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MAINT_PROTOCOL_IN</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xa3</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MOVE_MEDIUM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xa5</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MOVE_MEDIUM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xa5</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">EXCHANGE_MEDIUM</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xa6</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">EXCHANGE_MEDIUM</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xa6</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_12</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xa8</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_12</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xa8</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_12</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0xaa</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_12</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0xaa</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">GET_PERFORMACE</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0xac</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">GET_PERFORMACE</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0xac</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_DVD_STRUCTURE</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0xad</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_DVD_STRUCTURE</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0xad</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_VERIFY_12</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xae</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_VERIFY_12</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xae</span></td>
+</tr>
+<tr class="SectionAll">
+<td class="TextItemInsigMod">#define VERIFY_12&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 0xaf</td>
+<td class="AlignCenter">&lt;&gt;</td>
+<td class="TextItemInsigMod">#define VERIFY_12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="TextSegInsigDiff">&nbsp; &nbsp; </span>0xaf</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_HIGH_12</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0xb0</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_HIGH_12</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0xb0</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_EQUAL_12</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xb1</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_EQUAL_12</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xb1</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_LOW_12</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xb2</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEARCH_LOW_12</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xb2</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_ELEMENT_STATUS</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0xb8</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">READ_ELEMENT_STATUS</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0xb8</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEND_VOLUME_TAG</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xb6</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SEND_VOLUME_TAG</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xb6</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SET_STREAMING</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xb6</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SET_STREAMING</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xb6</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SET_CD_SPEED</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0xbb</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SET_CD_SPEED</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0xbb</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_LONG_2</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0xea</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">WRITE_LONG_2</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0xea</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Service actions for opcode 0xa3 */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Service actions for opcode 0xa3 */</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MPI_REPORT_SUPPORTED_OPCODES</span> <span class="TextSegElementNumber">0x0c</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MPI_REPORT_SUPPORTED_OPCODES</span> <span class="TextSegElementNumber">0x0c</span></td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">-+</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">MPI_REPORT_TARGET_PGS</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">0x0a</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_GOOD</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_GOOD</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_CHECK_CONDITION</span> <span class="TextSegElementNumber">0x02</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_CHECK_CONDITION</span> <span class="TextSegElementNumber">0x02</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_CONDITION_MET</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0x04</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_CONDITION_MET</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0x04</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_BUSY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x08</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_BUSY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x08</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_INTERMEDIATE</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x10</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_INTERMEDIATE</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x10</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_INTERMEDIATE_CONDITION_MET</span> <span class="TextSegElementNumber">0x14</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_INTERMEDIATE_CONDITION_MET</span> <span class="TextSegElementNumber">0x14</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_RESERVATION_CONFLICT</span> <span class="TextSegElementNumber">0x18</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_RESERVATION_CONFLICT</span> <span class="TextSegElementNumber">0x18</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_COMMAND_TERMINATED</span> <span class="TextSegElementNumber">0x22</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_COMMAND_TERMINATED</span> <span class="TextSegElementNumber">0x22</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_TASK_SET_FULL</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0x28</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_TASK_SET_FULL</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0x28</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_ACA_ACTIVE</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x30</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_ACA_ACTIVE</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x30</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_TASK_ABORTED</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x40</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_TASK_ABORTED</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x40</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">NO_SENSE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">NO_SENSE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RECOVERED_ERROR</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x01</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">RECOVERED_ERROR</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">NOT_READY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x02</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">NOT_READY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x02</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MEDIUM_ERROR</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x03</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MEDIUM_ERROR</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x03</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">HARDWARE_ERROR</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x04</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">HARDWARE_ERROR</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x04</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ILLEGAL_REQUEST</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x05</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ILLEGAL_REQUEST</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x05</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">UNIT_ATTENTION</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x06</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">UNIT_ATTENTION</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x06</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">DATA_PROTECT</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x07</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">DATA_PROTECT</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x07</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">BLANK_CHECK</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x08</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">BLANK_CHECK</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x08</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">COPY_ABORTED</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0a</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">COPY_ABORTED</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0a</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ABORTED_COMMAND</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0b</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ABORTED_COMMAND</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0b</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">VOLUME_OVERFLOW</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0d</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">VOLUME_OVERFLOW</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0d</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MISCOMPARE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MISCOMPARE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_DISK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_DISK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_TAPE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x01</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_TAPE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_PRINTER</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x02</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_PRINTER</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x02</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_PROCESSOR</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x03</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_PROCESSOR</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x03</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_WORM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x04</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_WORM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x04</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_MMC</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x05</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_MMC</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x05</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_SCANNER</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x06</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_SCANNER</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x06</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_MOD</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x07</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_MOD</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x07</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_MEDIUM_CHANGER</span> <span class="TextSegElementNumber">0x08</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_MEDIUM_CHANGER</span> <span class="TextSegElementNumber">0x08</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_COMM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x09</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_COMM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x09</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_RAID</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0c</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_RAID</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0c</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_ENCLOSURE</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0d</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_ENCLOSURE</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0d</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_RBC</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_RBC</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_OSD</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x11</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_OSD</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x11</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_NO_LUN</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x7f</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_NO_LUN</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x7f</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_PT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xff</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TYPE_PT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0xff</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MSG_SIMPLE_TAG</span>&nbsp; <span class="TextSegElementNumber">0x20</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MSG_SIMPLE_TAG</span>&nbsp; <span class="TextSegElementNumber">0x20</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MSG_HEAD_TAG</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x21</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MSG_HEAD_TAG</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x21</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MSG_ORDERED_TAG</span> <span class="TextSegElementNumber">0x22</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MSG_ORDERED_TAG</span> <span class="TextSegElementNumber">0x22</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ABORT_TASK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0d</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ABORT_TASK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0d</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ABORT_TASK_SET</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x06</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ABORT_TASK_SET</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x06</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CLEAR_ACA</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x16</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CLEAR_ACA</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x16</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CLEAR_TASK_SET</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CLEAR_TASK_SET</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">LOGICAL_UNIT_RESET</span>&nbsp; <span class="TextSegElementNumber">0x17</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">LOGICAL_UNIT_RESET</span>&nbsp; <span class="TextSegElementNumber">0x17</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TASK_ABORTED</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x20</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">TASK_ABORTED</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x20</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_TASK_ABORTED</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x40</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">SAM_STAT_TASK_ABORTED</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x40</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 0: No Sense Errors */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 0: No Sense Errors */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">NO_ADDITIONAL_SENSE</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0000</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">NO_ADDITIONAL_SENSE</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0000</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MARK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0001</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MARK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0001</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_EOM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0002</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_EOM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0002</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_BOM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0004</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_BOM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0004</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_END_OF_DATA</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0005</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_END_OF_DATA</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0005</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_OP_IN_PROGRESS</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0016</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_OP_IN_PROGRESS</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0016</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_DRIVE_REQUIRES_CLEANING</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x8282</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_DRIVE_REQUIRES_CLEANING</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x8282</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 1: Recovered Errors */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 1: Recovered Errors */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_WRITE_ERROR</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0c00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_WRITE_ERROR</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0c00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_READ_ERROR</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x1100</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_READ_ERROR</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x1100</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_RECOVERED_WITH_RETRYS</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x1701</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_RECOVERED_WITH_RETRYS</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x1701</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIA_LOAD_EJECT_ERROR</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5300</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIA_LOAD_EJECT_ERROR</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5300</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_FAILURE_PREDICTION</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5d00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_FAILURE_PREDICTION</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5d00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 2: Not ready */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 2: Not ready */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_CAUSE_NOT_REPORTABLE</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0400</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_CAUSE_NOT_REPORTABLE</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0400</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_BECOMING_READY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0401</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_BECOMING_READY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x0401</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INITIALIZING_REQUIRED</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0402</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INITIALIZING_REQUIRED</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0402</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_CLEANING_CART_INSTALLED</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3003</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_CLEANING_CART_INSTALLED</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3003</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_CLEANING_FAILURE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3007</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_CLEANING_FAILURE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3007</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_NOT_PRESENT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3a00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_NOT_PRESENT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3a00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_LOGICAL_UNIT_NOT_CONFIG</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3e00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_LOGICAL_UNIT_NOT_CONFIG</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3e00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 3: Medium Errors */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 3: Medium Errors */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_WRITE_ERROR</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0c00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_WRITE_ERROR</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0c00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_UNRECOVERED_READ</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x1100</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_UNRECOVERED_READ</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x1100</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_RECORDED_ENTITY_NOT_FOUND</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x1400</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_RECORDED_ENTITY_NOT_FOUND</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x1400</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_UNKNOWN_FORMAT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3001</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_UNKNOWN_FORMAT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3001</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_IMCOMPATIBLE_FORMAT</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3002</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_IMCOMPATIBLE_FORMAT</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3002</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_FORMAT_CORRUPT</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3100</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_FORMAT_CORRUPT</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3100</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_SEQUENTIAL_POSITION_ERR</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3b00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_SEQUENTIAL_POSITION_ERR</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3b00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_WRITE_APPEND_ERR</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5000</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_WRITE_APPEND_ERR</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5000</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_CARTRIDGE_FAULT</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x5200</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_CARTRIDGE_FAULT</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x5200</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIA_LOAD_OR_EJECT_FAILED</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5300</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIA_LOAD_OR_EJECT_FAILED</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5300</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 4: Hardware Failure */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 4: Hardware Failure */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_COMPRESSION_CHECK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0c04</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_COMPRESSION_CHECK</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0c04</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_DECOMPRESSION_CRC</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x110d</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_DECOMPRESSION_CRC</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x110d</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MECHANICAL_POSITIONING_ERROR</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x1501</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MECHANICAL_POSITIONING_ERROR</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x1501</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MANUAL_INTERVENTION_REQ</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0403</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MANUAL_INTERVENTION_REQ</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0403</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_HARDWARE_FAILURE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x4000</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_HARDWARE_FAILURE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x4000</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INTERNAL_TGT_FAILURE</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x4400</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INTERNAL_TGT_FAILURE</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x4400</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_ERASE_FAILURE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x5100</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_ERASE_FAILURE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x5100</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 5: Illegal Request */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 5: Illegal Request */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_PARAMETER_LIST_LENGTH_ERR</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x1a00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_PARAMETER_LIST_LENGTH_ERR</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x1a00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INVALID_OP_CODE</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2000</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INVALID_OP_CODE</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2000</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_LBA_OUT_OF_RANGE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2100</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_LBA_OUT_OF_RANGE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2100</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INVALID_FIELD_IN_CDB</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2400</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INVALID_FIELD_IN_CDB</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2400</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_LUN_NOT_SUPPORTED</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2500</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_LUN_NOT_SUPPORTED</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2500</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INVALID_FIELD_IN_PARMS</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2600</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INVALID_FIELD_IN_PARMS</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2600</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INVALID_RELEASE_OF_PERSISTENT_RESERVATION</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0x2604</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INVALID_RELEASE_OF_PERSISTENT_RESERVATION</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0x2604</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INCOMPATIBLE_FORMAT</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3005</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INCOMPATIBLE_FORMAT</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3005</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_SAVING_PARMS_UNSUP</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3900</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_SAVING_PARMS_UNSUP</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3900</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_DEST_FULL</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3b0d</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_DEST_FULL</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3b0d</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_SRC_EMPTY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3b0e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_SRC_EMPTY</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3b0e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_POSITION_PAST_BOM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3b0c</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_POSITION_PAST_BOM</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x3b0c</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_REMOVAL_PREVENTED</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5302</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_REMOVAL_PREVENTED</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5302</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INSUFFICENT_REGISTRATION_RESOURCES</span>&nbsp; <span class="TextSegElementNumber">0x5504</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INSUFFICENT_REGISTRATION_RESOURCES</span>&nbsp; <span class="TextSegElementNumber">0x5504</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_BAD_MICROCODE_DETECTED</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x8283</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_BAD_MICROCODE_DETECTED</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x8283</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 6: Unit Attention */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Key 6: Unit Attention */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_NOT_READY_TO_TRANSITION</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2800</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_NOT_READY_TO_TRANSITION</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2800</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_POWERON_RESET</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2900</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_POWERON_RESET</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2900</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_I_T_NEXUS_LOSS_OCCURRED</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2907</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_I_T_NEXUS_LOSS_OCCURRED</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2907</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MODE_PARAMETERS_CHANGED</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2a01</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MODE_PARAMETERS_CHANGED</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2a01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_RESERVATIONS_PREEMPTED</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2a03</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_RESERVATIONS_PREEMPTED</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x2a03</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_RESERVATIONS_RELEASED</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2a04</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_RESERVATIONS_RELEASED</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2a04</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INSUFFICIENT_TIME_FOR_OPERATION</span> <span class="TextSegElementNumber">0x2e00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INSUFFICIENT_TIME_FOR_OPERATION</span> <span class="TextSegElementNumber">0x2e00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_CMDS_CLEARED_BY_ANOTHER_INI</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2f00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_CMDS_CLEARED_BY_ANOTHER_INI</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2f00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MICROCODE_DOWNLOADED</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3f01</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MICROCODE_DOWNLOADED</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3f01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INQUIRY_DATA_HAS_CHANGED</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3f03</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_INQUIRY_DATA_HAS_CHANGED</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x3f03</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_REPORTED_LUNS_DATA_HAS_CHANGED</span>&nbsp; <span class="TextSegElementNumber">0x3f0e</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_REPORTED_LUNS_DATA_HAS_CHANGED</span>&nbsp; <span class="TextSegElementNumber">0x3f0e</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_FAILURE_PREDICTION_FALSE</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5dff</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_FAILURE_PREDICTION_FALSE</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x5dff</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Data Protect */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Data Protect */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_WRITE_PROTECT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2700</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_WRITE_PROTECT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x2700</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_OVERWRITE_ATTEMPTED</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x300c</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MEDIUM_OVERWRITE_ATTEMPTED</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x300c</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Miscompare */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Miscompare */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MISCOMPARE_DURING_VERIFY_OPERATION</span>&nbsp; <span class="TextSegElementNumber">0x1d00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">ASC_MISCOMPARE_DURING_VERIFY_OPERATION</span>&nbsp; <span class="TextSegElementNumber">0x1d00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* PERSISTENT_RESERVE_IN service action codes */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* PERSISTENT_RESERVE_IN service action codes */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_IN_READ_KEYS</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_IN_READ_KEYS</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_IN_READ_RESERVATION</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x01</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_IN_READ_RESERVATION</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_IN_REPORT_CAPABILITIES</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x02</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_IN_REPORT_CAPABILITIES</span>&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x02</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_IN_READ_FULL_STATUS</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x03</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_IN_READ_FULL_STATUS</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x03</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* PERSISTENT_RESERVE_OUT service action codes */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* PERSISTENT_RESERVE_OUT service action codes */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_REGISTER</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_REGISTER</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_RESERVE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x01</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_RESERVE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_RELEASE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x02</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_RELEASE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x02</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_CLEAR</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x03</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_CLEAR</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x03</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_PREEMPT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x04</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_PREEMPT</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x04</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_PREEMPT_AND_ABORT</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x05</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_PREEMPT_AND_ABORT</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x05</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_REGISTER_AND_IGNORE_EXISTING_KEY</span> <span class="TextSegElementNumber">0x06</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_REGISTER_AND_IGNORE_EXISTING_KEY</span> <span class="TextSegElementNumber">0x06</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_REGISTER_AND_MOVE</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x07</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_OUT_REGISTER_AND_MOVE</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x07</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Persistent Reservation scope */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Persistent Reservation scope */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_LU_SCOPE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x00</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_LU_SCOPE</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">/* Persistent Reservation Type Mask format */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/* Persistent Reservation Type Mask format */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_WRITE_EXCLUSIVE</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x01</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_WRITE_EXCLUSIVE</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_EXCLUSIVE_ACCESS</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x03</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_EXCLUSIVE_ACCESS</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x03</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_WRITE_EXCLUSIVE_REGONLY</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x05</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_WRITE_EXCLUSIVE_REGONLY</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x05</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_EXCLUSIVE_ACCESS_REGONLY</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x06</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_EXCLUSIVE_ACCESS_REGONLY</span>&nbsp; &nbsp; <span class="TextSegElementNumber">0x06</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_WRITE_EXCLUSIVE_ALLREG</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x07</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_WRITE_EXCLUSIVE_ALLREG</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementNumber">0x07</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_EXCLUSIVE_ACCESS_ALLREG</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x08</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">PR_TYPE_EXCLUSIVE_ACCESS_ALLREG</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x08</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">-+</td>
+<td class="TextItemInsigMod"><span class="TextSegInsigDiff">/*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod"><span class="TextSegInsigDiff">&nbsp;* Receive Copy Results Sevice Actions</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod"><span class="TextSegInsigDiff">&nbsp;*/</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_SA_COPY_STATUS</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="TextSegSigDiff">0x00</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_SA_RECEIVE_DATA</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">0x01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_SA_OPERATING_PARAMETERS</span><span class="TextSegInsigDiff">&nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">0x03</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_SA_FAILED_SEGMENT_DETAILS</span><span class="TextSegInsigDiff">&nbsp;&nbsp; </span><span class="TextSegSigDiff">0x04</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod"><span class="TextSegInsigDiff">/*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod"><span class="TextSegInsigDiff">&nbsp;* Receive Copy Results Operating Parameters</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod"><span class="TextSegInsigDiff">&nbsp;*/</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_OP_MAX_TARGET_DESC_COUNT</span><span class="TextSegInsigDiff">&nbsp; &nbsp; </span><span class="TextSegSigDiff">0x02</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_OP_MAX_SEGMENT_DESC_COUNT</span><span class="TextSegInsigDiff">&nbsp;&nbsp; </span><span class="TextSegSigDiff">0x01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_OP_MAX_DESC_LIST_LEN</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="TextSegSigDiff">1024</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_OP_MAX_SEGMENT_LEN</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="TextSegSigDiff">1024</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_OP_TOTAL_CONCURR_COPIES</span><span class="TextSegInsigDiff">&nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">0x01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_OP_MAX_CONCURR_COPIES</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">0x01</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_OP_DATA_SEG_GRAN_LOG2</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">0x09</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_OP_INLINE_DATA_GRAN_LOG2</span><span class="TextSegInsigDiff">&nbsp; &nbsp; </span><span class="TextSegSigDiff">0x09</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_OP_HELD_DATA_GRAN_LOG2</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp; </span><span class="TextSegSigDiff">0x09</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod"><span class="TextSegInsigDiff">/*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod"><span class="TextSegInsigDiff">&nbsp;* Receive Copy Results descriptor type codes supports</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod"><span class="TextSegInsigDiff">&nbsp;*/</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">RCR_OP_IMPLE_DES_LIST_LENGTH</span><span class="TextSegInsigDiff">&nbsp; &nbsp; </span><span class="TextSegSigDiff">0x02</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">XCOPY_SEG_DESC_TYPE_CODE_B2B</span><span class="TextSegInsigDiff">&nbsp; &nbsp; </span><span class="TextSegSigDiff">0x02</span><span class="TextSegInsigDiff"> </span><span class="TextSegInsigDiff">/* block --&gt; block */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#define</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">XCOPY_TARGET_DESC_TYPE_CODE_ID</span><span class="TextSegInsigDiff">&nbsp; </span><span class="TextSegSigDiff">0xe4</span><span class="TextSegInsigDiff"> </span><span class="TextSegInsigDiff">/* Identification descriptor */</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;</td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;</td>
+</tr>
+<tr class="SectionAll">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#endif</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#endif</span></td>
+</tr>
+</table>
+<br/>
+</body>
+</html>

@@ -1,0 +1,43 @@
+《 大话 Ceph 》 之 CRUSH 那点事儿     https://cloud.tencent.com/developer/article/1006315
+
+
+2、item_weights为子树的weights(根据osd的大小)
+3、straws是为了使落到每个子树的概率之比等于
+weight之比（应该是用几何概率计算,最小哪个数为
+65536）
+
+假如有osd0,osd1,osd2
+选osd的规则是  max(伪随机数0*straws0,伪随机数1*straws1,伪随机数2*straws2)
+
+选择osd的概率由 straws0，straws1，straws2 决定
+
+假如osd0,osd1,osd2的大小比例为2:3:4
+那么如何求 s1,s2,s3呢 （使用几何概率，用点（x,y,z）表示坐标
+假如s3>s2>s1
+
+p(x>y) = (s1*s1/2) / (s1*s2)  = s1/(2*s2) (有效面积/总面积)
+
+p(y>x) = 1 - p(x>y) = 1 - s1/(2*s2)
+
+p(x>z) = (s1*s1/2) / (s1*s3) = s1/(2*s3)
+
+p(z>x) = 1 - p(x>z)
+
+p(y>z) = (s2*s2/2) / (s2*s3) = s2/(2*s3)
+
+p(z>y) = 1 - p(y>z)
+
+
+选择osd0的概率为：
+p(osd0) = p(x>y) * p(x>z)
+
+选择osd1的概率为：
+p(osd1) = p(y>x) * p(y>z)
+
+选择osd2的概率为：
+p(osd2) = p(z>x) * p(z>y)
+
+可得 
+s1=65536
+s2=75674
+s3=85133

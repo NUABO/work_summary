@@ -1,0 +1,55 @@
+cat /etc/ceph/ceph.conf 
+[global]
+public network = 192.168.0.0/16
+cluster network = 192.168.0.0/16
+pid file = /var/run/ceph/$name.pid
+log file = /var/log/ceph/$name.log
+auth cluster required = none
+auth service required = none
+auth client required = none
+keyring = /etc/ceph/keyring.$name
+osd pool default size = 1
+osd pool default min size = 1
+osd pool default crush rule = 0
+osd crush chooseleaf type = 0
+
+[mon]
+mon data = /var/lib/ceph/mon/$name
+mon clock drift allowed = .15
+keyring = /etc/ceph/keyring.$name
+
+[mon.0]
+host = zhong3
+mon addr = 192.168.14.87:6789
+
+[client]
+rbd_cache=false
+
+[osd]
+#osd mkfs type = xfs
+#osd mount options xfs = rw,noatime,inode64,logbsize=256k,delaylog
+#osd max write size = 512
+osd data = /mnt/osd$id
+osd recovery max active = 5
+osd journal = /mnt/osd$id/journal
+osd journal size = 10000
+keyring = /etc/ceph/keyring.$name
+osd op threads = 8
+
+[osd.0]
+public addr = 192.168.14.87
+cluster addr = 192.168.14.87
+host = zhong3
+devs = /dev/vdb
+
+[osd.1]
+public addr = 192.168.14.87
+cluster addr = 192.168.14.87
+host = zhong3
+devs = /dev/vdc
+
+[osd.2]
+public addr = 192.168.14.87
+cluster addr = 192.168.14.87
+host = zhong3
+devs = /dev/vdd

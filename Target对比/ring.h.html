@@ -1,0 +1,582 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+.AlignLeft { text-align: left; }
+.AlignCenter { text-align: center; }
+.AlignRight { text-align: right; }
+body { font-family: sans-serif; font-size: 11pt; }
+td { vertical-align: top; padding-left: 4px; padding-right: 4px; }
+
+tr.SectionGap td { font-size: 4px; border-left: none; border-top: none; border-bottom: 1px solid Black; border-right: 1px solid Black; }
+tr.SectionAll td { border-left: none; border-top: none; border-bottom: 1px solid Black; border-right: 1px solid Black; }
+tr.SectionBegin td { border-left: none; border-top: none; border-right: 1px solid Black; }
+tr.SectionEnd td { border-left: none; border-top: none; border-bottom: 1px solid Black; border-right: 1px solid Black; }
+tr.SectionMiddle td { border-left: none; border-top: none; border-right: 1px solid Black; }
+tr.SubsectionAll td { border-left: none; border-top: none; border-bottom: 1px solid Gray; border-right: 1px solid Black; }
+tr.SubsectionEnd td { border-left: none; border-top: none; border-bottom: 1px solid Gray; border-right: 1px solid Black; }
+table.fc { border-top: 1px solid Black; border-left: 1px solid Black; width: 100%; font-family: monospace; font-size: 10pt; }
+td.TextItemInsigAdd { color: #000000; background-color: #EEEEFF; }
+td.TextItemInsigDel { color: #000000; background-color: #EEEEFF; text-decoration: line-through; }
+td.TextItemInsigMod { color: #000000; background-color: #EEEEFF; }
+td.TextItemInsigOrphan { color: #000000; background-color: #FAEEFF; }
+td.TextItemNum { color: #696969; background-color: #F0F0F0; }
+td.TextItemSame { color: #000000; background-color: #FFFFFF; }
+td.TextItemSigAdd { color: #000000; background-color: #FFE3E3; }
+td.TextItemSigDel { color: #000000; background-color: #FFE3E3; text-decoration: line-through; }
+td.TextItemSigMod { color: #000000; background-color: #FFE3E3; }
+td.TextItemSigOrphan { color: #000000; background-color: #F1E3FF; }
+.TextSegInsigDiff { color: #0000FF; }
+.TextSegReplacedDiff { color: #0000FF; font-style: italic; }
+.TextSegSigDiff { color: #FF0000; }
+.TextSegElementKeyword { font-weight: bold; }
+.TextSegElementIdentifier { }
+.TextSegElementNumber { color: #2E9269; }
+.TextSegElementString { color: #3A7726; }
+.TextSegElementCompiler_32Directive { color: #681717; }
+.TextSegElementComment { color: #786A41; }
+.TextSegElementOperator { }
+</style>
+<title>Text Compare</title>
+</head>
+<body>
+Text Compare<br/>
+Produced: 2017/11/28 19:50:44<br/>
+&nbsp; &nbsp;
+<br/>
+Mode:&nbsp; All &nbsp;
+<br/>
+Left base folder: D:\Users\zhong\Desktop\Target-5.2 &nbsp;
+<br/>
+Right base folder: D:\Users\zhong\Desktop\Target-5.3 &nbsp;
+<br/>
+&nbsp; &nbsp;
+<br/>
+File: usr\ring.h &nbsp;
+<br/>
+<table class="fc" cellspacing="0" cellpadding="0">
+<tr class="SectionBegin">
+<td class="TextItemSame"><span class="TextSegElementComment">/*</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* shared memory ring buffer</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* shared memory ring buffer</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* Copyright (C) 2016 chaolu zhang &lt;finals@126.com&gt;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* Copyright (C) 2016 chaolu zhang &lt;finals@126.com&gt;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* This program is free software; you can redistribute it and/or</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* This program is free software; you can redistribute it and/or</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* modify it under the terms of the GNU General Public License as</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* modify it under the terms of the GNU General Public License as</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* published by the Free Software Foundation, version 2 of the</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* published by the Free Software Foundation, version 2 of the</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* License.</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* License.</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* This program is distributed in the hope that it will be useful, but</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* This program is distributed in the hope that it will be useful, but</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* WITHOUT ANY WARRANTY; without even the implied warranty of</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* WITHOUT ANY WARRANTY; without even the implied warranty of</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* General Public License for more details.</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* General Public License for more details.</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* You should have received a copy of the GNU General Public License</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* You should have received a copy of the GNU General Public License</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* along with this program; if not, write to the Free Software</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* along with this program; if not, write to the Free Software</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* 02110-1301 USA</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* 02110-1301 USA</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*/</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*/</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#ifndef</span> <span class="TextSegElementIdentifier">__SHARED_RING_BUFFER__</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#ifndef</span> <span class="TextSegElementIdentifier">__SHARED_RING_BUFFER__</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">__SHARED_RING_BUFFER__</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">__SHARED_RING_BUFFER__</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#include</span> <span class="TextSegElementOperator">&lt;</span><span class="TextSegElementIdentifier">pthread</span><span class="TextSegElementOperator">.</span><span class="TextSegElementIdentifier">h</span><span class="TextSegElementOperator">&gt;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#include</span> <span class="TextSegElementOperator">&lt;</span><span class="TextSegElementIdentifier">pthread</span><span class="TextSegElementOperator">.</span><span class="TextSegElementIdentifier">h</span><span class="TextSegElementOperator">&gt;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#include</span> <span class="TextSegElementOperator">&lt;</span><span class="TextSegElementIdentifier">stdint</span><span class="TextSegElementOperator">.</span><span class="TextSegElementIdentifier">h</span><span class="TextSegElementOperator">&gt;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#include</span> <span class="TextSegElementOperator">&lt;</span><span class="TextSegElementIdentifier">stdint</span><span class="TextSegElementOperator">.</span><span class="TextSegElementIdentifier">h</span><span class="TextSegElementOperator">&gt;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#include</span> <span class="TextSegElementString">&quot;list.h&quot;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#include</span> <span class="TextSegElementString">&quot;list.h&quot;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_DEPTH</span> <span class="TextSegElementNumber">16</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_DEPTH</span> <span class="TextSegElementNumber">16</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_MASK</span> <span class="TextSegElementOperator">(</span><span class="TextSegElementIdentifier">CMD_DEPTH</span> <span class="TextSegElementOperator">-</span> <span class="TextSegElementNumber">1</span><span class="TextSegElementOperator">)</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_MASK</span> <span class="TextSegElementOperator">(</span><span class="TextSegElementIdentifier">CMD_DEPTH</span> <span class="TextSegElementOperator">-</span> <span class="TextSegElementNumber">1</span><span class="TextSegElementOperator">)</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_DATA_SIZE</span> <span class="TextSegElementNumber">20971520</span> <span class="TextSegElementComment">//20M</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_DATA_SIZE</span> <span class="TextSegElementNumber">20971520</span> <span class="TextSegElementComment">//20M</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_COMMON_LEN</span> <span class="TextSegElementNumber">1310720</span> <span class="TextSegElementComment">//1.25M</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_COMMON_LEN</span> <span class="TextSegElementNumber">1310720</span> <span class="TextSegElementComment">//1.25M</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_HUGE_LEN</span>&nbsp;&nbsp; <span class="TextSegElementNumber">4194304</span> <span class="TextSegElementComment">//4M</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_HUGE_LEN</span>&nbsp;&nbsp; <span class="TextSegElementNumber">4194304</span> <span class="TextSegElementComment">//4M</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_HUGE_IDX</span>&nbsp;&nbsp; <span class="TextSegElementNumber">99999</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">CMD_HUGE_IDX</span>&nbsp;&nbsp; <span class="TextSegElementNumber">99999</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MAGIC</span> <span class="TextSegElementNumber">0x654321</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">MAGIC</span> <span class="TextSegElementNumber">0x654321</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">STATE_FREE</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">STATE_FREE</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x0</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">STATE_SEND</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x1</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">STATE_SEND</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementNumber">0x1</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">STATE_HANDLE</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0x2</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">STATE_HANDLE</span>&nbsp;&nbsp; <span class="TextSegElementNumber">0x2</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame"><span class="TextSegElementKeyword">enum</span> <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementOperator">{</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">enum</span> <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementOperator">{</span></td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeRead&nbsp; &nbsp;&nbsp; = 0x12,</td>
+<td class="AlignCenter">&lt;&gt;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeRead&nbsp; &nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x12,</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeWrite&nbsp; &nbsp; = 0x13,</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeWrite&nbsp;&nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x13,</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp;&nbsp; </span><span class="TextSegSigDiff">TypeXCopy</span><span class="TextSegInsigDiff">&nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">=</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">0x15</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp;&nbsp; </span><span class="TextSegSigDiff">TypeUnmap</span><span class="TextSegInsigDiff">&nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">=</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">0x16</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp;&nbsp; </span><span class="TextSegSigDiff">TypeWriteSame</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">=</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">0x17</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp;&nbsp; </span><span class="TextSegSigDiff">TypeCAW</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">=</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">0x18</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp;&nbsp; </span><span class="TextSegSigDiff">TypeRtpg</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp; </span><span class="TextSegSigDiff">=</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">0x19</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeOK&nbsp; &nbsp; &nbsp;&nbsp; = 0x80,</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeOK&nbsp; &nbsp; &nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x80,</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeError&nbsp; &nbsp; = 0x81,</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeError&nbsp;&nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x81,</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeEOF&nbsp; &nbsp; &nbsp; = 0x82,</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeEOF&nbsp; &nbsp;&nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x82,</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeTimeout&nbsp; = 0x83,</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeTimeout &nbsp;<span class="TextSegInsigDiff"> </span>= 0x83,</td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeClose&nbsp; &nbsp; = 0x86</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeClose&nbsp;&nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x86</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#pragma</span> <span class="TextSegElementIdentifier">pack</span><span class="TextSegElementOperator">(</span><span class="TextSegElementNumber">1</span><span class="TextSegElementOperator">)</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#pragma</span> <span class="TextSegElementIdentifier">pack</span><span class="TextSegElementOperator">(</span><span class="TextSegElementNumber">1</span><span class="TextSegElementOperator">)</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd</span> <span class="TextSegElementOperator">{</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd</span> <span class="TextSegElementOperator">{</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">state</span><span class="TextSegElementOperator">;</span>&nbsp;&nbsp; <span class="TextSegElementComment">//命令状态</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">state</span><span class="TextSegElementOperator">;</span>&nbsp;&nbsp; <span class="TextSegElementComment">//命令状态</span></td>
+</tr>
+<tr class="SectionAll">
+<td class="TextItemSigMod">&nbsp;&nbsp;&nbsp; uint<span class="TextSegSigDiff">32</span>_t length;&nbsp; //命令数据长度</td>
+<td class="AlignCenter">&lt;&gt;</td>
+<td class="TextItemSigMod">&nbsp;&nbsp;&nbsp; uint<span class="TextSegSigDiff">64</span>_t length;&nbsp; //命令数据长度</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint64_t</span> <span class="TextSegElementIdentifier">seq</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementComment">//命令序号</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint64_t</span> <span class="TextSegElementIdentifier">seq</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementComment">//命令序号</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">type</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp; <span class="TextSegElementComment">//命令类型</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">type</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp; <span class="TextSegElementComment">//命令类型</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">rtype</span><span class="TextSegElementOperator">;</span>&nbsp;&nbsp; <span class="TextSegElementComment">//命令返回类型</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">rtype</span><span class="TextSegElementOperator">;</span>&nbsp;&nbsp; <span class="TextSegElementComment">//命令返回类型</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">int64_t</span>&nbsp; <span class="TextSegElementIdentifier">offset</span><span class="TextSegElementOperator">;</span>&nbsp; <span class="TextSegElementComment">//命令在磁盘的偏移</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">int64_t</span>&nbsp; <span class="TextSegElementIdentifier">offset</span><span class="TextSegElementOperator">;</span>&nbsp; <span class="TextSegElementComment">//命令在磁盘的偏移</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">char</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">data</span><span class="TextSegElementOperator">[</span><span class="TextSegElementIdentifier">CMD_COMMON_LEN</span><span class="TextSegElementOperator">];</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">char</span>&nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">data</span><span class="TextSegElementOperator">[</span><span class="TextSegElementIdentifier">CMD_COMMON_LEN</span><span class="TextSegElementOperator">];</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_cond_t</span>&nbsp; <span class="TextSegElementIdentifier">cond</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//命令完成通知</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_cond_t</span>&nbsp; <span class="TextSegElementIdentifier">cond</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//命令完成通知</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_mutex_t</span> <span class="TextSegElementIdentifier">mutex</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_mutex_t</span> <span class="TextSegElementIdentifier">mutex</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd_idx</span> <span class="TextSegElementOperator">{</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd_idx</span> <span class="TextSegElementOperator">{</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">idx</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementComment">//命令所在的数组下标</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">idx</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementComment">//命令所在的数组下标</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">list_head</span> <span class="TextSegElementIdentifier">free</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//链入ringbuffer中的空闲链表</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">list_head</span> <span class="TextSegElementIdentifier">free</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//链入ringbuffer中的空闲链表</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">list_head</span> <span class="TextSegElementIdentifier">used</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//链入ringbuffer中的使用链表</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">list_head</span> <span class="TextSegElementIdentifier">used</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//链入ringbuffer中的使用链表</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">cmd</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementComment">//指向共享内存对应命令的地址</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">cmd</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementComment">//指向共享内存对应命令的地址</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ring</span> <span class="TextSegElementOperator">{</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ring</span> <span class="TextSegElementOperator">{</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">magic</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementComment">//魔数</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">magic</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementComment">//魔数</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd</span> <span class="TextSegElementIdentifier">cmds</span><span class="TextSegElementOperator">[</span><span class="TextSegElementIdentifier">CMD_DEPTH</span><span class="TextSegElementOperator">];</span>&nbsp; <span class="TextSegElementComment">//common命令区域</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd</span> <span class="TextSegElementIdentifier">cmds</span><span class="TextSegElementOperator">[</span><span class="TextSegElementIdentifier">CMD_DEPTH</span><span class="TextSegElementOperator">];</span>&nbsp; <span class="TextSegElementComment">//common命令区域</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd</span> <span class="TextSegElementIdentifier">huge</span><span class="TextSegElementOperator">[</span><span class="TextSegElementNumber">0</span><span class="TextSegElementOperator">];</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementComment">//huge命令区域</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd</span> <span class="TextSegElementIdentifier">huge</span><span class="TextSegElementOperator">[</span><span class="TextSegElementNumber">0</span><span class="TextSegElementOperator">];</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementComment">//huge命令区域</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ringbuffer</span> <span class="TextSegElementOperator">{</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ringbuffer</span> <span class="TextSegElementOperator">{</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">sendix</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//下一个发送命令所在数组的编号</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">sendix</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//下一个发送命令所在数组的编号</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">recvix</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//下一个完成命令所在数据的编号</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">recvix</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//下一个完成命令所在数据的编号</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">restix</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//命令区域空闲命令数量</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">restix</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//命令区域空闲命令数量</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">size</span><span class="TextSegElementOperator">;</span>&nbsp;&nbsp; <span class="TextSegElementComment">//共享内存区域大小</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">size</span><span class="TextSegElementOperator">;</span>&nbsp;&nbsp; <span class="TextSegElementComment">//共享内存区域大小</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ring</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">buffer</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ring</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">buffer</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">list_head</span> <span class="TextSegElementIdentifier">free_list</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//命令空闲链表</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">list_head</span> <span class="TextSegElementIdentifier">free_list</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//命令空闲链表</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">list_head</span> <span class="TextSegElementIdentifier">used_list</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//命令使用链表</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">list_head</span> <span class="TextSegElementIdentifier">used_list</span><span class="TextSegElementOperator">;</span> <span class="TextSegElementComment">//命令使用链表</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">char</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">shm_file</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementKeyword">char</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">shm_file</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_mutex_t</span> <span class="TextSegElementIdentifier">mutex</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementComment">//保护ringbuffer结构</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_mutex_t</span> <span class="TextSegElementIdentifier">mutex</span><span class="TextSegElementOperator">;</span>&nbsp; &nbsp; &nbsp; <span class="TextSegElementComment">//保护ringbuffer结构</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ringbuffer</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">init</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">char</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">shm_file</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ringbuffer</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">init</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">char</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">shm_file</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame"><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">destroy</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ringbuffer</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">ringbuf</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">destroy</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ringbuffer</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">ringbuf</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionAll">
+<td class="TextItemSigMod">struct cmnd * add(struct ringbuffer *rbuf, void *buf, uint<span class="TextSegSigDiff">32</span>_t length, int64_t offset,</td>
+<td class="AlignCenter">&lt;&gt;</td>
+<td class="TextItemSigMod">struct cmnd * add(struct ringbuffer *rbuf, void *buf, uint<span class="TextSegSigDiff">64</span>_t length, int64_t offset,</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">type</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementIdentifier">uint64_t</span> <span class="TextSegElementIdentifier">seq</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">idx</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">type</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementIdentifier">uint64_t</span> <span class="TextSegElementIdentifier">seq</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">idx</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">del</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ringbuffer</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">rbuf</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">idx</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">del</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ringbuffer</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">rbuf</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">idx</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">get</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ringbuffer</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">rbuf</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">idx</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">cmnd</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">get</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">ringbuffer</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">rbuf</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementIdentifier">idx</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#endif</span> <span class="TextSegElementComment">/* __SHARED_RING_BUFFER__ */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#endif</span> <span class="TextSegElementComment">/* __SHARED_RING_BUFFER__ */</span></td>
+</tr>
+</table>
+<br/>
+</body>
+</html>

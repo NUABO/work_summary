@@ -3,11 +3,19 @@
 systemctl stop  ceph-mon@0
 rm -rf /tmp/monmap 
 rm -rf /var/lib/ceph/mon/mon.0/*
-monmaptool  --create --add 0 192.168.3.202 /tmp/monmap
+monmaptool  --create --add 0 192.168.9.27 /tmp/monmap
 ceph-mon --mkfs -i 0 --monmap /tmp/monmap
 chown -R ceph:ceph /var/lib/ceph/
 systemctl start  ceph-mon@0
 systemctl status  ceph-mon@0
+
+#修改monitor ip之后要重新生成  monmaptool --create --generate -c /etc/ceph/ceph.conf /tmp/monmap
+
+修改 vi /usr/lib/ceph/ceph-osd-prestart.sh
+
+data="/var/lib/ceph/osd/${cluster:-ceph}-$id"     改为          data="/mnt/osd$id"
+
+systemctl stop  ceph-osd@0
 rm -rf /mnt/osd0/*
 ceph osd create
 ceph-osd -i 0 --mkfs --mkkey 
@@ -21,7 +29,21 @@ ExecStart=/usr/bin/ceph-osd -f --cluster ${CLUSTER} --id %i
 
 systemctl start  ceph-osd@0
 systemctl status  ceph-osd@0
-ceph osd pool create rep-pool 256 256 replicated
+
+ceph osd create
+ceph-osd -i 1 --mkfs --mkkey 
+chown -R ceph:ceph /mnt/osd1
+systemctl start  ceph-osd@1
+systemctl status  ceph-osd@1
+
+ceph osd create
+ceph-osd -i 2 --mkfs --mkkey 
+chown -R ceph:ceph /mnt/osd2
+systemctl start  ceph-osd@2
+systemctl status  ceph-osd@2
+
+
+ceph osd pool create rep-pool 128 128 replicated
 ceph osd pool set rep-pool size 3
 rbd create volume-1 --size 10240 -p rep-pool  --image-format 2
 

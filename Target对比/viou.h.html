@@ -1,0 +1,537 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+.AlignLeft { text-align: left; }
+.AlignCenter { text-align: center; }
+.AlignRight { text-align: right; }
+body { font-family: sans-serif; font-size: 11pt; }
+td { vertical-align: top; padding-left: 4px; padding-right: 4px; }
+
+tr.SectionGap td { font-size: 4px; border-left: none; border-top: none; border-bottom: 1px solid Black; border-right: 1px solid Black; }
+tr.SectionAll td { border-left: none; border-top: none; border-bottom: 1px solid Black; border-right: 1px solid Black; }
+tr.SectionBegin td { border-left: none; border-top: none; border-right: 1px solid Black; }
+tr.SectionEnd td { border-left: none; border-top: none; border-bottom: 1px solid Black; border-right: 1px solid Black; }
+tr.SectionMiddle td { border-left: none; border-top: none; border-right: 1px solid Black; }
+tr.SubsectionAll td { border-left: none; border-top: none; border-bottom: 1px solid Gray; border-right: 1px solid Black; }
+tr.SubsectionEnd td { border-left: none; border-top: none; border-bottom: 1px solid Gray; border-right: 1px solid Black; }
+table.fc { border-top: 1px solid Black; border-left: 1px solid Black; width: 100%; font-family: monospace; font-size: 10pt; }
+td.TextItemInsigAdd { color: #000000; background-color: #EEEEFF; }
+td.TextItemInsigDel { color: #000000; background-color: #EEEEFF; text-decoration: line-through; }
+td.TextItemInsigMod { color: #000000; background-color: #EEEEFF; }
+td.TextItemInsigOrphan { color: #000000; background-color: #FAEEFF; }
+td.TextItemNum { color: #696969; background-color: #F0F0F0; }
+td.TextItemSame { color: #000000; background-color: #FFFFFF; }
+td.TextItemSigAdd { color: #000000; background-color: #FFE3E3; }
+td.TextItemSigDel { color: #000000; background-color: #FFE3E3; text-decoration: line-through; }
+td.TextItemSigMod { color: #000000; background-color: #FFE3E3; }
+td.TextItemSigOrphan { color: #000000; background-color: #F1E3FF; }
+.TextSegInsigDiff { color: #0000FF; }
+.TextSegReplacedDiff { color: #0000FF; font-style: italic; }
+.TextSegSigDiff { color: #FF0000; }
+.TextSegElementKeyword { font-weight: bold; }
+.TextSegElementIdentifier { }
+.TextSegElementNumber { color: #2E9269; }
+.TextSegElementString { color: #3A7726; }
+.TextSegElementCompiler_32Directive { color: #681717; }
+.TextSegElementComment { color: #786A41; }
+.TextSegElementOperator { }
+</style>
+<title>Text Compare</title>
+</head>
+<body>
+Text Compare<br/>
+Produced: 2017/11/28 19:56:11<br/>
+&nbsp; &nbsp;
+<br/>
+Mode:&nbsp; All &nbsp;
+<br/>
+Left base folder: D:\Users\zhong\Desktop\Target-5.2 &nbsp;
+<br/>
+Right base folder: D:\Users\zhong\Desktop\Target-5.3 &nbsp;
+<br/>
+&nbsp; &nbsp;
+<br/>
+File: usr\viou.h &nbsp;
+<br/>
+<table class="fc" cellspacing="0" cellpadding="0">
+<tr class="SectionBegin">
+<td class="TextItemSame"><span class="TextSegElementComment">/*</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame"><span class="TextSegElementComment">/*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* SCSI object storage device command processing</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* SCSI object storage device command processing</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* Copyright (C) 2016 chaolu zhang &lt;finals@126.com&gt;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* Copyright (C) 2016 chaolu zhang &lt;finals@126.com&gt;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* This program is free software; you can redistribute it and/or</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* This program is free software; you can redistribute it and/or</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* modify it under the terms of the GNU General Public License as</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* modify it under the terms of the GNU General Public License as</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* published by the Free Software Foundation, version 2 of the</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* published by the Free Software Foundation, version 2 of the</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* License.</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* License.</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* This program is distributed in the hope that it will be useful, but</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* This program is distributed in the hope that it will be useful, but</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* WITHOUT ANY WARRANTY; without even the implied warranty of</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* WITHOUT ANY WARRANTY; without even the implied warranty of</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the GNU</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the GNU</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* General Public License for more details.</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* General Public License for more details.</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* You should have received a copy of the GNU General Public License</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* You should have received a copy of the GNU General Public License</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* along with this program; if not, write to the Free Software</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* along with this program; if not, write to the Free Software</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* 02110-1301 USA</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;* 02110-1301 USA</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*/</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementComment">&nbsp;*/</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#ifndef</span> <span class="TextSegElementIdentifier">__VESPACE_VIO_BLOCK_DEVICE__</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#ifndef</span> <span class="TextSegElementIdentifier">__VESPACE_VIO_BLOCK_DEVICE__</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">__VESPACE_VIO_BLOCK_DEVICE__</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#define</span> <span class="TextSegElementIdentifier">__VESPACE_VIO_BLOCK_DEVICE__</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#include</span> <span class="TextSegElementOperator">&lt;</span><span class="TextSegElementIdentifier">pthread</span><span class="TextSegElementOperator">.</span><span class="TextSegElementIdentifier">h</span><span class="TextSegElementOperator">&gt;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#include</span> <span class="TextSegElementOperator">&lt;</span><span class="TextSegElementIdentifier">pthread</span><span class="TextSegElementOperator">.</span><span class="TextSegElementIdentifier">h</span><span class="TextSegElementOperator">&gt;</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#include</span> <span class="TextSegElementString">&quot;uthash.h&quot;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#include</span> <span class="TextSegElementString">&quot;uthash.h&quot;</span></td>
+</tr>
+<tr class="SectionAll">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">-+</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">#include</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">&quot;vaai.h&quot;</span></td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">Message</span> <span class="TextSegElementOperator">{</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">Message</span> <span class="TextSegElementOperator">{</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">uint64_t</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementIdentifier">Seq</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">uint64_t</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementIdentifier">Seq</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementIdentifier">Type</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">uint32_t</span>&nbsp; &nbsp; &nbsp; &nbsp; <span class="TextSegElementIdentifier">Type</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">int64_t</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">Offset</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">int64_t</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">Offset</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionAll">
+<td class="TextItemSigMod">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; uint<span class="TextSegSigDiff">32</span>_t&nbsp; &nbsp; &nbsp; &nbsp; DataLength;</td>
+<td class="AlignCenter">&lt;&gt;</td>
+<td class="TextItemSigMod">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; uint<span class="TextSegSigDiff">64</span>_t&nbsp; &nbsp; &nbsp; &nbsp; DataLength;</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">void</span><span class="TextSegElementOperator">*</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">Data</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">void</span><span class="TextSegElementOperator">*</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">Data</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_cond_t</span>&nbsp; <span class="TextSegElementIdentifier">cond</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_cond_t</span>&nbsp; <span class="TextSegElementIdentifier">cond</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_mutex_t</span> <span class="TextSegElementIdentifier">mutex</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_mutex_t</span> <span class="TextSegElementIdentifier">mutex</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">UT_hash_handle</span> <span class="TextSegElementIdentifier">hh</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">UT_hash_handle</span> <span class="TextSegElementIdentifier">hh</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame"><span class="TextSegElementKeyword">enum</span> <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementOperator">{</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">enum</span> <span class="TextSegElementIdentifier">uint32_t</span> <span class="TextSegElementOperator">{</span></td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeRead&nbsp; &nbsp;&nbsp; = 0x12,</td>
+<td class="AlignCenter">&lt;&gt;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeRead&nbsp; &nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x12,</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeWrite&nbsp; &nbsp; = 0x13,</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeWrite&nbsp;&nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x13,</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp;&nbsp; </span><span class="TextSegSigDiff">TypeXCopy</span><span class="TextSegInsigDiff">&nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">=</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">0x15</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp;&nbsp; </span><span class="TextSegSigDiff">TypeUnmap</span><span class="TextSegInsigDiff">&nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">=</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">0x16</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp;&nbsp; </span><span class="TextSegSigDiff">TypeWriteSame</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">=</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">0x17</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp;&nbsp; </span><span class="TextSegSigDiff">TypeCAW</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">=</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">0x18</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp;&nbsp; </span><span class="TextSegSigDiff">TypeRtpg</span><span class="TextSegInsigDiff">&nbsp; &nbsp; &nbsp; </span><span class="TextSegSigDiff">=</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">0x19</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeOK&nbsp; &nbsp; &nbsp;&nbsp; = 0x80,</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeOK&nbsp; &nbsp; &nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x80,</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeError&nbsp; &nbsp; = 0x81,</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeError&nbsp;&nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x81,</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeEOF&nbsp; &nbsp; &nbsp; = 0x82,</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeEOF&nbsp; &nbsp;&nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x82,</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeTimeout&nbsp; = 0x83,</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeTimeout &nbsp;<span class="TextSegInsigDiff"> </span>= 0x83,</td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeClose&nbsp; &nbsp; = 0x86</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;&nbsp;&nbsp; TypeClose&nbsp;&nbsp; &nbsp;<span class="TextSegInsigDiff"> </span>= 0x86</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">send_msg</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">fd</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">Message</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">msg</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">send_msg</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">fd</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">Message</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">msg</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">receive_msg</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">fd</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">Message</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">msg</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">receive_msg</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">fd</span><span class="TextSegElementOperator">,</span> <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">Message</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">msg</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">viou_connection</span> <span class="TextSegElementOperator">{</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">viou_connection</span> <span class="TextSegElementOperator">{</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">seq</span><span class="TextSegElementOperator">;</span>&nbsp; <span class="TextSegElementComment">// must be atomic</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">seq</span><span class="TextSegElementOperator">;</span>&nbsp; <span class="TextSegElementComment">// must be atomic</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">fd</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">fd</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">notify_fd</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">notify_fd</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">state</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">state</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_t</span> <span class="TextSegElementIdentifier">response_thread</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_t</span> <span class="TextSegElementIdentifier">response_thread</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">Message</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">msg_table</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">Message</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">msg_table</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_mutex_t</span> <span class="TextSegElementIdentifier">mutex</span><span class="TextSegElementOperator">;</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span class="TextSegElementIdentifier">pthread_mutex_t</span> <span class="TextSegElementIdentifier">mutex</span><span class="TextSegElementOperator">;</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">enum</span> <span class="TextSegElementOperator">{</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">enum</span> <span class="TextSegElementOperator">{</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">CLIENT_CONN_STATE_OPEN</span>&nbsp; <span class="TextSegElementOperator">=</span> <span class="TextSegElementNumber">0</span><span class="TextSegElementOperator">,</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">CLIENT_CONN_STATE_OPEN</span>&nbsp; <span class="TextSegElementOperator">=</span> <span class="TextSegElementNumber">0</span><span class="TextSegElementOperator">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">CLIENT_CONN_STATE_CLOSE</span> <span class="TextSegElementOperator">=</span> <span class="TextSegElementNumber">1</span><span class="TextSegElementOperator">,</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;&nbsp;&nbsp; <span class="TextSegElementIdentifier">CLIENT_CONN_STATE_CLOSE</span> <span class="TextSegElementOperator">=</span> <span class="TextSegElementNumber">1</span><span class="TextSegElementOperator">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementOperator">};</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">viou_connection</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">new_viou_connection</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">char</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">socket_path</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">viou_connection</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">new_viou_connection</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">char</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">socket_path</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">shutdown_viou_connection</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">viou_connection</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">conn</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">int</span> <span class="TextSegElementIdentifier">shutdown_viou_connection</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">viou_connection</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">conn</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame"><span class="TextSegElementKeyword">void</span> <span class="TextSegElementIdentifier">drain_request</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">viou_connection</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">conn</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">void</span> <span class="TextSegElementIdentifier">drain_request</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">viou_connection</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">conn</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSigMod">int read_at_unix(struct viou_connection *conn, void *buf, <span class="TextSegSigDiff">size</span>_t count, off_t offset);</td>
+<td class="AlignCenter">&lt;&gt;</td>
+<td class="TextItemSigMod">int read_at_unix(struct viou_connection *conn, void *buf, <span class="TextSegSigDiff">uint64</span>_t count, off_t offset);</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSigMod">int write_at_unix(struct viou_connection *conn, void *buf, <span class="TextSegSigDiff">size</span>_t count, off_t offset);</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod">int write_at_unix(struct viou_connection *conn, void *buf, <span class="TextSegSigDiff">uint64</span>_t count, off_t offset);</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">int</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">xcopy_at_unix</span><span class="TextSegSigDiff">(</span><span class="TextSegSigDiff">struct</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">viou_connection</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">*</span><span class="TextSegSigDiff">conn</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">struct</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">xcopy</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">*</span><span class="TextSegSigDiff">xcopy</span><span class="TextSegSigDiff">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">int</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">unmap_at_unix</span><span class="TextSegSigDiff">(</span><span class="TextSegSigDiff">struct</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">viou_connection</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">*</span><span class="TextSegSigDiff">conn</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">uint64_t</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">count</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">off_t</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">offset</span><span class="TextSegSigDiff">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">int</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">write_same_at_unix</span><span class="TextSegSigDiff">(</span><span class="TextSegSigDiff">struct</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">viou_connection</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">*</span><span class="TextSegSigDiff">conn</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">void</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">*</span><span class="TextSegSigDiff">buf</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">uint64_t</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">block_size</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">size_t</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">count</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">off_t</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">offset</span><span class="TextSegSigDiff">);</span></td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">int</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">caw_at_unix</span><span class="TextSegSigDiff">(</span><span class="TextSegSigDiff">struct</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">viou_connection</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">*</span><span class="TextSegSigDiff">conn</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">void</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">*</span><span class="TextSegSigDiff">buf</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">uint64_t</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">count</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">off_t</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">offset</span><span class="TextSegSigDiff">);</span></td>
+</tr>
+<tr class="SectionAll">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">-+</td>
+<td class="TextItemSigMod"><span class="TextSegSigDiff">int</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">process_request_unix</span><span class="TextSegSigDiff">(</span><span class="TextSegSigDiff">struct</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">viou_connection</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">*</span><span class="TextSegSigDiff">conn</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">void</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">*</span><span class="TextSegSigDiff">buf</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">uint64_t</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">count</span><span class="TextSegSigDiff">,</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">off_t</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">offset</span><span class="TextSegSigDiff">,</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSigMod"><span class="TextSegInsigDiff">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; </span><span class="TextSegSigDiff">uint32_t</span><span class="TextSegInsigDiff"> </span><span class="TextSegSigDiff">type</span><span class="TextSegSigDiff">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;</td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemInsigMod">&nbsp;</td>
+</tr>
+<tr class="SectionBegin">
+<td class="TextItemSame"><span class="TextSegElementKeyword">void</span> <span class="TextSegElementIdentifier">start_response_processing_unix</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">viou_connection</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">conn</span><span class="TextSegElementOperator">);</span></td>
+<td class="AlignCenter">=</td>
+<td class="TextItemSame"><span class="TextSegElementKeyword">void</span> <span class="TextSegElementIdentifier">start_response_processing_unix</span><span class="TextSegElementOperator">(</span><span class="TextSegElementKeyword">struct</span> <span class="TextSegElementIdentifier">viou_connection</span> <span class="TextSegElementOperator">*</span><span class="TextSegElementIdentifier">conn</span><span class="TextSegElementOperator">);</span></td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionMiddle">
+<td class="TextItemSame">&nbsp;</td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame">&nbsp;</td>
+</tr>
+<tr class="SectionEnd">
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#endif</span> <span class="TextSegElementComment">/* __VESPACE_VIO_BLOCK_DEVICE__ */</span></td>
+<td class="AlignCenter">&nbsp;</td>
+<td class="TextItemSame"><span class="TextSegElementCompiler_32Directive">#endif</span> <span class="TextSegElementComment">/* __VESPACE_VIO_BLOCK_DEVICE__ */</span></td>
+</tr>
+</table>
+<br/>
+</body>
+</html>

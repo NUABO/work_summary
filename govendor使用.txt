@@ -7,7 +7,7 @@ mv govendor /local/usr/bin/
 
 
 以Costor工程为例,
-首先 吃的./Costor/src/costor   // main package 所在文件夹
+首先 cd ./Costor/src/costor   // main package 所在文件夹
 
 govendor init  // 初始化生成vendor文件夹
 govendor list  // 查看依赖包

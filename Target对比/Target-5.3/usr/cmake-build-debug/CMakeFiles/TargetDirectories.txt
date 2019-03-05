@@ -1,0 +1,3 @@
+F:/code/github/Costor-micro-service/Target/usr/cmake-build-debug/CMakeFiles/cpp.dir
+F:/code/github/Costor-micro-service/Target/usr/cmake-build-debug/CMakeFiles/edit_cache.dir
+F:/code/github/Costor-micro-service/Target/usr/cmake-build-debug/CMakeFiles/rebuild_cache.dir

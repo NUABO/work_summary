@@ -1,0 +1,240 @@
+参考：ceph rbd中的对象解析 http://www.sysnote.org/2015/10/20/ceph-rbd-obj/
+
+rbd ls -p rep-pool
+volume-1
+volume-2
+
+root@ubuntu:~# rados ls -p rep-pool
+rbd_id.volume-2
+rbd_object_map.104a6b8b4567
+rbd_directory
+rbd_id.volume-1
+rbd_header.104a6b8b4567
+rbd_object_map.10126b8b4567
+rbd_header.10126b8b4567
+
+rados -p rep-pool  listomapvals rbd_directory
+id_10126b8b4567
+value (12 bytes) :
+00000000  08 00 00 00 76 6f 6c 75  6d 65 2d 31              |....volume-1|
+0000000c
+
+id_104a6b8b4567
+value (12 bytes) :
+00000000  08 00 00 00 76 6f 6c 75  6d 65 2d 32              |....volume-2|
+0000000c
+
+name_volume-1
+value (16 bytes) :
+00000000  0c 00 00 00 31 30 31 32  36 62 38 62 34 35 36 37  |....10126b8b4567|
+00000010
+
+name_volume-2
+value (16 bytes) :
+00000000  0c 00 00 00 31 30 34 61  36 62 38 62 34 35 36 37  |....104a6b8b4567|
+00000010
+
+rbd_directory 对象是通过key value 方式存数据的
+(直接下载下来的数据是空的)
+rados  -p rep-pool stat rbd_header.10126b8b4567  
+rep-pool/rbd_header.10126b8b4567 mtime 0.000000, size 0
+
+rados 通过这些命令设置和查看key value
+   listomapkeys <obj-name>          list the keys in the object map
+   listomapvals <obj-name>          list the keys and vals in the object map 
+   getomapval <obj-name> <key> [file] show the value for the specified key
+                                    in the object's object map
+   setomapval <obj-name> <key> <val>
+   rmomapkey <obj-name> <key>
+
+ceph osd map  rep-pool rbd_directory
+osdmap e20 pool 'rep-pool' (1) object 'rbd_directory' -> pg 1.30a98c1c (1.1c) -> up ([0,1,2], p0) acting ([0,1,2], p0)
+
+数据存在 /mnt/osd*/current/omap/
+
+使用go程序打印所有key value
+
+package main
+
+import (
+	"fmt"
+	"os"
+	"unicode"
+
+	"unicode/utf8"
+
+	"github.com/jmhodges/levigo"
+)
+
+func main() {
+	opts := levigo.NewOptions()
+	opts.SetCache(levigo.NewLRUCache(3 << 30))
+	opts.SetCreateIfMissing(true)
+	db, err := levigo.Open(os.Args[1], opts)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	ro := levigo.NewReadOptions()
+	ro.SetFillCache(false)
+	it := db.NewIterator(ro)
+	defer it.Close()
+	for it.SeekToFirst(); it.Valid(); it.Next() {
+		var v string
+		if isPrintable(string(it.Value())) {
+			v = fmt.Sprintf("%q", string(it.Value()))
+		} else {
+			v = fmt.Sprintf("%x(%s)", string(it.Value()), toPrintableString(string(it.Value())))
+		}
+		fmt.Printf("key:%s , value:%s\n", string(it.Key()), v)
+	}
+}
+
+func isPrintable(s string) bool {
+	if !utf8.ValidString(s) {
+		return false
+	}
+	for _, ch := range s {
+		if !unicode.IsPrint(ch) {
+			return false
+		}
+	}
+	return true
+}
+
+func toPrintableString(s string) string {
+	if !utf8.ValidString(s) {
+		return ""
+	}
+	outstring := ""
+	for _, ch := range s {
+		if !unicode.IsPrint(ch) {
+			if len(outstring) == 0 {
+				outstring = outstring + "*"
+				continue
+			}
+			if outstring[len(outstring)-1] != '*' {
+				outstring = outstring + "*"
+			}
+		} else {
+			outstring = outstring + string(ch)
+		}
+	}
+	return outstring
+}
+
+
+rados -p rep-pool create test-obj
+rados -p rep-pool setomapval test-obj  key1 value1
+rados -p rep-pool getomapval test-obj  key1
+value (6 bytes) :
+00000000  76 61 6c 75 65 31                                 |value1|
+00000006
+
+ceph osd map rep-pool test-obj
+osdmap e20 pool 'rep-pool' (1) object 'test-obj' -> pg 1.d6b75f59 (1.59) -> up ([0,2,1], p0) acting ([0,2,1], p0)
+
+cd /mnt/osd0/current/1.59_head
+ls -alh 
+total 16K
+drwxr-xr-x   2 ceph ceph   66 Feb 27 13:57 .
+drwxr-xr-x 309 ceph ceph 8.0K Feb 27 13:46 ..
+-rw-r--r--   1 ceph ceph    0 Feb 27 08:54 __head_00000059__1
+-rw-r--r--   1 ceph ceph    0 Feb 27 13:50 test-obj__head_D6B75F59__1
+
+cp -rp /mnt/osd0/current/omap /mnt/osd0/current/omap2
+root@ubuntu:/mnt/osd0/current/1.59_head# /root/test-leveldb /mnt/osd0/current/omap2 |grep -a key1
+key:_USER_0000000000000196_USER_key1 , value:value1
+root@ubuntu:/mnt/osd0/current/1.59_head# /root/test-leveldb /mnt/osd0/current/omap2 |grep -a key2
+key:_USER_0000000000000196_USER_key2 , value:value2
+
+rados -p rep-pool create test-obj2
+rados -p rep-pool setomapval test-obj2  key1 value1
+
+key:_USER_0000000000000196_USER_key1 , value:"value1"
+key:_USER_0000000000000196_USER_key2 , value:"value2"
+key:_USER_0000000000000197_USER_key1 , value:"value1"
+
+没有对象都有一个id 193 194 等 不知存在哪的   193对应对象(rados -p rep-pool  listomapvals rbd_directory)
+key:_USER_0000000000000193_USER_id_10126b8b4567 , value:08000000766f6c756d652d31(*volume-1)
+key:_USER_0000000000000193_USER_id_104a6b8b4567 , value:08000000766f6c756d652d32(*volume-2)
+key:_USER_0000000000000193_USER_name_volume-1 , value:0c000000313031323662386234353637(*10126b8b4567)
+key:_USER_0000000000000193_USER_name_volume-2 , value:0c000000313034613662386234353637(*104a6b8b4567)
+key:_USER_0000000000000194_USER_features , value:3d00000000000000(=*)
+key:_USER_0000000000000194_USER_object_prefix , value:150000007262645f646174612e313031323662386234353637(*rbd_data.10126b8b4567)
+key:_USER_0000000000000194_USER_order , value:16(*)
+key:_USER_0000000000000194_USER_size , value:0000008002000000()
+key:_USER_0000000000000194_USER_snap_seq , value:0000000000000000(*)
+key:_USER_0000000000000195_USER_features , value:3f00000000000000(?*)
+key:_USER_0000000000000195_USER_object_prefix , value:150000007262645f646174612e313034613662386234353637(*rbd_data.104a6b8b4567)
+key:_USER_0000000000000195_USER_order , value:16(*)
+key:_USER_0000000000000195_USER_size , value:00000000f4010000()
+key:_USER_0000000000000195_USER_snap_seq , value:0000000000000000(*)
+key:_USER_0000000000000195_USER_stripe_count , value:1000000000000000(*)
+key:_USER_0000000000000195_USER_stripe_unit , value:0000100000000000(*)
+key:_USER_0000000000000196_USER_key1 , value:"value1"
+key:_USER_0000000000000196_USER_key2 , value:"value2"
+key:_USER_0000000000000197_USER_key1 , value:"value1"
+
+
+
+rados -p rep-pool  listomapvals rbd_header.10126b8b4567
+features
+value (8 bytes) :
+00000000  3d 00 00 00 00 00 00 00                           |=.......|
+00000008
+
+object_prefix
+value (25 bytes) :
+00000000  15 00 00 00 72 62 64 5f  64 61 74 61 2e 31 30 31  |....rbd_data.101|
+00000010  32 36 62 38 62 34 35 36  37                       |26b8b4567|
+00000019
+
+order
+value (1 bytes) :
+00000000  16                                                |.|
+00000001
+
+size
+value (8 bytes) :
+00000000  00 00 00 80 02 00 00 00                           |........|
+00000008
+
+snap_seq
+value (8 bytes) :
+00000000  00 00 00 00 00 00 00 00                           |........|
+00000008
+
+
+root@ubuntu:~# rados -p rep-pool  listomapvals rbd_object_map.10126b8b4567
+root@ubuntu:~# rados -p rep-pool  listomapvals rbd_id.volume-1
+
+
+root@ubuntu:~# rados stat -p rep-pool rbd_object_map.10126b8b4567
+rep-pool/rbd_object_map.10126b8b4567 mtime 2018-02-27 08:54:45.000000, size 674
+root@ubuntu:~# rados stat -p rep-pool rbd_id.volume-1
+rep-pool/rbd_id.volume-1 mtime 2018-02-27 08:54:45.000000, size 16
+
+
+root@ubuntu:~# rados  -p rep-pool get rbd_object_map.10126b8b4567  rbd_object_map.10126b8b4567
+root@ubuntu:~# ls -alh rbd_object_map.10126b8b4567
+-rw-r--r-- 1 root root 674 Feb 27 10:31 rbd_object_map.10126b8b4567
+root@ubuntu:~# hexdump -C rbd_object_map.10126b8b4567
+00000000  0e 00 00 00 01 01 08 00  00 00 00 0a 00 00 00 00  |................|
+00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00000290  00 00 0c 00 00 00 91 1e  9c 74 01 00 00 00 00 00  |.........t......|
+*
+000002a2
+
+
+
+root@ubuntu:~# rados  -p rep-pool get rbd_id.volume-1 rbd_id.volume-1
+root@ubuntu:~# ls -lah rbd_id.volume-1
+-rw-r--r-- 1 root root 16 Feb 27 10:32 rbd_id.volume-1
+ hexdump -C rbd_id.volume-1
+00000000  0c 00 00 00 31 30 31 32  36 62 38 62 34 35 36 37  |....10126b8b4567|   前四个字节表示长度
+00000010
+
+
+
